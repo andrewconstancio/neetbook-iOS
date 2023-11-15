@@ -30,4 +30,26 @@ final class Helpers {
             } while Set<Character>(result).count < 4
         return result
     }
+    
+    func getDownloadAndResponseDataFromURL(someURL: String) async throws -> (Data, URLResponse) {
+        guard let url = URL(string: someURL) else {
+            throw URLError(.badURL)
+        }
+        let (data, response) = try await URLSession.shared.data(from: url, delegate: nil)
+        
+        
+        return (data, response)
+    }
+    
+    func convertDataToUIImage(data: Data?, response: URLResponse?) -> UIImage? {
+        guard
+            let data = data,
+            let image = UIImage(data: data),
+            let reponse = response as? HTTPURLResponse,
+            reponse.statusCode >= 200 && reponse.statusCode < 300 else {
+                return nil
+            }
+        
+        return image
+    }
 }

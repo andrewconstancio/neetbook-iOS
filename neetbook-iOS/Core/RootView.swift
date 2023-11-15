@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RootView: View {
     @StateObject private var viewModel = RootViewModel()
+    @StateObject private var currentUserViewModel = CurrentUserViewModel()
     @State private var showSignInView: Bool = true
     @State private var showProfileSetUpView: Bool = true
     
@@ -17,6 +18,12 @@ struct RootView: View {
             if !showSignInView && !showProfileSetUpView {
                 NavigationView {
                     ContentView(showSignInView: $showSignInView)
+                        .environmentObject(currentUserViewModel)
+                        .onAppear {
+                            Task {
+                                try? await currentUserViewModel.loadCurrentUser()
+                            }
+                        }
                 }
             }
             
@@ -39,16 +46,6 @@ struct RootView: View {
                 (self.showSignInView, self.showProfileSetUpView) = (result, result)
             }
         }
-//        .fullScreenCover(isPresented: $showSignInView) {
-//            NavigationView {
-//                AuthenticationView(showSignInView: $showSignInView, showProfileSetUpView: $showProfileSetUpView)
-//            }
-//        }
-//        .fullScreenCover(isPresented: $showProfileSetUpView) {
-//            NavigationView {
-//                ProfileSetupRootView(showProfileSetUpView: $showProfileSetUpView)
-//            }
-//        }
     }
 }
 

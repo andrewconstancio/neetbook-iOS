@@ -88,5 +88,34 @@ final class UserManager {
         
         return downloadUrl.absoluteString
     }
+    
+    
+    func getURLImageAsUIImage(path: String) async throws -> UIImage {
+        guard let url = URL(string: path) else {
+            throw URLError(.badURL)
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url, delegate: nil)
+        
+        guard let image = UIImage(data: data) else {
+            throw URLError(.badServerResponse)
+        }
+        
+        
+        return image
+    }
+    
+    func updateUserDisplayName(displayName: String) async throws {
+        guard let userId = Firebase.Auth.auth().currentUser?.uid else { return }
+        try await userCollection.document(userId).updateData(["displayname": displayName])
+    }
+    
+    func updateUserName(username: String, hashcode: String) async throws {
+        guard let userId = Firebase.Auth.auth().currentUser?.uid else { return }
+        try await userCollection.document(userId).updateData(
+            ["username": username,"hashcode": hashcode]
+        )
+    }
+    
 }
  

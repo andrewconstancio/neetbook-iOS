@@ -11,53 +11,56 @@ struct ContentView: View {
     @State private var selection: String = "Home"
     @State private var tabSelection: TabBarItem = .home
     @Binding var showSignInView: Bool
+    @EnvironmentObject var currentUserViewModel: CurrentUserViewModel
     
     var body: some View {
         TabView {
-            HomeView()
+            HomeView(showSignInView: $showSignInView)
+                .environmentObject(currentUserViewModel)
                 .tabItem {
-                    Label(TabBarItem.home.title,
-                          systemImage: TabBarItem.home.iconName
-                    )
+                    Image(systemName: TabBarItem.home.iconName)
+                }
+            
+            SearchView()
+                .environmentObject(currentUserViewModel)
+                .tabItem {
+                    Image(systemName: TabBarItem.search.iconName)
                 }
 
+            NotifcationsView()
+                .tabItem {
+                    Image(systemName: TabBarItem.notificaiton.iconName)
+                }
+            
             LibraryView()
                 .tabItem {
-                    Label(TabBarItem.library.title,
-                          systemImage: TabBarItem.library.iconName
-                    )
+                    Image(systemName: TabBarItem.library.iconName)
                 }
 
-            SearchView()
-                .tabItem {
-                    Label(TabBarItem.search.title,
-                          systemImage: TabBarItem.search.iconName
-                    )
-                }
-
-            ProfileView(showSignInView: $showSignInView)
-                .tabItem {
-                    Label(TabBarItem.profile.title,
-                          systemImage: TabBarItem.profile.iconName
-                    )
-                }
+//            ProfileView(showSignInView: $showSignInView)
+//                .tabItem {
+//                    Label(TabBarItem.profile.title,
+//                          systemImage: TabBarItem.profile.iconName
+//                    )
+//                }
          }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink {
+                    ProfileView(showSignInView: $showSignInView)
+                        .environmentObject(currentUserViewModel)
+                } label: {
+                    if let image = currentUserViewModel.profilePicture {
+                        Image(uiImage: image)
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                    }
+                }
+            }
+        }
         .accentColor(Color.pink)
         .ignoresSafeArea(.keyboard, edges: .bottom)
-//        CustomTabBarContainerView(selection: $tabSelection) {
-//            HomeView()
-//                .tabBarItem(tab: .home, selection: $tabSelection)
-//
-//            LibraryView()
-//                .tabBarItem(tab: .library, selection: $tabSelection)
-//
-//            SearchView()
-//                .tabBarItem(tab: .search, selection: $tabSelection)
-//
-//            ProfileView(showSignInView: $showSignInView)
-//                .tabBarItem(tab: .profile, selection: $tabSelection)
-//        }
-//        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
 

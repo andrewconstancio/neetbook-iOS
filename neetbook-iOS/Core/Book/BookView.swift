@@ -25,7 +25,12 @@ struct BookView: View {
         ZStack {
             VStack {
                 ScrollView {
-                    bookCoverImage
+                    if let coverPhoto = book.coverPhoto {
+                        Image(uiImage: coverPhoto)
+                            .resizable()
+                            .frame(width: 150, height: 250)
+                            .shadow(radius: 10)
+                    }
                     
                     VStack(alignment: .leading) {
                         bookTitle
@@ -39,7 +44,7 @@ struct BookView: View {
                     .navigationTitle(book.title)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    if viewModel.userActions != nil {
+                    if viewModel.userActions != nil && viewModel.savedActionToDB {
                         savedToBookshelfButton
                     } else {
                         addToBookshelfButton
@@ -51,30 +56,54 @@ struct BookView: View {
                 }
                 .padding()
             }
-        }
-        .onAppear {
-            Task {
-                 try await viewModel.getUserBookAction(bookId: book.bookId)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        AddToFavoritesView(book: book)
+                    } label: {
+                        if viewModel.savedToFavorites {
+                            Image(systemName: "star.fill")
+                                .font(.headline)
+                                .foregroundColor(.orange)
+                        } else {
+                            Image(systemName: "star")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                }
             }
-        }
-        .onDisappear {
-            showBookActionSheet = false
+            .toolbarBackground(.hidden, for: .navigationBar)
+            .adaptiveSheet(isPresented: $showBookActionSheet, detents: [.medium()]) {
+                BookActionView(
+                    viewModel: viewModel,
+                    showBookActionSheet: $showBookActionSheet,
+                    actionSelected: viewModel.userActions,
+                    book: book
+                )
+            }
+            .onAppear {
+                print(book.bookId)
+                Task {
+                    try await viewModel.getUserBookAction(bookId: book.bookId)
+                    try await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
+                }
+            }
+            .onDisappear {
+                print("here")
+                showBookActionSheet = false
+            }
         }
     }
 }
 
 extension BookView {
-    private var bookCoverImage: some View {
-        AsyncImage(url: URL(string: book.coverURL)) { image in
-            image
-                .resizable()
-                .frame(width: 150, height: 250)
-                .shadow(radius: 10)
-
-        } placeholder: {
-            ProgressView()
-        }
-    }
+//    private var bookCoverImage: some View {
+//        Image(uiImage: book.coverPhoto)
+//            .resizable()
+//            .frame(width: 150, height: 250)
+//            .shadow(radius: 10)
+//    }
     
     private var bookTitle: some View {
         Text(book.title)
@@ -99,7 +128,8 @@ extension BookView {
                     .foregroundColor(.primary)
                     .padding(.top, 5)
                 
-                Text(book.description)
+//                book.description.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+                Text(book.description.htmlStripped)
                     .font(.system(size: 15))
                     .font(.body)
                     .lineLimit(showFullDescription ? nil : 5)
@@ -121,7 +151,7 @@ extension BookView {
     
     private var savedToBookshelfButton: some View {
         Button {
-            showBookActionSheet.toggle()
+            showBookActionSheet = true
         } label: {
             HStack {
                 Image(systemName: "checkmark.circle.fill")
@@ -138,20 +168,12 @@ extension BookView {
                     .stroke(Color.green, lineWidth: 2)
             )
         }
-        .adaptiveSheet(isPresented: $showBookActionSheet, detents: [.medium()]) {
-            BookActionView(
-                viewModel: viewModel,
-                showBookActionSheet: $showBookActionSheet,
-                actionSelected: viewModel.userActions,
-                book: book
-            )
-        }
 
     }
     
     private var addToBookshelfButton: some View {
         Button {
-            showBookActionSheet.toggle()
+            showBookActionSheet = true
         } label: {
             HStack {
                 Image(systemName: "plus.circle")

@@ -5,7 +5,7 @@
 //  Created by Andrew Constancio on 9/4/23.
 //
 
-import Foundation
+import SwiftUI
 
 
 struct Book: Identifiable, Codable {
@@ -18,6 +18,7 @@ struct Book: Identifiable, Codable {
     let pageCount: Int
     let categories: [String]
     var userAction: String?
+    @CodableImage var coverPhoto: UIImage?
     
     mutating func setUserAction(action: String) {
         self.userAction = action

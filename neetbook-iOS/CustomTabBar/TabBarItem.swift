@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum TabBarItem: Hashable {
-    case home, library, search, profile
+    case home, library, search, profile, notificaiton
     
     var iconName: String {
         switch self {
@@ -16,6 +16,7 @@ enum TabBarItem: Hashable {
         case .library: return "books.vertical"
         case .search: return "magnifyingglass"
         case .profile: return "person.crop.circle"
+        case .notificaiton: return "heart.fill"
         }
     }
     
@@ -25,6 +26,7 @@ enum TabBarItem: Hashable {
         case .library: return "Library"
         case .search: return "Search"
         case .profile: return "Profile"
+        case .notificaiton: return "Notifcation"
         }
     }
     
@@ -34,6 +36,7 @@ enum TabBarItem: Hashable {
         case .library: return Color.white
         case .search: return Color.white
         case .profile: return Color.white
+        case .notificaiton: return Color.white
         }
     }
 }

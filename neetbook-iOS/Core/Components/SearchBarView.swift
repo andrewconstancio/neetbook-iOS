@@ -28,6 +28,8 @@ struct SearchBarView: View {
                 Text("Search...")
                     .foregroundColor(.gray)
             }
+            .disableAutocorrection(true)
+            .autocapitalization(.none)
             .overlay (
                 Image(systemName: "xmark.circle.fill")
                     .padding()
@@ -40,6 +42,7 @@ struct SearchBarView: View {
                     }
                 ,alignment: .trailing
             )
+            
             .foregroundColor(.black)
         }
         .padding()

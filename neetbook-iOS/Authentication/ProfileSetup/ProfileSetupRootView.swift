@@ -126,7 +126,7 @@ struct SetupProfileProgressView: View {
             ForEach(1..<5) { index in
                 Rectangle()
                     .frame(width: 30, height: 5)
-                    .foregroundColor(viewModel.setProgressIndexStep >= index ? Color.white : Color.gray)
+                    .foregroundColor(viewModel.setProgressIndexStep >= index ? Color.primary : Color.gray)
                     .cornerRadius(20)
             }
         }

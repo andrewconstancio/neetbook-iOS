@@ -5,8 +5,7 @@
 //  Created by Andrew Constancio on 8/14/23.
 //
 
-import Foundation
-
+import SwiftUI
 
 struct DBUser: Codable {
     let userId: String

@@ -14,6 +14,7 @@ struct BookActionView: View {
     @State var actionSelected: ReadingActions?
     @State private var currentPage: String = "0"
     @Environment(\.colorScheme) var colorScheme
+    @State private var showFavoritesView: Bool = false
     
     let book: Book
     
@@ -24,20 +25,18 @@ struct BookActionView: View {
     }()
     
     var body: some View {
-        ZStack {
-//            Color.appColorPale
-//                .ignoresSafeArea()
-            
+        NavigationView {
             VStack(alignment: .leading, spacing: 10) {
                 // title
                 titleText
                 Spacer()
+//                if viewModel.savedToFavorites {
+//                    addedToFavorites
+//                } else {
+//                    addToFavorites
+//                }
                 // reading button
                 readingButton
-                // page count input
-//                if actionSelected == .reading {
-//                    pageCountInput
-//                }--
                 // want to read button
                 wantToReadButton
                 // read button
@@ -45,6 +44,19 @@ struct BookActionView: View {
                 Spacer()
                 // save button
                 saveButton
+            }
+            //            .sheet(isPresented: $showFavoritesView) {
+            //                AddToFavoritesView(book: book)
+            //                    .onDisappear {
+            //                        Task {
+            //                            try? await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
+            //                        }
+            //                    }
+            //            }
+            .onAppear {
+                Task {
+                    try? await viewModel.getUserBookAction(bookId: book.bookId)
+                }
             }
             .padding()
         }
@@ -57,6 +69,52 @@ extension BookActionView {
             .font(.title2)
             .fontWeight(.bold)
             .foregroundColor(colorScheme == .dark ? Color.appColorBeige : Color.black)
+    }
+    
+    private var addToFavorites: some View {
+        NavigationLink {
+            AddToFavoritesView(book: book)
+                .onDisappear {
+                    Task {
+                        try? await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
+                    }
+                }
+        } label: {
+            HStack {
+                Image(systemName: "star.fill")
+                    .offset(x: 10)
+                Text("Add book to your top favorites")
+                    .offset(x: 10)
+                Spacer()
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity, maxHeight: 50)
+            .background(.orange)
+            .cornerRadius(10)
+        }
+    }
+    
+    private var addedToFavorites: some View {
+        NavigationLink {
+            AddToFavoritesView(book: book)
+                .onDisappear {
+                    Task {
+                        try? await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
+                    }
+                }
+        } label: {
+            HStack {
+                Image(systemName: "checkmark")
+                    .offset(x: 10)
+                Text("Saved to your favorites list")
+                    .offset(x: 10)
+                Spacer()
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity, maxHeight: 50)
+            .background(.green)
+            .cornerRadius(10)
+        }
     }
     
     private var readingButton: some View {

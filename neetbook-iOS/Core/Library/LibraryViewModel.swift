@@ -7,16 +7,21 @@
 
 import Foundation
 
+@MainActor
 final class LibraryViewModel: ObservableObject {
-    @Published private(set) var books: [Book] = []
-    
-    
-    
+    @Published private(set) var booksReading: [Book] = []
+    @Published private(set) var booksWantToRead: [Book] = []
+    @Published private(set) var booksRead: [Book] = []
+    @Published var isLoading: Bool = false
     
     func getUserBooks() async throws {
         do {
+            isLoading = true
             let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            self.books = try await BookUserManager.shared.getAllUserAddedBooks(userId: userId)
+            self.booksReading = try await BookUserManager.shared.getReadingUserAddedBooks(userId: userId)
+            self.booksWantToRead = try await BookUserManager.shared.getWantToReadUserAddedBooks(userId: userId)
+            self.booksRead = try await BookUserManager.shared.getReadUserAddedBooks(userId: userId)
+            isLoading = false
         } catch {
             throw error
         }

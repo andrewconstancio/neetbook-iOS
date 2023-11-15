@@ -9,8 +9,8 @@ import SwiftUI
 
 extension Color {
     public static var appBackgroundColor: Color {
-        return Color.white
-//        return Color(red: 0.14, green: 0.14, blue: 0.14)
+//        return Color.white
+        return Color(red: 0.14, green: 0.14, blue: 0.14)
     }
     
     public static var appColorGreen: Color {

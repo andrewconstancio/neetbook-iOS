@@ -1,20 +1,20 @@
 //
-//  LibraryReadingView.swift
+//  LibraryBookListView.swift
 //  neetbook-iOS
 //
-//  Created by Andrew Constancio on 9/19/23.
+//  Created by Andrew Constancio on 10/3/23.
 //
 
 import SwiftUI
 
-struct LibraryReadingView: View {
-    @ObservedObject var viewModel: LibraryViewModel
+struct LibraryBookListView: View {
+    let bookList: [Book]
     
     var body: some View {
         ZStack {
             ScrollView {
                 LazyVGrid(columns: Array(repeating: GridItem(), count: 3)) {
-                    ForEach(viewModel.booksReading) { book in
+                    ForEach(bookList) { book in
                         NavigationLink {
                             BookView(book: book)
                         } label: {
@@ -35,8 +35,8 @@ struct LibraryReadingView: View {
     }
 }
 
-struct LibraryReadingView_Previews: PreviewProvider {
-    static var previews: some View {
-        LibraryReadingView(viewModel: LibraryViewModel())
-    }
-}
+//struct LibraryBookListView: PreviewProvider {
+//    static var previews: some View {
+//        LibraryBookListView(bookList: [])
+//    }
+//}

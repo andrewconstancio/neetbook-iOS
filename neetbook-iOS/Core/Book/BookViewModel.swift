@@ -12,6 +12,8 @@ final class BookViewModel: ObservableObject {
     @Published var userActions: ReadingActions? = nil
     @Published var userNewComment: String = ""
     @Published private(set) var bookComments: [BookComment] = []
+    @Published var savedActionToDB: Bool = false
+    @Published var savedToFavorites: Bool = false
     
     
     func getUserBookAction(bookId: String) async throws {
@@ -22,10 +24,13 @@ final class BookViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch action {
                 case "Reading":
+                    self.savedActionToDB = true
                     self.userActions = .reading
                 case "Want To Read":
+                    self.savedActionToDB = true
                     self.userActions = .wantToRead
                 case "Read":
+                    self.savedActionToDB = true
                     self.userActions = .read
                 default:
                     self.userActions = nil
@@ -56,11 +61,13 @@ final class BookViewModel: ObservableObject {
                     self.userActions = nil
                 }
                 try? await BookUserActionManager.shared.removeUserBookAction(bookId: bookId, userId: userId)
+                self.savedActionToDB = false
             } else {
                 DispatchQueue.main.async {
                     self.userActions = action
                 }
                 try? BookUserActionManager.shared.setUserBookAction(bookId: bookId, userId: userId, action: actionUser)
+                self.savedActionToDB = true
             }
             
         } catch {
@@ -79,5 +86,10 @@ final class BookViewModel: ObservableObject {
     
     func getAllBookComments(bookId: String) async throws {
         self.bookComments = try await BookUserCommentManager.shared.getAllBookComments(bookId: bookId)
+    }
+    
+    func checkIfUserAddedBookToFavoritesList(bookId: String) async throws {
+        let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+        savedToFavorites = try await BookUserManager.shared.checkIfBookAddedToFavorites(userId: userId, bookId: bookId)
     }
 }

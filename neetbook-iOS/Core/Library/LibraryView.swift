@@ -7,7 +7,7 @@
 
 import SwiftUI
 import SnapToScroll
-
+import SwiftfulLoadingIndicators
 
 struct LibraryView: View {
     @StateObject private var viewModel = LibraryViewModel()
@@ -22,79 +22,97 @@ struct LibraryView: View {
     @Namespace private var namespace2
     
     var body: some View {
-        ZStack {
-            VStack {
-                ScrollView {
-                    Text("Library")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
-                        .foregroundColor(.primary)
-                        .fontWeight(.bold)
-                        .font(.largeTitle)
-                    
-                    Spacer()
-                    VStack {
-                        HStack {
-                            ForEach(0..<categories.count, id: \.self) { index in
-                                ZStack(alignment: .bottom) {
-                                    if currentIndex == index {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color.primary)
-                                            .matchedGeometryEffect(id: "category_background", in: namespace2)
-                                            .frame(width: 35, height: 2)
-                                            .offset(y: 10)
-                                    }
-                                    Text(categories[index])
-                                        .foregroundColor(currentIndex == index ? .primary : .primary.opacity(0.5))
-                                }
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 55)
-                                .onTapGesture {
-                                    withAnimation(.spring()) {
-                                        self.currentIndex = index
-                                        self.backgroundOffset = CGFloat(index)
-                                    }
-                                }
-                            }
+        VStack {
+            Text("Library")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                .foregroundColor(.primary)
+                .fontWeight(.bold)
+                .font(.largeTitle)
+            HStack(spacing: 40) {
+                ForEach(0..<categories.count, id: \.self) { index in
+                    ZStack(alignment: .bottom) {
+                        if currentIndex == index {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.primary)
+                                .matchedGeometryEffect(id: "category_background", in: namespace2)
+                                .frame(width: 35, height: 2)
+                                .offset(y: 10)
                         }
-                        .padding()
-                        GeometryReader { geo in
-                            HStack {
-                                LibraryReadingView(viewModel: viewModel)
-                                    .frame(width: geo.size.width)
-//                                    .frame(maxHeight: UIScreen.main.bounds.height)
-                            }
-                            .frame(height: geo.size.height)
-                            .offset(x: -(self.backgroundOffset * geo.size.width))
-                            .animation(.default)
+                        Text(categories[index])
+                            .fontWeight(.bold)
+                            .foregroundColor(currentIndex == index ? .primary : .primary.opacity(0.5))
+                            
+                    }
+                    .frame(height: 55)
+                    .onTapGesture {
+                        withAnimation(.spring()) {
+                            self.currentIndex = index
+                            self.backgroundOffset = CGFloat(index)
                         }
-                        .gesture(
-                            DragGesture()
-                                .onEnded { value in
-                                    if value.translation.width > 10 {
-                                        if self.backgroundOffset > 0 {
-                                            withAnimation(.spring()) {
-                                                self.currentIndex -= 1
-                                            }
-                                            self.backgroundOffset -= 1
-                                        }
-                                    } else if value.translation.width < -10 {
-                                        if self.backgroundOffset < 2 {
-                                            withAnimation(.spring()) {
-                                                self.currentIndex += 1
-                                            }
-                                            self.backgroundOffset += 1
-                                        }
-                                    }
-                                }
-                        )
                     }
                 }
             }
-            .task {
-                try? await viewModel.getUserBooks()
+            .padding()
+            GeometryReader { geo in
+            VStack {
+                // menu
+                    Spacer()
+                    VStack {
+                            // book view
+                        if viewModel.isLoading {
+                            Spacer()
+                            HStack {
+                                Spacer()
+                                LoadingIndicator(animation: .circleTrim, color: .appColorGreen, speed: .fast)
+                                Spacer() 
+                            }
+                            Spacer()
+                        } else {
+                            HStack {
+                                LibraryBookListView(bookList: viewModel.booksReading)
+                                    .frame(width: geo.size.width)
+                                
+                                LibraryBookListView(bookList: viewModel.booksWantToRead)
+                                    .frame(width: geo.size.width)
+                                
+                                LibraryBookListView(bookList: viewModel.booksRead)
+                                    .frame(width: geo.size.width)
+
+                            }
+                            .offset(x: -(self.backgroundOffset * geo.size.width))
+                            .animation(.default)
+                        }
+                    }
+                }
+            }
+            .gesture(
+                DragGesture()
+                    .onEnded { value in
+                        if value.translation.width > 10 {
+                            if self.backgroundOffset > 0 {
+                                withAnimation(.spring()) {
+                                    self.currentIndex -= 1
+                                }
+                                self.backgroundOffset -= 1
+                            }
+                        } else if value.translation.width < -10 {
+                            if self.backgroundOffset < 2 {
+                                withAnimation(.spring()) {
+                                    self.currentIndex += 1
+                                }
+                                self.backgroundOffset += 1
+                            }
+                        }
+                    }
+            )
+            .onAppear {
+                Task {
+                    try? await viewModel.getUserBooks()
+                }
             }
         }
+       
     }
 }
 
