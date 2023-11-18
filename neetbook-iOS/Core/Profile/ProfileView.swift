@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftfulLoadingIndicators
 
 struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
@@ -24,7 +25,6 @@ struct ProfileView: View {
         NavigationView {
             VStack() {
                 VStack() {
-//                    if let user = viewModel.user {
                         HStack(alignment: .top) {
                             VStack(alignment: .leading) {
                                 Text(viewModel.user?.displayname ?? "")
@@ -79,24 +79,6 @@ struct ProfileView: View {
                                     )
                                     .shadow(radius: 20)
                             }
-//                            AsyncImage(url: URL(string: viewModel.photoURL)) { image in
-//                                image
-//                                    .resizable()
-//                                    .frame(width: 100, height: 100)
-//                                    .clipShape(Circle())
-//                                    .overlay(
-//                                     Circle()
-//                                         .stroke(Color.red, lineWidth: 5)
-//                                    )
-//                                    .padding(5.0)
-//                                    .overlay(
-//                                      Circle()
-//                                          .stroke(Color.yellow, lineWidth: 5)
-//                                    )
-//                                    .shadow(radius: 20)
-//                            } placeholder: {
-//                                ProgressView()
-//                            }
                         }
                 }
                 .padding()

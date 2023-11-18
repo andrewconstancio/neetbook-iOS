@@ -14,37 +14,28 @@ struct ContentView: View {
     @EnvironmentObject var currentUserViewModel: CurrentUserViewModel
     
     var body: some View {
-        TabView {
+        CustomTabBarContainerView(selection: $tabSelection) {
             HomeView(showSignInView: $showSignInView)
                 .environmentObject(currentUserViewModel)
-                .tabItem {
-                    Image(systemName: TabBarItem.home.iconName)
-                }
-            
+                .tabBarItem(tab: TabBarItem.home, selection: $tabSelection)
+
             SearchView()
                 .environmentObject(currentUserViewModel)
-                .tabItem {
-                    Image(systemName: TabBarItem.search.iconName)
-                }
+                .tabBarItem(tab: TabBarItem.search, selection: $tabSelection)
 
             NotifcationsView()
-                .tabItem {
-                    Image(systemName: TabBarItem.notificaiton.iconName)
-                }
-            
-            LibraryView()
-                .tabItem {
-                    Image(systemName: TabBarItem.library.iconName)
-                }
+                .tabBarItem(tab: TabBarItem.notificaiton, selection: $tabSelection)
 
-//            ProfileView(showSignInView: $showSignInView)
-//                .tabItem {
-//                    Label(TabBarItem.profile.title,
-//                          systemImage: TabBarItem.profile.iconName
-//                    )
-//                }
-         }
+            LibraryView()
+                .tabBarItem(tab: TabBarItem.library, selection: $tabSelection)
+        }
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(tabSelection.title)
+                    .foregroundColor(.white)
+                    .fontWeight(.bold)
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink {
                     ProfileView(showSignInView: $showSignInView)
@@ -59,8 +50,47 @@ struct ContentView: View {
                 }
             }
         }
-        .accentColor(Color.pink)
-        .ignoresSafeArea(.keyboard, edges: .bottom)
+        .ignoresSafeArea(edges: .bottom)
+//        TabView {
+//            HomeView(showSignInView: $showSignInView)
+//                .environmentObject(currentUserViewModel)
+//                .tabItem {
+//                    Image(systemName: TabBarItem.home.iconName)
+//                }
+//
+//            SearchView()
+//                .environmentObject(currentUserViewModel)
+//                .tabItem {
+//                    Image(systemName: TabBarItem.search.iconName)
+//                }
+//
+//            NotifcationsView()
+//                .tabItem {
+//                    Image(systemName: TabBarItem.notificaiton.iconName)
+//                }
+//
+//            LibraryView()
+//                .tabItem {
+//                    Image(systemName: TabBarItem.library.iconName)
+//                }
+//         }
+//        .toolbar {
+//            ToolbarItem(placement: .navigationBarTrailing) {
+//                NavigationLink {
+//                    ProfileView(showSignInView: $showSignInView)
+//                        .environmentObject(currentUserViewModel)
+//                } label: {
+//                    if let image = currentUserViewModel.profilePicture {
+//                        Image(uiImage: image)
+//                            .resizable()
+//                            .frame(width: 40, height: 40)
+//                            .clipShape(Circle())
+//                    }
+//                }
+//            }
+//        }
+//        .accentColor(Color.pink)
+//        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
 

@@ -22,6 +22,7 @@ struct LibraryReadingView: View {
                                 image
                                     .resizable()
                                     .frame(width: 85, height: 125)
+                                    .cornerRadius(10)
                                     .shadow(radius: 10)
                                 
                             } placeholder: {

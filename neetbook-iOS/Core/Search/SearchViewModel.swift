@@ -38,21 +38,26 @@ final class SearchViewModel: ObservableObject {
                             try await self.searchUsersTextAction(searchText: value)
                         }
                     }
-                } else if value.count == 0 {
-                    self.searchBookResults = []
-                    self.searchUsersResults = []
-                    self.loadingBooks = false
-                    self.loadingUsers = false
                 } else {
-                    self.loadingBooks = false
-                    self.loadingUsers = false
+                    self.clearSearchVars()
                 }
             }
             .store(in: &cancellables)
     }
     
+    private func clearSearchVars() {
+        self.searchBookResults = []
+        self.searchUsersResults = []
+        self.loadingBooks = false
+        self.loadingUsers = false
+        self.recentlySearchedBookText = ""
+        self.recentlySearchedUserText = ""
+    }
+    
     func searchBooksTextAction(searchText: String) async throws {
         searchBookResults = try await BookDataService.shared.searchBooks(query: searchText)
+        print("HERE")
+        print(searchBookResults)
         recentlySearchedBookText = searchText
         loadingBooks = false
     }

@@ -17,7 +17,7 @@ struct BookCommentSectionView: View {
             Text("Comments")
                 .font(.caption)
                 .fontWeight(.bold)
-                .foregroundColor(.primary)
+                .foregroundColor(.white)
                 .padding(.top, 5)
             
             TextField("", text: $viewModel.userNewComment, axis: .vertical)
@@ -28,9 +28,10 @@ struct BookCommentSectionView: View {
             .multilineTextAlignment(.leading)
             .font(.system(size: 14))
             .padding()
+            .background(.white)
             .overlay(
-               RoundedRectangle(cornerRadius: 10)
-                .stroke(colorScheme == .dark ? Color.white.opacity(0.5) : Color.black.opacity(0.5))
+               RoundedRectangle(cornerRadius: 15)
+                .stroke(Color.white.opacity(0.5))
            )
             
             if !viewModel.userNewComment.isEmpty && viewModel.userNewComment.count > 3 {
@@ -50,37 +51,39 @@ struct BookCommentSectionView: View {
                 }
             }
             
-            ForEach(viewModel.bookComments) { comment in
-                HStack {
-                    AsyncImage(url: URL(string: comment.photoURL)) { image in
-                        image
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .clipShape(Circle())
-                            .shadow(radius: 20)
-                            .alignmentGuide(VerticalAlignment.center) {   // << here !!
-                                  $0[VerticalAlignment.top]
-                              }
+            if(viewModel.bookComments.count > 0) {
+                ForEach(viewModel.bookComments) { comment in
+                    HStack {
+                        AsyncImage(url: URL(string: comment.photoURL)) { image in
+                            image
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                                .shadow(radius: 20)
+                                .alignmentGuide(VerticalAlignment.center) {   // << here !!
+                                      $0[VerticalAlignment.top]
+                                  }
 
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text(comment.displayName)
-                            .font(.headline)
-                            .foregroundColor(.primary)
+                        } placeholder: {
+                            ProgressView()
+                        }
                         
-                        Text(comment.comment ?? "")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                        VStack(alignment: .leading) {
+                            Text(comment.displayName)
+                                .font(.headline)
+                                .foregroundColor(.black.opacity(0.7))
+                            
+                            Text(comment.comment ?? "")
+                                .font(.subheadline)
+                                .foregroundColor(.black)
+                        }
+                        Spacer()
                     }
-                    Spacer()
+                    .alignmentGuide(VerticalAlignment.center) {   // << here !!
+                          $0[VerticalAlignment.top]
+                      }
+                    .padding(.top, 20)
                 }
-                .alignmentGuide(VerticalAlignment.center) {   // << here !!
-                      $0[VerticalAlignment.top]
-                  }
-                .padding(.top, 20)
             }
         }
         .task {

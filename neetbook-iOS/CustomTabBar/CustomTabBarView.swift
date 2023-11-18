@@ -43,14 +43,10 @@ struct CustomTabBarView_Previews: PreviewProvider {
 }
 
 extension CustomTabBarView {
-    
-    
     private func tabView(tab: TabBarItem) -> some View {
         VStack {
             Image(systemName: tab.iconName)
-                .font(.subheadline)
-            Text(tab.title)
-                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                .font(.headline)
         }
         .foregroundColor(localSelection == tab ? tab.color : Color.gray)
         .padding(.vertical, 8)
@@ -64,6 +60,7 @@ extension CustomTabBarView {
                 }
             }
         )
+        .offset(y: -20)
     }
     
     
@@ -76,11 +73,10 @@ extension CustomTabBarView {
                     }
             }
         }
+        .frame(height: 80)
         .padding(6)
-        .background(Color(red: 0.14, green: 0.14, blue: 0.14))
+        .background(Color.appNavBarBackgroundColor)
         .cornerRadius(10)
-//        .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
-//        .padding(.horizontal)
     }
     
     private func switchToTab(tab: TabBarItem) {

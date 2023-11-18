@@ -23,39 +23,41 @@ struct BookView: View {
     
     var body: some View {
         ZStack {
+            Color.appColorWedge.ignoresSafeArea()
             VStack {
                 ScrollView {
                     if let coverPhoto = book.coverPhoto {
                         Image(uiImage: coverPhoto)
                             .resizable()
-                            .frame(width: 150, height: 250)
+                            .frame(width: 125, height: 200)
+                            .cornerRadius(10)
                             .shadow(radius: 10)
+                            .padding(.bottom, 20)
                     }
                     
                     VStack(alignment: .leading) {
                         bookTitle
-                        
                         authorName
-                        
                         description
-                        
-                        TagCloudView(tags: book.categories)
+//                        TagCloudView(tags: book.categories)
+                        if viewModel.userActions != nil && viewModel.savedActionToDB {
+                            savedToBookshelfButton
+                        } else {
+                            addToBookshelfButton
+                        }
+                        Spacer()
+                        Spacer()
+                        //comment section
+                        BookCommentSectionView(viewModel: viewModel, bookId: book.bookId)
                     }
-                    .navigationTitle(book.title)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(25, corners: [.topLeft, .topRight])
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    if viewModel.userActions != nil && viewModel.savedActionToDB {
-                        savedToBookshelfButton
-                    } else {
-                        addToBookshelfButton
-                    }
-                    Spacer()
-                    Spacer()
-                    //comment section
-                    BookCommentSectionView(viewModel: viewModel, bookId: book.bookId)
                 }
-                .padding()
+                .scrollIndicators(.hidden)
             }
+//            .padding(10)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
@@ -68,7 +70,7 @@ struct BookView: View {
                         } else {
                             Image(systemName: "star")
                                 .font(.headline)
-                                .foregroundColor(.primary)
+                                .foregroundColor(.white)
                         }
                     }
                 }
@@ -83,14 +85,12 @@ struct BookView: View {
                 )
             }
             .onAppear {
-                print(book.bookId)
                 Task {
                     try await viewModel.getUserBookAction(bookId: book.bookId)
                     try await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
                 }
             }
             .onDisappear {
-                print("here")
                 showBookActionSheet = false
             }
         }
@@ -98,25 +98,16 @@ struct BookView: View {
 }
 
 extension BookView {
-//    private var bookCoverImage: some View {
-//        Image(uiImage: book.coverPhoto)
-//            .resizable()
-//            .frame(width: 150, height: 250)
-//            .shadow(radius: 10)
-//    }
-    
     private var bookTitle: some View {
         Text(book.title)
-            .font(.title)
+            .font(.title2)
             .fontWeight(.bold)
-            .foregroundColor(.primary)
+            .foregroundColor(.black)
     }
     
     private var authorName: some View {
         Text(book.author)
-            .font(.subheadline)
-            .fontWeight(.bold)
-            .foregroundColor(.secondary)
+            .foregroundColor(.black.opacity(0.7))
     }
     
     private var description: some View {
@@ -125,15 +116,15 @@ extension BookView {
                 Text("Description")
                     .font(.caption)
                     .fontWeight(.bold)
-                    .foregroundColor(.primary)
+                    .foregroundColor(.white.opacity(0.7))
                     .padding(.top, 5)
                 
 //                book.description.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
                 Text(book.description.htmlStripped)
                     .font(.system(size: 15))
                     .font(.body)
-                    .lineLimit(showFullDescription ? nil : 5)
-                    .foregroundColor(.primary)
+                    .lineLimit(showFullDescription ? nil : 3)
+                    .foregroundColor(.black)
             }
             
             Button {
@@ -144,8 +135,44 @@ extension BookView {
                 Image(systemName: showFullDescription ? "chevron.up.circle" : "chevron.down.circle")
                     .frame(width: 15, height: 15)
                     .padding(.vertical, 4)
-                    .foregroundColor(Color.systemGray2)
+                    .foregroundColor(Color.white.opacity(0.7))
             }
+        }
+        .cornerRadius(15)
+    }
+    
+    private var addToBookshelfButton: some View {
+        HStack {
+            Spacer()
+            Button {
+                showBookActionSheet = true
+            } label: {
+                HStack {
+                    Image(systemName: "plus.circle")
+                    Text("Add to library")
+
+                }
+                .frame(width: UIScreen.main.bounds.width / 3)
+                .font(.system(size: 14))
+                .foregroundColor(.white)
+                .padding(10)
+                .background(Color.appColorBuff)
+                .cornerRadius(20)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.clear, lineWidth: 1)
+                )
+
+            }
+            .adaptiveSheet(isPresented: $showBookActionSheet, detents: [.medium()]) {
+                BookActionView(
+                    viewModel: viewModel,
+                    showBookActionSheet: $showBookActionSheet,
+                    actionSelected: viewModel.userActions,
+                    book: book
+                )
+            }
+            Spacer()
         }
     }
     
@@ -171,32 +198,6 @@ extension BookView {
 
     }
     
-    private var addToBookshelfButton: some View {
-        Button {
-            showBookActionSheet = true
-        } label: {
-            HStack {
-                Image(systemName: "plus.circle")
-                Text("Add to library")
-            }
-            .frame(minWidth: 0, maxWidth: .infinity)
-            .font(.system(size: 18))
-            .padding()
-            .foregroundColor(.primary)
-            .overlay(
-                RoundedRectangle(cornerRadius: 25)
-                    .stroke(Color.primary, lineWidth: 2)
-            )
-        }
-        .adaptiveSheet(isPresented: $showBookActionSheet, detents: [.medium()]) {
-            BookActionView(
-                viewModel: viewModel,
-                showBookActionSheet: $showBookActionSheet,
-                actionSelected: viewModel.userActions,
-                book: book
-            )
-        }
-    }
 }
 
 struct BookView_Previews: PreviewProvider {

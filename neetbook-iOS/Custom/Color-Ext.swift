@@ -9,8 +9,13 @@ import SwiftUI
 
 extension Color {
     public static var appBackgroundColor: Color {
-//        return Color.white
-        return Color(red: 0.14, green: 0.14, blue: 0.14)
+//        return Color(red: 0.14, green: 0.14, blue: 0.14)
+        return Color(hex: "454545")
+    }
+    
+    public static var appNavBarBackgroundColor: Color {
+//        return Color(red: 0.18, green: 0.18, blue: 0.18)
+        return Color(hex: "2A2B2E")
     }
     
     public static var appColorGreen: Color {
@@ -18,7 +23,8 @@ extension Color {
     }
     
     public static var appColorPale: Color {
-        return Color(hex: "f4d8cd")
+//        return Color(hex: "f4d8cd")
+        return Color(hex: "FF8552")
     }
     
     public static var appColorBuff: Color {
@@ -29,10 +35,18 @@ extension Color {
         return Color(hex: "f15152")
     }
     public static var appColorYellow: Color {
-        return Color(hex: "EDD83D")
+        return Color(hex: "a8a41d")
     }
     public static var appColorBeige: Color {
         return Color(hex: "F3F9E3")
+    }
+    
+    public static var appColorCambridgeBlue: Color {
+        return Color(hex: "A4C2A8")
+    }
+    
+    public static var appColorWedge: Color {
+        return Color(hex: "6D5959")
     }
 }
 

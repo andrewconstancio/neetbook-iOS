@@ -14,7 +14,7 @@ import FirebaseFirestoreSwift
 
 
 struct UserSearchResult: Identifiable, Hashable {
-    let id: String?
+    let id: String
     let displayName: String
     let username: String
     let hashcode: String

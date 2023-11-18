@@ -149,13 +149,12 @@ extension AuthenticationView {
                 do {
                     let userAcountSetup = try await viewModel.signInUserFlow(signInMethod: .google)
                     
-                    print("userAcountSetup: ", userAcountSetup)
-                    
+    
                     if !userAcountSetup {
                         showProfileSetUpView = true
                     }
                     
-//                    showSignInView = false
+                    showSignInView = false
                 } catch {
                     print(error)
                 }
