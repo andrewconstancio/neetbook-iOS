@@ -39,7 +39,6 @@ struct AddToFavoritesView: View {
                             move(indexSet: indexSet, newOffset: newOffset)
                         }
                     }
-//                    .environment(\.editMode, Binding.constant(EditMode.active))
                     .navigationBarItems(trailing: EditButton())
                     .scrollContentBackground(.hidden)
                     .navigationTitle("Your favorite books")
@@ -64,6 +63,7 @@ struct AddToFavoritesView: View {
             .onAppear {
                 Task {
                     try? await viewModel.getFavoriteBooks(toSaveBook: book)
+                    try? await viewModel.saveFavoriteBooks()
                 }
             }
             

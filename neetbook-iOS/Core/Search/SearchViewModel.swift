@@ -56,14 +56,13 @@ final class SearchViewModel: ObservableObject {
     
     func searchBooksTextAction(searchText: String) async throws {
         searchBookResults = try await BookDataService.shared.searchBooks(query: searchText)
-        print("HERE")
-        print(searchBookResults)
         recentlySearchedBookText = searchText
         loadingBooks = false
     }
     
     func searchUsersTextAction(searchText: String) async throws {
-        searchUsersResults = try await UserConnectivity.shared.searchForUser(searchText: searchText)
+        let currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+        searchUsersResults = try await UserInteractions.shared.searchForUser(searchText: searchText, currentUserId: currentUserId)
         recentlySearchedUserText = searchText
         loadingUsers = false
     }

@@ -12,17 +12,19 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
     @State var showProfileEditView: Bool = false
+    @State var showFollowListView: Bool = false
     @EnvironmentObject var currentUserViewModel: CurrentUserViewModel
 
     @State var backgroundOffset: CGFloat = 0
     @State var currentIndex = 0
     
-    let categories: [String] = ["Post", "Favorites"]
-    @State private var selected: String = "Updates"
+    let categories: [String] = ["Activity", "Favorites"]
+    @State private var selected: String = "Activity"
     @Namespace private var namespace2
     
     var body: some View {
-        NavigationView {
+        ZStack {
+            Color.appBackgroundColor.ignoresSafeArea()
             VStack() {
                 VStack() {
                         HStack(alignment: .top) {
@@ -30,34 +32,41 @@ struct ProfileView: View {
                                 Text(viewModel.user?.displayname ?? "")
                                     .font(.system(size: 36))
                                     .fontWeight(.bold)
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(.white)
 
                                 Text("\(viewModel.user?.username ?? "")#\(viewModel.user?.hashcode ?? "")")
                                     .font(.subheadline)
                                     .fontWeight(.bold)
-                                    .foregroundColor(.primary.opacity(0.7))
+                                    .foregroundColor(.white.opacity(0.7))
 
                                 HStack {
-                                    HStack(spacing: 5) {
-                                        Text("50")
-                                            .foregroundColor(.primary)
-                                            .fontWeight(.bold)
-                                            .font(.system(size: 15))
+                                    Button {
+                                        showFollowListView = true
+                                    } label: {
+                                        HStack(spacing: 5) {
+                                            Text("\(viewModel.followingCount)")
+                                                .foregroundColor(.white)
+                                                .fontWeight(.bold)
+                                                .font(.system(size: 15))
 
-                                        Text("Followers")
-                                            .foregroundColor(.primary)
-                                            .font(.system(size: 15))
+                                            Text("Following")
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 15))
+                                        }
                                     }
+                                    Button {
+                                        showFollowListView = true
+                                    } label: {
+                                        HStack(spacing: 5) {
+                                            Text("\(viewModel.followerCount)")
+                                                .foregroundColor(.white)
+                                                .fontWeight(.bold)
+                                                .font(.system(size: 15))
 
-                                    HStack(spacing: 5) {
-                                        Text("12")
-                                            .foregroundColor(.primary)
-                                            .fontWeight(.bold)
-                                            .font(.system(size: 15))
-
-                                        Text("Following")
-                                            .foregroundColor(.primary)
-                                            .font(.system(size: 15))
+                                            Text("Followers")
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 15))
+                                        }
                                     }
                                 }
                                 .padding(.top, 10)
@@ -70,12 +79,12 @@ struct ProfileView: View {
                                     .clipShape(Circle())
                                     .overlay(
                                      Circle()
-                                         .stroke(Color.red, lineWidth: 5)
+                                         .stroke(Color.appColorWedge, lineWidth: 5)
                                     )
                                     .padding(5.0)
                                     .overlay(
                                       Circle()
-                                          .stroke(Color.yellow, lineWidth: 5)
+                                        .stroke(Color.appColorCeladon, lineWidth: 5)
                                     )
                                     .shadow(radius: 20)
                             }
@@ -90,11 +99,13 @@ struct ProfileView: View {
                         Text("Edit Profile")
                             .frame(width: UIScreen.main.bounds.width / 3)
                             .font(.system(size: 14))
-                            .foregroundColor(.primary)
+                            .foregroundColor(.black)
                             .padding(5)
+                            .background(.white)
+                            .cornerRadius(10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.primary, lineWidth: 2)
+                                    .stroke(Color.clear, lineWidth: 2)
                             )
                     }
                     NavigationLink {
@@ -103,11 +114,13 @@ struct ProfileView: View {
                         Text("Share Profile")
                             .frame(width: UIScreen.main.bounds.width / 3)
                             .font(.system(size: 14))
-                            .foregroundColor(.primary)
+                            .foregroundColor(.black)
                             .padding(5)
+                            .background(.white)
+                            .cornerRadius(10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.primary, lineWidth: 2)
+                                    .stroke(Color.clear, lineWidth: 2)
                             )
                     }
                 }
@@ -118,13 +131,13 @@ struct ProfileView: View {
                         ZStack(alignment: .bottom) {
                             if currentIndex == index {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.primary)
+                                    .fill(Color.white)
                                     .matchedGeometryEffect(id: "category_background", in: namespace2)
                                     .frame(width: 35, height: 2)
                                     .offset(y: 10)
                             }
                             Text(categories[index])
-                                .foregroundColor(currentIndex == index ? .primary : .primary.opacity(0.5))
+                                .foregroundColor(currentIndex == index ? .white : .white.opacity(0.5))
                         }
                         .frame(width: UIScreen.main.bounds.width / 3, height: 55)
                         .onTapGesture {
@@ -145,32 +158,54 @@ struct ProfileView: View {
                                 Text("Post here")
                                     .frame(width: geo.size.width)
                                 
-                                ScrollView {
-                                    LazyVGrid(columns: Array(repeating: GridItem(), count: 3)) {
-                                        ForEach(viewModel.favoriteBooks) { favbook in
-                                            NavigationLink {
-                                                BookView(book: favbook.book)
-                                            } label: {
-                                                AsyncImage(url: URL(string: favbook.book.coverURL)) { image in
-                                                    image
-                                                        .resizable()
-                                                        .frame(width: 85, height: 125)
-                                                        .shadow(radius: 10)
-            
-                                                } placeholder: {
-                                                    ProgressView()
+                                if viewModel.favoriteBooks.count > 0 {
+                                    ScrollView {
+                                        LazyVGrid(columns: Array(repeating: GridItem(), count: 3)) {
+                                            ForEach(viewModel.favoriteBooks) { favbook in
+                                                NavigationLink {
+                                                    BookView(book: favbook.book)
+                                                } label: {
+                                                    AsyncImage(url: URL(string: favbook.book.coverURL)) { image in
+                                                        image
+                                                            .resizable()
+                                                            .frame(width: 85, height: 125)
+                                                            .shadow(radius: 10)
+                
+                                                    } placeholder: {
+                                                        ProgressView()
+                                                    }
                                                 }
                                             }
                                         }
                                     }
+                                    .frame(width: geo.size.width)
+                                } else {
+                                    VStack {
+                                        Text("No books added yet!")
+                                            .foregroundColor(.white.opacity(0.7))
+                                            .fontWeight(.bold)
+                                            .frame(width: geo.size.width)
+                                        Spacer()
+                                        Spacer()
+                                        Spacer()
+                                    }
                                 }
-                                .frame(width: geo.size.width)
                             }
                             .offset(x: -(self.backgroundOffset * geo.size.width))
                             .animation(.default)
                         }
                     }
                 }
+            }
+        }
+        .sheet(isPresented: $showFollowListView) {
+            if let userId = viewModel.user?.userId {
+                FollowListView(userId: userId)
+                    .onDisappear {
+                        Task {
+                            try? await viewModel.loadCurrentUser()
+                        }
+                    }
             }
         }
         .sheet(isPresented: $showProfileEditView) {
@@ -203,7 +238,7 @@ struct ProfileView: View {
                 } label: {
                     Image(systemName: "gear")
                         .font(.headline)
-                        .foregroundColor(.primary)
+                        .foregroundColor(.white)
                 }
             }
         }

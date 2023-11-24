@@ -17,7 +17,7 @@ struct UserNameSetupView: View {
             Spacer()
             Text("What do you want to be known as?")
                 .font(.title3)
-                .foregroundColor(.primary)
+                .foregroundColor(.white)
                 .fontWeight(.bold)
             
             VStack {
@@ -32,7 +32,7 @@ struct UserNameSetupView: View {
                     .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 6))
                     .frame(maxWidth: .infinity)
                     .fontWeight(.bold)
-                    .background(Color.appColorPale)
+                    .background(.white)
                     .foregroundColor(.black)
                     .cornerRadius(20)
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
@@ -48,7 +48,7 @@ struct UserNameSetupView: View {
                     }
                 
                 Text("Please enter a display name. This can be changed anytime.")
-                    .foregroundColor(.primary.opacity(0.3))
+                    .foregroundColor(.white.opacity(0.3))
                     .font(.system(size: 12))
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
             }
@@ -58,7 +58,7 @@ struct UserNameSetupView: View {
                     TextField("", text: $viewModel.username.max(20))
                         .placeholder(when: viewModel.username.isEmpty) {
                             Text("Username...")
-                                .foregroundColor(Color.primary.opacity(0.7))
+                                .foregroundColor(Color.white.opacity(0.7))
                         }
                         .disableAutocorrection(true)
                         .autocapitalization(.none)
@@ -67,7 +67,7 @@ struct UserNameSetupView: View {
                         .frame(maxWidth: .infinity)
                         .fontWeight(.bold)
                         .background(Color.clear)
-                        .foregroundColor(viewModel.validUsername ? .green : .primary)
+                        .foregroundColor(viewModel.validUsername ? .green : .white)
                         .cornerRadius(20)
                         .onReceive(Just(viewModel.username)) { newValue in
                             let allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._-"
@@ -81,7 +81,7 @@ struct UserNameSetupView: View {
                     if viewModel.hashcode != "" {
                         Text("#\(viewModel.hashcode)")
                             .fontWeight(.bold)
-                            .foregroundColor(viewModel.validUsername ? .green : .primary)
+                            .foregroundColor(viewModel.validUsername ? .green : .white)
                     }
                 }
                 .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
@@ -89,7 +89,7 @@ struct UserNameSetupView: View {
                 
                 Text("Enter a username. Be creative!")
                 
-                    .foregroundColor(.primary.opacity(0.3))
+                    .foregroundColor(.white.opacity(0.3))
                     .font(.system(size: 12))
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
             }

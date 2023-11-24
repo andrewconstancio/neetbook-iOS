@@ -22,78 +22,78 @@ struct BookView: View {
     let book: Book
     
     var body: some View {
-        ZStack {
-            Color.appColorWedge.ignoresSafeArea()
-            VStack {
+        GeometryReader { geo in
+            ZStack {
+                Color.appColorWedge.ignoresSafeArea()
                 ScrollView {
-                    if let coverPhoto = book.coverPhoto {
-                        Image(uiImage: coverPhoto)
-                            .resizable()
-                            .frame(width: 125, height: 200)
-                            .cornerRadius(10)
-                            .shadow(radius: 10)
-                            .padding(.bottom, 20)
+                    VStack {
+                        if let coverPhoto = book.coverPhoto {
+                            Image(uiImage: coverPhoto)
+                                .resizable()
+                                .frame(width: 125, height: 200)
+                                .cornerRadius(10)
+                                .shadow(radius: 10)
+                                .padding(.bottom, 20)
+                        }
                     }
                     
                     VStack(alignment: .leading) {
                         bookTitle
                         authorName
                         description
-//                        TagCloudView(tags: book.categories)
                         if viewModel.userActions != nil && viewModel.savedActionToDB {
                             savedToBookshelfButton
                         } else {
                             addToBookshelfButton
                         }
-                        Spacer()
-                        Spacer()
                         //comment section
-                        BookCommentSectionView(viewModel: viewModel, bookId: book.bookId)
+//                        BookCommentSectionView(viewModel: viewModel, bookId: book.bookId)
                     }
                     .padding()
+                    .frame(maxHeight: .infinity)
                     .background(Color.white)
                     .cornerRadius(25, corners: [.topLeft, .topRight])
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
+//                .frame(minHeight: geo.size.height)
                 .scrollIndicators(.hidden)
-            }
-//            .padding(10)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        AddToFavoritesView(book: book)
-                    } label: {
-                        if viewModel.savedToFavorites {
-                            Image(systemName: "star.fill")
-                                .font(.headline)
-                                .foregroundColor(.orange)
-                        } else {
-                            Image(systemName: "star")
-                                .font(.headline)
-                                .foregroundColor(.white)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        NavigationLink {
+                            AddToFavoritesView(book: book)
+                        } label: {
+                            if viewModel.savedToFavorites {
+                                Image(systemName: "star.fill")
+                                    .font(.headline)
+                                    .foregroundColor(.orange)
+                            } else {
+                                Image(systemName: "star")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                            }
                         }
                     }
                 }
-            }
-            .toolbarBackground(.hidden, for: .navigationBar)
-            .adaptiveSheet(isPresented: $showBookActionSheet, detents: [.medium()]) {
-                BookActionView(
-                    viewModel: viewModel,
-                    showBookActionSheet: $showBookActionSheet,
-                    actionSelected: viewModel.userActions,
-                    book: book
-                )
-            }
-            .onAppear {
-                Task {
-                    try await viewModel.getUserBookAction(bookId: book.bookId)
-                    try await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
+                .toolbarBackground(.hidden, for: .navigationBar)
+                .adaptiveSheet(isPresented: $showBookActionSheet, detents: [.medium()]) {
+                    BookActionView(
+                        viewModel: viewModel,
+                        showBookActionSheet: $showBookActionSheet,
+                        actionSelected: viewModel.userActions,
+                        book: book
+                    )
+                }
+                .onAppear {
+                    Task {
+                        try await viewModel.getUserBookAction(bookId: book.bookId)
+                        try await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
+                    }
+                }
+                .onDisappear {
+                    showBookActionSheet = false
                 }
             }
-            .onDisappear {
-                showBookActionSheet = false
-            }
         }
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 

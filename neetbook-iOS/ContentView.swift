@@ -20,10 +20,9 @@ struct ContentView: View {
                 .tabBarItem(tab: TabBarItem.home, selection: $tabSelection)
 
             SearchView()
-                .environmentObject(currentUserViewModel)
                 .tabBarItem(tab: TabBarItem.search, selection: $tabSelection)
 
-            NotifcationsView()
+            NotificationView()
                 .tabBarItem(tab: TabBarItem.notificaiton, selection: $tabSelection)
 
             LibraryView()

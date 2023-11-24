@@ -19,7 +19,7 @@ struct ProfileSetupRootView: View {
     
     var body: some View {
         ZStack {
-//            Color.appBackgroundColor.ignoresSafeArea()
+            Color.appBackgroundColor.ignoresSafeArea()
             if viewModel.isCreatingNewUser {
                 VStack {
                     Spacer()
@@ -126,7 +126,7 @@ struct SetupProfileProgressView: View {
             ForEach(1..<5) { index in
                 Rectangle()
                     .frame(width: 30, height: 5)
-                    .foregroundColor(viewModel.setProgressIndexStep >= index ? Color.primary : Color.gray)
+                    .foregroundColor(viewModel.setProgressIndexStep >= index ? .white : .white.opacity(0.5))
                     .cornerRadius(20)
             }
         }

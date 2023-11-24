@@ -46,7 +46,7 @@ struct ProfilePictureView: View {
                             })
                     } else {
                         Image(systemName: "person.circle")
-                            .foregroundColor(Color.appColorPale)
+                            .foregroundColor(.white)
                             .font(.system(size: 96))
                             .padding()
                     }

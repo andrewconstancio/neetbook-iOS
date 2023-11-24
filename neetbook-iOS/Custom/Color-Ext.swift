@@ -35,7 +35,7 @@ extension Color {
         return Color(hex: "f15152")
     }
     public static var appColorYellow: Color {
-        return Color(hex: "a8a41d")
+        return Color(hex: "d3e03d")
     }
     public static var appColorBeige: Color {
         return Color(hex: "F3F9E3")
@@ -47,6 +47,10 @@ extension Color {
     
     public static var appColorWedge: Color {
         return Color(hex: "6D5959")
+    }
+    
+    public static var appColorCeladon: Color {
+        return Color(hex: "ABEBD2")
     }
 }
 

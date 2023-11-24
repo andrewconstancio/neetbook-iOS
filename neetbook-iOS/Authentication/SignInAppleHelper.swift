@@ -54,7 +54,6 @@ final class SignInWithAppleHelper: NSObject {
     
     func startSignInWithAppleFlow(completion: @escaping (Result<SignInWithAppleResult, Error>) -> Void) {
         guard let topVC = Utilities.shared.getTopViewController() else {
-            print("WHATTTTTTT")
             completion(.failure(URLError(.badURL)))
             return
         }

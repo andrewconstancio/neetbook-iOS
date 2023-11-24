@@ -17,7 +17,7 @@ struct BookCommentSectionView: View {
             Text("Comments")
                 .font(.caption)
                 .fontWeight(.bold)
-                .foregroundColor(.white)
+                .foregroundColor(.black)
                 .padding(.top, 5)
             
             TextField("", text: $viewModel.userNewComment, axis: .vertical)

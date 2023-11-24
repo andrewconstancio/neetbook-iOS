@@ -18,6 +18,7 @@ final class UserManager {
     private init() {}
     
     private let userCollection = Firestore.firestore().collection("users")
+    private let userFollowingListCollection = Firestore.firestore().collection("UserFollowList")
     private let storage = Storage.storage()
 
     
@@ -117,5 +118,96 @@ final class UserManager {
         )
     }
     
+    func getFollowingCount(userId: String) async throws -> Int {
+        let snapshot = try await userFollowingListCollection
+                .document(userId)
+                .collection("UserFollowing")
+                .getDocuments()
+        
+        
+        return snapshot.count
+    }
+    
+    func getFollowerCount(userId: String) async throws -> Int {
+        let snapshot = try await userFollowingListCollection
+                .document(userId)
+                .collection("UserFollowers")
+                .getDocuments()
+        
+        
+        return snapshot.count
+    }
+    
+    func getUserFollowing(userId: String) async throws -> [FollowingUser] {
+        let query = userFollowingListCollection
+                        .document(userId)
+                        .collection("UserFollowing")
+        
+        do {
+            let results = try await query.getDocuments()
+            var users: [FollowingUser] = []
+            for result in results.documents {
+                let otherUserId = result["user_id"] as? String ?? ""
+                let user = try await UserManager.shared.getUser(userId: otherUserId)
+                
+                let displayName = user.displayname ?? ""
+                let username = user.username ?? ""
+                let hashcode = user.hashcode ?? ""
+                var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+                if let photoUrl = user.photoUrl {
+                    profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+                }
+                
+                let newNoti = FollowingUser(
+                    userId: otherUserId,
+                    displayName: displayName,
+                    username: username,
+                    hashcode: hashcode,
+                    profileImage: profileImage,
+                    followingStatus: .following
+                )
+                users.append(newNoti)
+            }
+            
+            return users
+        } catch {
+            throw URLError(.badServerResponse)
+        }
+    }
+    
+    func getUserFollowers(userId: String) async throws -> [FollowerUser] {
+        let query = userFollowingListCollection
+                        .document(userId)
+                        .collection("UserFollowers")
+        
+        do {
+            let results = try await query.getDocuments()
+            var users: [FollowerUser] = []
+            for result in results.documents {
+                let otherUserId = result["user_id"] as? String ?? ""
+                let user = try await UserManager.shared.getUser(userId: otherUserId)
+                
+                let displayName = user.displayname ?? ""
+                let username = user.username ?? ""
+                let hashcode = user.hashcode ?? ""
+                var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+                if let photoUrl = user.photoUrl {
+                    profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+                }
+                
+                let followUser = FollowerUser(
+                    userId: otherUserId,
+                    displayName: displayName,
+                    username: username,
+                    hashcode: hashcode,
+                    profileImage: profileImage
+                )
+                users.append(followUser)
+            }
+            return users
+        } catch {
+            throw URLError(.badServerResponse)
+        }
+    }
 }
  

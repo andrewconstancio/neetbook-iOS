@@ -37,7 +37,7 @@ struct DataOfBirthView: View {
                 .onChange(of: viewModel.dateOfBirth) { newValue in
                     viewModel.checkDateOfBirth(dob: newValue)
                 }
-                .accentColor(colorScheme == .dark ? Color.white : Color.black)
+                .accentColor(.white)
             
             Spacer()
             Button {

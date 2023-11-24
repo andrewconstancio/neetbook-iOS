@@ -60,16 +60,13 @@ final class AuthenticationViewModel: ObservableObject {
         }
 
         let userAcountCreated = try await checkUserAccountCreated(userId: authDataResults.uid)
-    
+          
         if !userAcountCreated {
-//            try await UserManager.shared.createNewUser(auth: authDataResults)
             profileSetup = false
         } else {
             profileSetup = true
         }
         
-        
-    
         return profileSetup
     }
 }

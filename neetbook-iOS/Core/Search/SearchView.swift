@@ -56,13 +56,10 @@ struct SearchView: View {
 //                }
                 
                 if viewModel.loadingBooks || viewModel.loadingUsers {
-                    VStack {
-                        Spacer()
-                        Spacer()
-                        Spacer()
-                        LoadingIndicator(animation: .circleTrim, color: .appColorGreen, speed: .fast)
-                        Spacer()
-                    }
+                    Spacer()
+                    Spacer()
+                    LoadingIndicator(animation: .circleTrim, color: .white, speed: .fast)
+                    Spacer()
                 }
 
                     if viewModel.searchType == "books" {
@@ -107,7 +104,7 @@ struct SearchView: View {
                         if viewModel.searchUsersResults.count > 0 {
                                 ForEach(viewModel.searchUsersResults, id: \.self) { user in
                                     NavigationLink {
-                                        OtherUserProfileIView(userId: user.id)
+                                        OtherUserProfileView(userId: user.id)
                                     } label: {
                                         HStack {
                                             Image(uiImage: user.profilePicture)
