@@ -22,77 +22,75 @@ struct BookView: View {
     let book: Book
     
     var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                Color.appColorWedge.ignoresSafeArea()
-                ScrollView {
-                    VStack {
-                        if let coverPhoto = book.coverPhoto {
-                            Image(uiImage: coverPhoto)
-                                .resizable()
-                                .frame(width: 125, height: 200)
-                                .cornerRadius(10)
-                                .shadow(radius: 10)
-                                .padding(.bottom, 20)
-                        }
+            FittedScrollView {
+                VStack {
+                    if let coverPhoto = book.coverPhoto {
+                        Image(uiImage: coverPhoto)
+                            .resizable()
+                            .frame(width: 125, height: 200)
+                            .cornerRadius(10)
+                            .shadow(radius: 10)
+                            .padding(.bottom, 20)
                     }
-                    
-                    VStack(alignment: .leading) {
-                        bookTitle
-                        authorName
-                        description
-                        if viewModel.userActions != nil && viewModel.savedActionToDB {
-                            savedToBookshelfButton
-                        } else {
-                            addToBookshelfButton
-                        }
-                        //comment section
-//                        BookCommentSectionView(viewModel: viewModel, bookId: book.bookId)
-                    }
-                    .padding()
-                    .frame(maxHeight: .infinity)
-                    .background(Color.white)
-                    .cornerRadius(25, corners: [.topLeft, .topRight])
                 }
+                
+                VStack(alignment: .leading) {
+                    bookTitle
+                    authorName
+                    description
+                    if viewModel.userActions != nil && viewModel.savedActionToDB {
+                        savedToBookshelfButton
+                    } else {
+                        addToBookshelfButton
+                    }
+                    //comment section
+                    BookCommentSectionView(viewModel: viewModel, bookId: book.bookId)
+                }
+                .padding()
+                .edgesIgnoringSafeArea(.all)
+                .background(Color.white)
+                .cornerRadius(25, corners: [.topLeft, .topRight])
+                
+                Spacer()
+            }
+            .background(Color.appColorWedge.ignoresSafeArea())
 //                .frame(minHeight: geo.size.height)
-                .scrollIndicators(.hidden)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink {
-                            AddToFavoritesView(book: book)
-                        } label: {
-                            if viewModel.savedToFavorites {
-                                Image(systemName: "star.fill")
-                                    .font(.headline)
-                                    .foregroundColor(.orange)
-                            } else {
-                                Image(systemName: "star")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                            }
+            .scrollIndicators(.hidden)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        AddToFavoritesView(book: book)
+                    } label: {
+                        if viewModel.savedToFavorites {
+                            Image(systemName: "star.fill")
+                                .font(.headline)
+                                .foregroundColor(.orange)
+                        } else {
+                            Image(systemName: "star")
+                                .font(.headline)
+                                .foregroundColor(.white)
                         }
                     }
-                }
-                .toolbarBackground(.hidden, for: .navigationBar)
-                .adaptiveSheet(isPresented: $showBookActionSheet, detents: [.medium()]) {
-                    BookActionView(
-                        viewModel: viewModel,
-                        showBookActionSheet: $showBookActionSheet,
-                        actionSelected: viewModel.userActions,
-                        book: book
-                    )
-                }
-                .onAppear {
-                    Task {
-                        try await viewModel.getUserBookAction(bookId: book.bookId)
-                        try await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
-                    }
-                }
-                .onDisappear {
-                    showBookActionSheet = false
                 }
             }
-        }
+            .toolbarBackground(.hidden, for: .navigationBar)
+            .adaptiveSheet(isPresented: $showBookActionSheet, detents: [.medium()]) {
+                BookActionView(
+                    viewModel: viewModel,
+                    showBookActionSheet: $showBookActionSheet,
+                    actionSelected: viewModel.userActions,
+                    book: book
+                )
+            }
+            .onAppear {
+                Task {
+                    try await viewModel.getUserBookAction(bookId: book.bookId)
+                    try await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
+                }
+            }
+            .onDisappear {
+                showBookActionSheet = false
+            }
         .edgesIgnoringSafeArea(.bottom)
     }
 }

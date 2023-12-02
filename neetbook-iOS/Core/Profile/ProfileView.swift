@@ -155,8 +155,60 @@ struct ProfileView: View {
                         Spacer()
                         VStack {
                             HStack {
-                                Text("Post here")
+                                if viewModel.activity.count > 0 {
+                                    ScrollView {
+                                        VStack(alignment: .leading){
+                                            ForEach(0..<viewModel.activity.count, id: \.self) { index in
+                                                HStack {
+                                                    VStack(alignment: .leading) {
+                                                        HStack {
+                                                            Text("You")
+                                                                .fontWeight(.bold)
+                                                                .foregroundColor(.white)
+                                                            
+                                                            Text(viewModel.activity[index].action)
+                                                                .foregroundColor(.white)
+                                                        }
+                                                        
+                                                        Text(viewModel.activity[index].book.title)
+                                                            .foregroundColor(.white)
+                                                            .fontWeight(.bold)
+                                                        
+                                                        Text("by \(viewModel.activity[index].book.author)")
+                                                            .foregroundColor(.white)
+                                                        
+                                                        Text(viewModel.activity[index].dateString)
+                                                            .fontWeight(.light)
+                                                            .fontWeight(.bold)
+                                                            .foregroundColor(.white.opacity(0.5))
+                                                    }
+                                                    Spacer()
+                                                    NavigationLink {
+                                                        BookView(book: viewModel.activity[index].book)
+                                                    } label: {
+                                                        Image(uiImage: viewModel.activity[index].bookCoverPicture)
+                                                            .resizable()
+                                                            .frame(width: 65, height: 100)
+                                                            .cornerRadius(10)
+                                                            .shadow(radius: 10)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .padding()
                                     .frame(width: geo.size.width)
+                                } else {
+                                    VStack {
+                                        Text("No activity yet!")
+                                            .foregroundColor(.white.opacity(0.7))
+                                            .fontWeight(.bold)
+                                            .frame(width: geo.size.width)
+                                        Spacer()
+                                        Spacer()
+                                        Spacer()
+                                    }
+                                }
                                 
                                 if viewModel.favoriteBooks.count > 0 {
                                     ScrollView {
@@ -170,6 +222,7 @@ struct ProfileView: View {
                                                             .resizable()
                                                             .frame(width: 85, height: 125)
                                                             .shadow(radius: 10)
+                                                            .cornerRadius(10)
                 
                                                     } placeholder: {
                                                         ProgressView()

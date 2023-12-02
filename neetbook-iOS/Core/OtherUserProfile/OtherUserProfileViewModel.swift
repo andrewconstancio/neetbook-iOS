@@ -19,6 +19,7 @@ class OtherUserProfileViewModel: ObservableObject {
     @Published private(set) var user: DBUser? = nil
     @Published private(set) var userProfilePicture: UIImage?
     @Published private(set) var userDataLoading: Bool = false
+    @Published var activity: [PostFeedInstance] = []
     @Published var favoriteBooks: [FavoriteBook] = []
     @Published var followingStatus: FollowingStatus = .notFollowing
     @Published var followingCount = 0
@@ -29,6 +30,7 @@ class OtherUserProfileViewModel: ObservableObject {
         try await getUserData(userId: userId)
         try await checkUserFollowing(userId: userId)
         try await getFavoriteBooks(userId: userId)
+        try await getUserActivity(userId: userId)
         self.mainDataLoading = false
     }
     
@@ -105,6 +107,14 @@ class OtherUserProfileViewModel: ObservableObject {
             let currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
             try await UserInteractions.shared.deleteUserFollowRequest(currentUserId: currentUserId, userId: userId)
             self.followingStatus = .notFollowing
+        } catch {
+            throw error
+        }
+    }
+    
+    func getUserActivity(userId: String) async throws {
+        do {
+            self.activity = try await UserFeedManager.shared.getUserActivty(userId: userId)
         } catch {
             throw error
         }

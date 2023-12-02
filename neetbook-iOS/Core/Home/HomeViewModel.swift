@@ -13,6 +13,12 @@ class HomeViewModel: ObservableObject {
     @Published var post: [PostFeedInstance] = []
     @Published var isLoadingFeed: Bool = false
     
+    init() {
+        Task {
+            try? await self.getHomeFeed()
+        }
+    }
+    
     func getProfileURL() async throws {
         do {
             let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()

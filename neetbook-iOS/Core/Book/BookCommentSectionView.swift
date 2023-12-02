@@ -85,6 +85,8 @@ struct BookCommentSectionView: View {
                     .padding(.top, 20)
                 }
             }
+            
+            Spacer()
         }
         .task {
             try? await viewModel.getAllBookComments(bookId: bookId)

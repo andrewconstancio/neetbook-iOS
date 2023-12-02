@@ -17,6 +17,12 @@ struct neetbook_iOSApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .onAppear {
+                                  UINavigationBar.appearance().backIndicatorImage = UIImage(systemName: "arrow.backward")
+
+                                  UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward")
+
+                              }
         }
     }
 }

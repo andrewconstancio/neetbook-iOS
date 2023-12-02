@@ -11,6 +11,7 @@ import SwiftUI
 final class ProfileViewModel: ObservableObject {
     @Published private(set) var user: DBUser? = nil
     @Published var favoriteBooks: [FavoriteBook] = []
+    @Published var activity: [PostFeedInstance] = []
     @Published var photoURL: String = ""
     @Published var followingCount = 0
     @Published var followerCount = 0
@@ -20,6 +21,15 @@ final class ProfileViewModel: ObservableObject {
         self.user = try await UserManager.shared.getUser(userId: authDataResult.uid)
         followingCount = try await UserManager.shared.getFollowingCount(userId: authDataResult.uid)
         followerCount = try await UserManager.shared.getFollowerCount(userId: authDataResult.uid)
+        try await self.getUserActivity(userId: authDataResult.uid)
+    }
+    
+    func getUserActivity(userId: String) async throws {
+        do {
+            self.activity = try await UserFeedManager.shared.getUserActivty(userId: userId)
+        } catch {
+            throw error
+        }
     }
     
     func getFavoriteBooks() async throws {
