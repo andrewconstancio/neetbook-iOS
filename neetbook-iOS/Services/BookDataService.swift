@@ -110,6 +110,15 @@ final class BookDataService {
             }
             
             let author = authors.joined(separator: ", ")
+            
+            let image: UIImage?
+            if let coverURL = URL(string: smallThumbnail) {
+                let (coverData, response) = try await URLSession.shared.data(from: coverURL, delegate: nil)
+                image = Helpers.shared.convertDataToUIImage(data: coverData, response: response)
+            } else {
+                image = UIImage(systemName: "book.closed.circle.fill")
+            }
+            
             return Book(
                  bookId: bookId,
                  title: title,
@@ -117,7 +126,8 @@ final class BookDataService {
                  coverURL: smallThumbnail,
                  description: description,
                  pageCount: pageCount,
-                 categories: categories
+                 categories: categories,
+                 coverPhoto: image
             )
         } catch {
            throw APIError.networkError(error)

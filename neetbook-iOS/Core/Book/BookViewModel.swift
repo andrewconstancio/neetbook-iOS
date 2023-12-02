@@ -9,17 +9,20 @@ import SwiftUI
 
 @MainActor
 final class BookViewModel: ObservableObject {
+    private(set) var currentUserId: String = ""
     @Published var userActions: ReadingActions? = nil
     @Published var userNewComment: String = ""
     @Published private(set) var bookComments: [BookComment] = []
     @Published var savedActionToDB: Bool = false
     @Published var savedToFavorites: Bool = false
-    
-    
+    @Published var isLoadingComments: Bool = false
+        
     func getUserBookAction(bookId: String) async throws {
         do {
             let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
             let action = try await BookUserActionManager.shared.getUserBookAction(bookId: bookId, userId: userId)
+            
+            currentUserId = userId
         
             DispatchQueue.main.async {
                 switch action {
@@ -78,14 +81,21 @@ final class BookViewModel: ObservableObject {
     func addUserBookComment(bookId: String) async throws {
         do {
             let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            try? BookUserCommentManager.shared.addUserBookComment(bookId: bookId, userId: userId, comment: userNewComment)
+            try? await BookUserCommentManager.shared.addUserBookComment(bookId: bookId, userId: userId, comment: userNewComment)
         } catch {
             throw error
         }
     }
     
+    func deleteBookComment(bookId: String, documentId: String) async throws {
+        try await BookUserCommentManager.shared.deleteBookComment(bookId: bookId, documentId: documentId)
+        self.bookComments =  self.bookComments.filter { $0.documentId != documentId}
+    }
+    
     func getAllBookComments(bookId: String) async throws {
+        isLoadingComments = true
         self.bookComments = try await BookUserCommentManager.shared.getAllBookComments(bookId: bookId)
+        isLoadingComments = false
     }
     
     func checkIfUserAddedBookToFavoritesList(bookId: String) async throws {

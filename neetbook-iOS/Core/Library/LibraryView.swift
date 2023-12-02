@@ -57,12 +57,12 @@ struct LibraryView: View {
                         VStack {
                                 // book view
                             if viewModel.isLoading {
+                                Spacer()
                                 HStack {
                                     Spacer()
-                                    LoadingIndicator(animation: .circleTrim, color: .appColorGreen, speed: .fast)
+                                    LoadingIndicator(animation: .circleTrim, color: .white, speed: .fast)
                                     Spacer()
                                 }
-                                Spacer()
                             } else {
                                 HStack {
                                     LibraryBookListView(bookList: viewModel.booksReading)

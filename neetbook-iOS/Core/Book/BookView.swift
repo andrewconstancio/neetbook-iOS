@@ -53,8 +53,7 @@ struct BookView: View {
                 
                 Spacer()
             }
-            .background(Color.appColorWedge.ignoresSafeArea())
-//                .frame(minHeight: geo.size.height)
+            .background(Color.appColorWedge)
             .scrollIndicators(.hidden)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

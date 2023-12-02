@@ -239,11 +239,13 @@ struct OtherUserProfileView: View {
                                                             NavigationLink {
                                                                 BookView(book: viewModel.activity[index].book)
                                                             } label: {
-                                                                Image(uiImage: viewModel.activity[index].bookCoverPicture)
-                                                                    .resizable()
-                                                                    .frame(width: 65, height: 100)
-                                                                    .cornerRadius(10)
-                                                                    .shadow(radius: 10)
+                                                                if let image = viewModel.activity[index].book.coverPhoto {
+                                                                    Image(uiImage: image)
+                                                                        .resizable()
+                                                                        .frame(width: 65, height: 100)
+                                                                        .cornerRadius(10)
+                                                                        .shadow(radius: 10)
+                                                                }
                                                             }
                                                         }
                                                     }

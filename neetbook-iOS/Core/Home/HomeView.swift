@@ -27,66 +27,75 @@ struct HomeView: View {
                         Spacer()
                     }
                 } else {
-                    ScrollView {
-                        VStack {
-                            ForEach(0..<viewModel.post.count, id: \.self) { index in
-                                HStack {
-                                    NavigationLink {
-                                        OtherUserProfileView(userId: viewModel.post[index].user.userId)
-                                    } label: {
-                                        Image(uiImage: viewModel.post[index].profilePicture)
-                                            .resizable()
-                                            .frame(width: 60, height: 60)
-                                            .clipShape(Circle())
-                                            .shadow(radius: 10)
-                                    }
-                                    VStack(alignment: .leading) {
-                                        HStack {
-                                            Text(viewModel.post[index].user.displayname ?? "")
-                                                .fontWeight(.bold)
-                                                .foregroundColor(.white)
-                                            
-                                            Text(viewModel.post[index].action)
-                                                .foregroundColor(.white)
-                                                .offset(x: -5)
-                                                .font(.system(size: 12))
+                    if viewModel.post.count > 0 {
+                        ScrollView {
+                            VStack {
+                                ForEach(0..<viewModel.post.count, id: \.self) { index in
+                                    HStack {
+                                        NavigationLink {
+                                            OtherUserProfileView(userId: viewModel.post[index].user.userId)
+                                        } label: {
+                                            Image(uiImage: viewModel.post[index].profilePicture)
+                                                .resizable()
+                                                .frame(width: 60, height: 60)
+                                                .clipShape(Circle())
+                                                .shadow(radius: 10)
                                         }
-                                        
-                                        Text(viewModel.post[index].book.title)
-                                            .foregroundColor(.white)
-                                            .fontWeight(.light)
-                                        
-//                                        Text("by \(viewModel.post[index].book.author)")
-//                                            .foregroundColor(.white)
-                                        
-                                        Text(viewModel.post[index].dateString)
-                                            .fontWeight(.light)
-                                            .fontWeight(.bold)
-                                            .font(.system(size: 14))
-                                            .foregroundColor(.white.opacity(0.5))
+                                        VStack(alignment: .leading) {
+                                            HStack {
+                                                Text(viewModel.post[index].user.displayname ?? "")
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(.white)
+                                                
+                                                Text(viewModel.post[index].action)
+                                                    .foregroundColor(.white)
+                                                    .offset(x: -5)
+                                                    .font(.system(size: 14))
+                                            }
+                                            
+                                            Text(viewModel.post[index].book.title)
+                                                .foregroundColor(.white)
+                                                .fontWeight(.light)
+                                            
+                                            Text(viewModel.post[index].dateString)
+                                                .fontWeight(.light)
+                                                .fontWeight(.bold)
+                                                .font(.system(size: 14))
+                                                .foregroundColor(.white.opacity(0.5))
+                                        }
+                                        Spacer()
+                                        NavigationLink {
+                                            BookView(book: viewModel.post[index].book)
+                                        } label: {
+                                            if let image = viewModel.post[index].book.coverPhoto {
+                                                Image(uiImage: image)
+                                                    .resizable()
+                                                    .frame(width: 65, height: 100)
+                                                    .cornerRadius(10)
+                                                    .shadow(radius: 10)
+                                            }
+                                        }
                                     }
-                                    Spacer()
-                                    NavigationLink {
-                                        BookView(book: viewModel.post[index].book)
-                                    } label: {
-                                        Image(uiImage: viewModel.post[index].bookCoverPicture)
-                                            .resizable()
-                                            .frame(width: 65, height: 100)
-                                            .cornerRadius(10)
-                                            .shadow(radius: 10)
-                                    }
+                                    .padding(.horizontal, 8)
+                                    .frame(height: 120)
+                                    .background(Color.appColorBeige.opacity(0.3))
+                                    .clipShape(RoundedRectangle(cornerRadius:10))
+                                    .frame(maxWidth: .infinity)
+                                    .shadow(radius: 10)
                                 }
-                                .padding(.horizontal, 8)
-                                .frame(height: 120)
-                                .background(Color.appColorBeige.opacity(0.3))
-                                .clipShape(RoundedRectangle(cornerRadius:10))
-                                .frame(maxWidth: .infinity)
-                                .shadow(radius: 10)
                             }
+                            .padding(.bottom, 120)
                         }
-                        .padding(.bottom, 120)
+                        .scrollIndicators(.hidden)
+                    } else {
+                        VStack {
+                            Spacer()
+                            Text("Add some friends to see activites here!")
+                                .foregroundColor(.white.opacity(0.7))
+                                .fontWeight(.bold)
+                            Spacer()
+                        }
                     }
-                    .scrollIndicators(.hidden)
                     Spacer()
                 }
             }

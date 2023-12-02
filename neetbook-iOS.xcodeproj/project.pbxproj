@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1C2D4C7E2B19702100828D16 /* FittedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C7D2B19702100828D16 /* FittedScrollView.swift */; };
+		1C2D4C812B1AC9ED00828D16 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 1C2D4C802B1AC9ED00828D16 /* PopupView */; };
+		1C2D4C832B1AD3E000828D16 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C822B1AD3E000828D16 /* CommentView.swift */; };
 		1C6A84F12AF1A7E800266135 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F02AF1A7E800266135 /* EditProfileViewModel.swift */; };
 		1C6A84F32AFF044300266135 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F22AFF044300266135 /* HomeViewModel.swift */; };
 		1C6A84F52AFF4D9900266135 /* UserInteractions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F42AFF4D9900266135 /* UserInteractions.swift */; };
@@ -134,6 +136,7 @@
 
 /* Begin PBXFileReference section */
 		1C2D4C7D2B19702100828D16 /* FittedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittedScrollView.swift; sourceTree = "<group>"; };
+		1C2D4C822B1AD3E000828D16 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		1C6A84F02AF1A7E800266135 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
 		1C6A84F22AFF044300266135 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		1C6A84F42AFF4D9900266135 /* UserInteractions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInteractions.swift; sourceTree = "<group>"; };
@@ -246,6 +249,7 @@
 				1CEDE22E2A95ADAE005DEDBA /* FirebaseStorage in Frameworks */,
 				1CC81F5D2A5A2127001D56E1 /* FirebaseAuth in Frameworks */,
 				1CC81F592A5A2127001D56E1 /* FirebaseAnalytics in Frameworks */,
+				1C2D4C812B1AC9ED00828D16 /* PopupView in Frameworks */,
 				1CB1B3BF2A5B50DE009F6914 /* FirebaseFirestore in Frameworks */,
 				1CC81F652A5A2127001D56E1 /* FirebaseFirestoreSwift in Frameworks */,
 				1CC81F632A5A2127001D56E1 /* FirebaseFirestoreCombine-Community in Frameworks */,
@@ -326,6 +330,7 @@
 				1CE3A2B62ACD0231003BAD2A /* AddToFavoritesView.swift */,
 				1CE3A2B82AD4F0E4003BAD2A /* AddToFavoritesViewModel.swift */,
 				1C6A85072B098E3300266135 /* TestView.swift */,
+				1C2D4C822B1AD3E000828D16 /* CommentView.swift */,
 			);
 			path = Book;
 			sourceTree = "<group>";
@@ -621,6 +626,7 @@
 				1CE3A2A52ABA7CC0003BAD2A /* SnapToScroll */,
 				1CE3A2A82ABA828F003BAD2A /* VisibilityTrackingScrollView */,
 				1C6A85032B01CBAA00266135 /* SwiftfulLoadingIndicators */,
+				1C2D4C802B1AC9ED00828D16 /* PopupView */,
 			);
 			productName = "neetbook-iOS";
 			productReference = 1CC81F272A5A20C1001D56E1 /* neetbook-iOS.app */;
@@ -700,6 +706,7 @@
 				1CE3A2A42ABA7CC0003BAD2A /* XCRemoteSwiftPackageReference "hstack-snap-to-scroll" */,
 				1CE3A2A72ABA828F003BAD2A /* XCRemoteSwiftPackageReference "VisibilityTrackingScrollView" */,
 				1C6A85022B01CBAA00266135 /* XCRemoteSwiftPackageReference "SwiftfulLoadingIndicators" */,
+				1C2D4C7F2B1AC9ED00828D16 /* XCRemoteSwiftPackageReference "PopupView" */,
 			);
 			productRefGroup = 1CC81F282A5A20C1001D56E1 /* Products */;
 			projectDirPath = "";
@@ -786,6 +793,7 @@
 				1C6A85082B098E3300266135 /* TestView.swift in Sources */,
 				1C6A84FF2AFFFE6D00266135 /* CurrentUserViewModel.swift in Sources */,
 				1CE3A2BB2ADCA87A003BAD2A /* String-Ext.swift in Sources */,
+				1C2D4C832B1AD3E000828D16 /* CommentView.swift in Sources */,
 				1CC81F9A2A5B40E0001D56E1 /* AuthenticationViewModel.swift in Sources */,
 				1CB1B3CC2A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift in Sources */,
 				1CE3A2BD2ADCA9A0003BAD2A /* ProfileViewModel.swift in Sources */,
@@ -1186,6 +1194,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1C2D4C7F2B1AC9ED00828D16 /* XCRemoteSwiftPackageReference "PopupView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/PopupView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		1C6A85022B01CBAA00266135 /* XCRemoteSwiftPackageReference "SwiftfulLoadingIndicators" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftfulThinking/SwiftfulLoadingIndicators.git";
@@ -1229,6 +1245,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1C2D4C802B1AC9ED00828D16 /* PopupView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1C2D4C7F2B1AC9ED00828D16 /* XCRemoteSwiftPackageReference "PopupView" */;
+			productName = PopupView;
+		};
 		1C6A85032B01CBAA00266135 /* SwiftfulLoadingIndicators */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1C6A85022B01CBAA00266135 /* XCRemoteSwiftPackageReference "SwiftfulLoadingIndicators" */;

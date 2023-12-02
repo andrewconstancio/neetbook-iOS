@@ -15,7 +15,6 @@ struct PostFeedInstance {
     let action: String
     let user: DBUser
     let profilePicture: UIImage
-    let bookCoverPicture: UIImage
     let book: Book
     var dateEvent: Date
     var dateString: String {
@@ -50,7 +49,6 @@ final class UserFeedManager {
             return try await withThrowingTaskGroup(of: PostFeedInstance?.self) { group in
                 var postList: [PostFeedInstance] = []
                 
-                var index = 1
                 for result in actionResults.documents {
                     group.addTask {
                         let data = result.data()
@@ -75,22 +73,21 @@ final class UserFeedManager {
                             actionText = "finished!"
                         }
                         
-                        guard let book = bookData else { return nil }
-                        let coverURL = book.coverURL
+                        guard let book = bookData else {  return nil }
+//                        let coverURL = book.coverURL
+//
+//                        var coverImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+//                        coverImage = try await UserManager.shared.getURLImageAsUIImage(path: coverURL)
                         
-                        var coverImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-                        coverImage = try await UserManager.shared.getURLImageAsUIImage(path: coverURL)
                         
                         return PostFeedInstance(
                             action: actionText,
                             user: user,
                             profilePicture: profileImage,
-                            bookCoverPicture: coverImage,
                             book: book,
                             dateEvent: dateCreated
                         )
                     }
-                    index += 1
                 }
                 
                 for try await post in group {
@@ -145,16 +142,15 @@ final class UserFeedManager {
                         }
                         
                         guard let book = bookData else { return nil }
-                        let coverURL = book.coverURL
-                        
-                        var coverImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-                        coverImage = try await UserManager.shared.getURLImageAsUIImage(path: coverURL)
+//                        let coverURL = book.coverURL
+//
+//                        var coverImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+//                        coverImage = try await UserManager.shared.getURLImageAsUIImage(path: coverURL)
                         
                         return PostFeedInstance(
                             action: actionText,
                             user: user,
                             profilePicture: profileImage,
-                            bookCoverPicture: coverImage,
                             book: book,
                             dateEvent: dateCreated
                         )
