@@ -11,7 +11,7 @@ struct NotificationView: View {
     @StateObject private var viewModel = NotificationsViewModel()
     var body: some View {
         ZStack {
-            Color.appBackgroundColor.ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             VStack {
                 ScrollView {
                     if viewModel.notifications.count > 0 {
@@ -20,7 +20,7 @@ struct NotificationView: View {
                         VStack {
                             Spacer()
                             Text("Nothing to see here!")
-                                .foregroundColor(.white.opacity(0.7))
+                                .foregroundColor(.black.opacity(0.7))
                                 .fontWeight(.bold)
                                 .frame(maxWidth: .infinity)
                             Spacer()
@@ -60,11 +60,11 @@ extension NotificationView {
                 VStack(alignment: .leading) {
                     Text("\(value.username)#\(value.hashcode)")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                     
                     Text("Requested to follow")
                         .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(.black.opacity(0.7))
                 }
                 Spacer()
                 Button {
@@ -76,7 +76,7 @@ extension NotificationView {
                         .font(.system(size: 14))
                         .foregroundColor(.white)
                         .padding(7)
-                        .background(Color.appColorCambridgeBlue)
+                        .background(Color.appColorPurple)
                         .cornerRadius(5)
                         .overlay(
                             RoundedRectangle(cornerRadius: 5)

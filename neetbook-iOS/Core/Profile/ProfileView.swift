@@ -14,6 +14,7 @@ struct ProfileView: View {
     @State var showProfileEditView: Bool = false
     @State var showFollowListView: Bool = false
     @EnvironmentObject var currentUserViewModel: CurrentUserViewModel
+    @Environment(\.dismiss) private var dismiss
 
     @State var backgroundOffset: CGFloat = 0
     @State var currentIndex = 0
@@ -24,7 +25,7 @@ struct ProfileView: View {
     
     var body: some View {
         ZStack {
-            Color.appBackgroundColor.ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             VStack() {
                 VStack() {
                         HStack(alignment: .top) {
@@ -32,12 +33,12 @@ struct ProfileView: View {
                                 Text(viewModel.user?.displayname ?? "")
                                     .font(.system(size: 36))
                                     .fontWeight(.bold)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.black)
 
                                 Text("\(viewModel.user?.username ?? "")#\(viewModel.user?.hashcode ?? "")")
                                     .font(.subheadline)
                                     .fontWeight(.bold)
-                                    .foregroundColor(.white.opacity(0.7))
+                                    .foregroundColor(.black.opacity(0.7))
 
                                 HStack {
                                     Button {
@@ -45,12 +46,12 @@ struct ProfileView: View {
                                     } label: {
                                         HStack(spacing: 5) {
                                             Text("\(viewModel.followingCount)")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.black)
                                                 .fontWeight(.bold)
                                                 .font(.system(size: 15))
 
                                             Text("Following")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.black)
                                                 .font(.system(size: 15))
                                         }
                                     }
@@ -59,12 +60,12 @@ struct ProfileView: View {
                                     } label: {
                                         HStack(spacing: 5) {
                                             Text("\(viewModel.followerCount)")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.black)
                                                 .fontWeight(.bold)
                                                 .font(.system(size: 15))
 
                                             Text("Followers")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.black)
                                                 .font(.system(size: 15))
                                         }
                                     }
@@ -99,9 +100,9 @@ struct ProfileView: View {
                         Text("Edit Profile")
                             .frame(width: UIScreen.main.bounds.width / 3)
                             .font(.system(size: 14))
-                            .foregroundColor(.black)
+                            .foregroundColor(.white)
                             .padding(5)
-                            .background(.white)
+                            .background(Color.appColorPurple)
                             .cornerRadius(10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
@@ -114,9 +115,9 @@ struct ProfileView: View {
                         Text("Share Profile")
                             .frame(width: UIScreen.main.bounds.width / 3)
                             .font(.system(size: 14))
-                            .foregroundColor(.black)
+                            .foregroundColor(.white)
                             .padding(5)
-                            .background(.white)
+                            .background(Color.appColorPurple)
                             .cornerRadius(10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
@@ -131,13 +132,13 @@ struct ProfileView: View {
                         ZStack(alignment: .bottom) {
                             if currentIndex == index {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.white)
+                                    .fill(Color.black)
                                     .matchedGeometryEffect(id: "category_background", in: namespace2)
                                     .frame(width: 35, height: 2)
                                     .offset(y: 10)
                             }
                             Text(categories[index])
-                                .foregroundColor(currentIndex == index ? .white : .white.opacity(0.5))
+                                .foregroundColor(currentIndex == index ? .black : .black.opacity(0.5))
                         }
                         .frame(width: UIScreen.main.bounds.width / 3, height: 55)
                         .onTapGesture {
@@ -164,23 +165,23 @@ struct ProfileView: View {
                                                         HStack {
                                                             Text("You")
                                                                 .fontWeight(.bold)
-                                                                .foregroundColor(.white)
+                                                                .foregroundColor(.black)
                                                             
                                                             Text(viewModel.activity[index].action)
-                                                                .foregroundColor(.white)
+                                                                .foregroundColor(.black)
                                                         }
                                                         
                                                         Text(viewModel.activity[index].book.title)
-                                                            .foregroundColor(.white)
+                                                            .foregroundColor(.black)
                                                             .fontWeight(.bold)
                                                         
                                                         Text("by \(viewModel.activity[index].book.author)")
-                                                            .foregroundColor(.white)
+                                                            .foregroundColor(.black)
                                                         
                                                         Text(viewModel.activity[index].dateString)
                                                             .fontWeight(.light)
                                                             .fontWeight(.bold)
-                                                            .foregroundColor(.white.opacity(0.5))
+                                                            .foregroundColor(.black.opacity(0.5))
                                                     }
                                                     Spacer()
                                                     NavigationLink {
@@ -198,12 +199,13 @@ struct ProfileView: View {
                                             }
                                         }
                                     }
+                                    .scrollIndicators(.hidden)
                                     .padding()
                                     .frame(width: geo.size.width)
                                 } else {
                                     VStack {
                                         Text("No activity yet!")
-                                            .foregroundColor(.white.opacity(0.7))
+                                            .foregroundColor(.black.opacity(0.7))
                                             .fontWeight(.bold)
                                             .frame(width: geo.size.width)
                                         Spacer()
@@ -286,6 +288,8 @@ struct ProfileView: View {
 
             Utilities.shared.hideToolBarBackground()
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink {
@@ -293,7 +297,7 @@ struct ProfileView: View {
                 } label: {
                     Image(systemName: "gear")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                 }
             }
         }

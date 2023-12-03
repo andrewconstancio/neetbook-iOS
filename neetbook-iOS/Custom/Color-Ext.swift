@@ -52,6 +52,18 @@ extension Color {
     public static var appColorCeladon: Color {
         return Color(hex: "ABEBD2")
     }
+    
+    public static var appColorPurple: Color {
+        return Color(hex: "1b1545")
+    }
+    
+    public static var appColorOrange: Color {
+        return Color(hex: "faa639")
+    }
+    
+    public static var appGradientOne: LinearGradient {
+        return LinearGradient(gradient: Gradient(stops: [Gradient.Stop(color: Color(hue: 0.7170674887048193, saturation: 0.7142083960843374, brightness: 0.6054569841867471, opacity: 0.8982492469879518), location: 0.18886718749999998), Gradient.Stop(color: Color(hue: 0.958449030496988, saturation: 0.9845867846385543, brightness: 1.0, opacity: 0.6921916180346386), location: 0.5756310096153845)]), startPoint: UnitPoint.topLeading, endPoint: UnitPoint.bottomTrailing)
+    }
 }
 
 extension Color {

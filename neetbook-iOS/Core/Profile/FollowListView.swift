@@ -18,20 +18,20 @@ struct FollowListView: View {
     
     var body: some View {
         ZStack {
-            Color.appBackgroundColor.ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             VStack {
                 HStack {
                     ForEach(0..<categories.count, id: \.self) { index in
                         ZStack(alignment: .bottom) {
                             if currentIndex == index {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.white)
+                                    .fill(Color.black)
                                     .matchedGeometryEffect(id: "category_background", in: namespace2)
                                     .frame(width: 35, height: 2)
                                     .offset(y: 10)
                             }
                             Text(categories[index])
-                                .foregroundColor(currentIndex == index ? .white : .white.opacity(0.5))
+                                .foregroundColor(currentIndex == index ? .black : .black.opacity(0.5))
                         }
                         .frame(width: UIScreen.main.bounds.width / 3, height: 55)
                         .onTapGesture {
@@ -52,7 +52,7 @@ struct FollowListView: View {
                 if viewModel.isLoadingFollowers {
                     VStack {
                         Spacer()
-                        LoadingIndicator(animation: .threeBalls, color: .white, speed: .fast)
+                        LoadingIndicator(animation: .threeBalls, color: .black, speed: .fast)
                         Spacer()
                     }
                 } else {
@@ -116,10 +116,10 @@ extension FollowListView {
                     VStack(alignment: .leading) {
                         Text("\( viewModel.following[index].displayName)")
                             .font(.headline)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                         Text("\( viewModel.following[index].username)")
                             .font(.subheadline)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                     }
                     Spacer()
                     if  viewModel.following[index].followingStatus == .following {
@@ -172,7 +172,7 @@ extension FollowListView {
                                 .font(.system(size: 14))
                                 .foregroundColor(.white)
                                 .padding(7)
-                                .background(Color.blue)
+                                .background(Color.appColorPurple)
                                 .cornerRadius(5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 5)
@@ -205,10 +205,10 @@ extension FollowListView {
                     VStack(alignment: .leading) {
                         Text("\(viewModel.followers[index].displayName)")
                             .font(.headline)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                         Text("\(viewModel.followers[index].username)")
                             .font(.subheadline)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                     }
                     Spacer()
                     Button {

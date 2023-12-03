@@ -25,40 +25,52 @@ struct BookCommentSectionView: View {
                     Spacer()
                 }
             } else {
-                Text("Comments")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundColor(.black)
-                    .padding(.top, 5)
-                
-                TextField("", text: $viewModel.userNewComment, axis: .vertical)
-                .placeholder(when: viewModel.userNewComment.isEmpty) {
-                    Text("Leave a comment...")
-                        .foregroundColor(.gray)
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "pencil")
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        Text("Leave a note")
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                    }
+                    .frame(height: 65)
+                    .frame(maxWidth: .infinity)
+                    .background(.black)
+                    .cornerRadius(30)
                 }
-                .multilineTextAlignment(.leading)
-                .font(.system(size: 14))
-                .padding()
-                .background(.white)
-                .overlay(
-                   RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.white.opacity(0.5))
-               )
+                .padding(.top, 10)
+//                TextField("", text: $viewModel.userNewComment, axis: .vertical)
+//                .placeholder(when: viewModel.userNewComment.isEmpty) {
+//                    Text("Leave a note...")
+//                        .foregroundColor(.gray)
+//                }
+//                .multilineTextAlignment(.leading)
+//                .font(.system(size: 14))
+//                .padding(.top, 20)
+//                .padding()
+//                .background(.white)
+//                .overlay(
+//                   RoundedRectangle(cornerRadius: 15)
+//                    .stroke(Color.white.opacity(0.5))
+//               )
                 
                 if !viewModel.userNewComment.isEmpty && viewModel.userNewComment.count > 3 {
                     Button {
                         Task {
                             try? await viewModel.addUserBookComment(bookId: bookId)
-                            try? await viewModel.getAllBookComments(bookId: bookId)
                         }
                     } label: {
-                        Text("Comment")
+                        Text("Post")
                             .padding(15)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
+                            .frame(height: 70)
                             .frame(maxWidth: .infinity)
-                            .background(.blue)
-                            .cornerRadius(25)
+                            .background(Color.appColorPurple)
+                            .cornerRadius(30)
                     }
                 }
                 if(viewModel.bookComments.count > 0) {

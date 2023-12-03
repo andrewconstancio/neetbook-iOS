@@ -14,6 +14,7 @@ struct OtherUserProfileView: View {
     @State var showFollowListView: Bool = false
     @State var backgroundOffset: CGFloat = 0
     @State var currentIndex = 0
+    @Environment(\.dismiss) private var dismiss
     
     let categories: [String] = ["Activity", "Favorites"]
     @State private var selected: String = "Activity"
@@ -21,12 +22,12 @@ struct OtherUserProfileView: View {
     
     var body: some View {
         ZStack {
-            Color.appBackgroundColor.ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             VStack() {
                 if viewModel.mainDataLoading {
                     VStack {
                         Spacer()
-                        LoadingIndicator(animation: .threeBalls, color: .white, speed: .fast)
+                        LoadingIndicator(animation: .threeBalls, color: .black, speed: .fast)
                         Spacer()
                     }
                 } else {
@@ -35,12 +36,12 @@ struct OtherUserProfileView: View {
                             Text(viewModel.user?.displayname ?? "")
                                 .font(.system(size: 36))
                                 .fontWeight(.bold)
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                             
                             Text("\(viewModel.user?.username ?? "")#\(viewModel.user?.hashcode ?? "")")
                                 .font(.subheadline)
                                 .fontWeight(.bold)
-                                .foregroundColor(.white.opacity(0.7))
+                                .foregroundColor(.black.opacity(0.7))
                             
                                 HStack {
                                     if viewModel.followingStatus == .following {
@@ -49,12 +50,12 @@ struct OtherUserProfileView: View {
                                         } label: {
                                             HStack(spacing: 5) {
                                                 Text("\(viewModel.followingCount)")
-                                                    .foregroundColor(.white)
+                                                    .foregroundColor(.black)
                                                     .fontWeight(.bold)
                                                     .font(.system(size: 15))
 
                                                 Text("Following")
-                                                    .foregroundColor(.white)
+                                                    .foregroundColor(.black)
                                                     .font(.system(size: 15))
                                             }
                                         }
@@ -63,35 +64,35 @@ struct OtherUserProfileView: View {
                                         } label: {
                                             HStack(spacing: 5) {
                                                 Text("\(viewModel.followerCount)")
-                                                    .foregroundColor(.white)
+                                                    .foregroundColor(.black)
                                                     .fontWeight(.bold)
                                                     .font(.system(size: 15))
 
                                                 Text("Followers")
-                                                    .foregroundColor(.white)
+                                                    .foregroundColor(.black)
                                                     .font(.system(size: 15))
                                             }
                                         }
                                     } else {
                                         HStack(spacing: 5) {
                                             Text("\(viewModel.followingCount)")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.black)
                                                 .fontWeight(.bold)
                                                 .font(.system(size: 15))
                                             
                                             Text("Following")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.black)
                                                 .font(.system(size: 15))
                                         }
                                         
                                         HStack(spacing: 5) {
                                             Text("\(viewModel.followerCount)")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.black)
                                                 .fontWeight(.bold)
                                                 .font(.system(size: 15))
                                             
                                             Text("Followers")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.black)
                                                 .font(.system(size: 15))
                                         }
                                     }
@@ -129,7 +130,7 @@ struct OtherUserProfileView: View {
                                     .font(.system(size: 14))
                                     .foregroundColor(.black)
                                     .padding(5)
-                                    .background(Color.appColorCeladon)
+                                    .background(Color.appColorPurple)
                                     .cornerRadius(10)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
@@ -184,13 +185,13 @@ struct OtherUserProfileView: View {
                                 ZStack(alignment: .bottom) {
                                     if currentIndex == index {
                                         RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color.white)
+                                            .fill(Color.black)
                                             .matchedGeometryEffect(id: "category_background", in: namespace2)
                                             .frame(width: 35, height: 2)
                                             .offset(y: 10)
                                     }
                                     Text(categories[index])
-                                        .foregroundColor(currentIndex == index ? .white : .white.opacity(0.5))
+                                        .foregroundColor(currentIndex == index ? .black : .black.opacity(0.5))
                                 }
                                 .frame(width: UIScreen.main.bounds.width / 3, height: 55)
                                 .onTapGesture {
@@ -217,23 +218,23 @@ struct OtherUserProfileView: View {
                                                                 HStack {
                                                                     Text(viewModel.activity[index].user.displayname ?? "")
                                                                         .fontWeight(.bold)
-                                                                        .foregroundColor(.white)
+                                                                        .foregroundColor(.black)
                                                                     
                                                                     Text(viewModel.activity[index].action)
-                                                                        .foregroundColor(.white)
+                                                                        .foregroundColor(.black)
                                                                 }
                                                                 
                                                                 Text(viewModel.activity[index].book.title)
-                                                                    .foregroundColor(.white)
+                                                                    .foregroundColor(.black)
                                                                     .fontWeight(.bold)
                                                                 
                                                                 Text("by \(viewModel.activity[index].book.author)")
-                                                                    .foregroundColor(.white)
+                                                                    .foregroundColor(.black)
                                                                 
                                                                 Text(viewModel.activity[index].dateString)
                                                                     .fontWeight(.light)
                                                                     .fontWeight(.bold)
-                                                                    .foregroundColor(.white.opacity(0.5))
+                                                                    .foregroundColor(.black.opacity(0.5))
                                                             }
                                                             Spacer()
                                                             NavigationLink {
@@ -256,7 +257,7 @@ struct OtherUserProfileView: View {
                                         } else {
                                             VStack {
                                                 Text("No activity yet!")
-                                                    .foregroundColor(.white.opacity(0.7))
+                                                    .foregroundColor(.black.opacity(0.7))
                                                     .fontWeight(.bold)
                                                     .frame(width: geo.size.width)
                                                 Spacer()
@@ -291,7 +292,7 @@ struct OtherUserProfileView: View {
                                         } else {
                                             VStack {
                                                 Text("No books added yet!")
-                                                    .foregroundColor(.white.opacity(0.7))
+                                                    .foregroundColor(.black.opacity(0.7))
                                                     .fontWeight(.bold)
                                                 Spacer()
                                                 Spacer()
@@ -310,12 +311,14 @@ struct OtherUserProfileView: View {
                             Image(systemName: "lock")
                                 .font(.system(size: 36))
                                 .frame(width: 100, height: 100, alignment: .center)
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                             Spacer()
                         }
                     }
                 }
             }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
             .sheet(isPresented: $showFollowListView) {
                 if let userId = viewModel.user?.userId {
                     OtherFollowListView(userId: userId)

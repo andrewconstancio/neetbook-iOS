@@ -79,12 +79,14 @@ final class BookViewModel: ObservableObject {
     }
     
     func addUserBookComment(bookId: String) async throws {
-        do {
-            let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            try? await BookUserCommentManager.shared.addUserBookComment(bookId: bookId, userId: userId, comment: userNewComment)
-        } catch {
-            throw error
+        let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+        let newComment = try? await BookUserCommentManager.shared.addUserBookComment(bookId: bookId, userId: userId, comment: userNewComment)
+        
+        if let comment = newComment {
+            self.bookComments.insert(comment, at: 0)
         }
+        
+        userNewComment = ""
     }
     
     func deleteBookComment(bookId: String, documentId: String) async throws {

@@ -22,7 +22,7 @@ struct LibraryBookListView: View {
                                 AsyncImage(url: URL(string: book.coverURL)) { image in
                                     image
                                         .resizable()
-                                        .frame(width: 85, height: 125)
+                                        .frame(width: 85, height: 135)
                                         .cornerRadius(10)
                                         .shadow(radius: 10)
                                     
@@ -38,7 +38,7 @@ struct LibraryBookListView: View {
                         HStack {
                             Spacer()
                             Text("No books added yet!")
-                                .foregroundColor(.white.opacity(0.7))
+                                .foregroundColor(.black.opacity(0.7))
                                 .fontWeight(.bold)
                             Spacer()
                         }

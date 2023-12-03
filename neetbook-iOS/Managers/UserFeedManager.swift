@@ -39,67 +39,64 @@ final class UserFeedManager {
             let results = try await followQ.getDocuments()
             let userIdList = results.documents.compactMap { $0["user_id"] as? String }
         
-            let actionQ = actionCollection
-                .whereField("user_id", in: userIdList)
-                .limit(to: 10)
-                .order(by: "date_created", descending: true)
+            var postList: [PostFeedInstance] = []
             
-            let actionResults = try await actionQ.getDocuments()
-        
-            return try await withThrowingTaskGroup(of: PostFeedInstance?.self) { group in
-                var postList: [PostFeedInstance] = []
+            if userIdList.count > 0 {
+                let actionQ = actionCollection
+                    .whereField("user_id", in: userIdList)
+                    .limit(to: 10)
+                    .order(by: "date_created", descending: true)
                 
-                for result in actionResults.documents {
-                    group.addTask {
-                        let data = result.data()
-                        let userId = data["user_id"] as? String ?? ""
-                        let action = data["action"] as? String ?? ""
-                        let bookId = data["book_id"] as? String ?? ""
-                        let dateCreated = (data["date_created"] as? Timestamp)?.dateValue() ?? Date()
-                        let user = try await UserManager.shared.getUser(userId: userId)
-                        let bookData = try await BookDataService.shared.fetchBookInfo(bookId: bookId)
-                        var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-                        if let photoUrl = user.photoUrl {
-                            profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+                let actionResults = try await actionQ.getDocuments()
+            
+                try await withThrowingTaskGroup(of: PostFeedInstance?.self) { group in
+                    for result in actionResults.documents {
+                        group.addTask {
+                            let data = result.data()
+                            let userId = data["user_id"] as? String ?? ""
+                            let action = data["action"] as? String ?? ""
+                            let bookId = data["book_id"] as? String ?? ""
+                            let dateCreated = (data["date_created"] as? Timestamp)?.dateValue() ?? Date()
+                            let user = try await UserManager.shared.getUser(userId: userId)
+                            let bookData = try await BookDataService.shared.fetchBookInfo(bookId: bookId)
+                            var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+                            if let photoUrl = user.photoUrl {
+                                profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+                            }
+                            
+                            var actionText = ""
+                            
+                            if action == "Reading" {
+                                actionText = "started reading"
+                            } else if action == "Want To Read" {
+                                actionText = "wants to read"
+                            } else if action == "Read" {
+                                actionText = "finished!"
+                            }
+                            
+                            guard let book = bookData else {  return nil }
+    
+                            return PostFeedInstance(
+                                action: actionText,
+                                user: user,
+                                profilePicture: profileImage,
+                                book: book,
+                                dateEvent: dateCreated
+                            )
                         }
-                        
-                        var actionText = ""
-                        
-                        if action == "Reading" {
-                            actionText = "started reading"
-                        } else if action == "Want To Read" {
-                            actionText = "wants to read"
-                        } else if action == "Read" {
-                            actionText = "finished!"
+                    }
+                    
+                    for try await post in group {
+                        if let post = post {
+                            postList.append(post)
                         }
-                        
-                        guard let book = bookData else {  return nil }
-//                        let coverURL = book.coverURL
-//
-//                        var coverImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-//                        coverImage = try await UserManager.shared.getURLImageAsUIImage(path: coverURL)
-                        
-                        
-                        return PostFeedInstance(
-                            action: actionText,
-                            user: user,
-                            profilePicture: profileImage,
-                            book: book,
-                            dateEvent: dateCreated
-                        )
                     }
+                    
+                    postList.sort { $0.dateEvent > $1.dateEvent }
                 }
-                
-                for try await post in group {
-                    if let post = post {
-                        postList.append(post)
-                    }
-                }
-                
-                postList.sort { $0.dateEvent > $1.dateEvent }
-                
-                return postList
             }
+            
+            return postList
         } catch {
             throw error
         }

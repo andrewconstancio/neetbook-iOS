@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PopupView
+import SwiftfulLoadingIndicators
 
 enum ReadingActions {
     case reading
@@ -18,79 +20,78 @@ struct BookView: View {
     @StateObject var viewModel = BookViewModel()
     @State private var showBookActionSheet = false
     @State private var showFullDescription: Bool = false
+    @Environment(\.dismiss) private var dismiss
     
     let book: Book
     
     var body: some View {
-            FittedScrollView {
-                VStack {
-                    if let coverPhoto = book.coverPhoto {
-                        Image(uiImage: coverPhoto)
-                            .resizable()
-                            .frame(width: 125, height: 200)
-                            .cornerRadius(10)
-                            .shadow(radius: 10)
-                            .padding(.bottom, 20)
-                    }
+        FittedScrollView {
+            VStack {
+                if let coverPhoto = book.coverPhoto {
+                    Image(uiImage: coverPhoto)
+                        .resizable()
+                        .frame(width: 125, height: 200)
+                        .cornerRadius(10)
+                        .shadow(radius: 10)
+                        .padding(.bottom, 20)
                 }
+            }
+            .padding(.top, 120)
+            
+            VStack(alignment: .leading) {
+                bookTitle
+                authorName
+                description
                 
-                VStack(alignment: .leading) {
-                    bookTitle
-                    authorName
-                    description
+                HStack {
                     if viewModel.userActions != nil && viewModel.savedActionToDB {
                         savedToBookshelfButton
                     } else {
                         addToBookshelfButton
                     }
-                    //comment section
-                    BookCommentSectionView(viewModel: viewModel, bookId: book.bookId)
+                    saveToFavoritesButton
                 }
-                .padding()
-                .edgesIgnoringSafeArea(.all)
-                .background(Color.white)
-                .cornerRadius(25, corners: [.topLeft, .topRight])
-                
-                Spacer()
+                //comment section
+                BookCommentSectionView(viewModel: viewModel, bookId: book.bookId)
             }
-            .background(Color.appColorWedge)
-            .scrollIndicators(.hidden)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        AddToFavoritesView(book: book)
-                    } label: {
-                        if viewModel.savedToFavorites {
-                            Image(systemName: "star.fill")
-                                .font(.headline)
-                                .foregroundColor(.orange)
-                        } else {
-                            Image(systemName: "star")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                        }
-                    }
-                }
+            .padding()
+            .edgesIgnoringSafeArea(.all)
+            .background(Color.white)
+            .cornerRadius(25, corners: [.topLeft, .topRight])
+        }
+        .overlay(Color.black.opacity(showBookActionSheet ? 0.3 : 0.0))
+        .blur(radius: showBookActionSheet ? 2 : 0)
+        .background(Color.appGradientOne)
+        .scrollIndicators(.hidden)
+        .ignoresSafeArea()
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: NavBackButtonView(color: .white, dismiss: self.dismiss))
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .popup(isPresented: $showBookActionSheet) {
+            BookActionView(
+                viewModel: viewModel,
+                showBookActionSheet: $showBookActionSheet,
+                actionSelected: viewModel.userActions,
+                book: book
+            )
+            .foregroundColor(.white)
+            .frame(height: 450)
+            .frame(maxWidth: .infinity)
+            .background(.white)
+            .cornerRadius(30, corners: [.topLeft, .topRight])
+        } customize: {
+            $0
+                .isOpaque(true)
+                .type(.toast)
+                .dragToDismiss(true)
+                .closeOnTap(false)
+        }
+        .onAppear {
+            Task {
+                try await viewModel.getUserBookAction(bookId: book.bookId)
+                try await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
             }
-            .toolbarBackground(.hidden, for: .navigationBar)
-            .adaptiveSheet(isPresented: $showBookActionSheet, detents: [.medium()]) {
-                BookActionView(
-                    viewModel: viewModel,
-                    showBookActionSheet: $showBookActionSheet,
-                    actionSelected: viewModel.userActions,
-                    book: book
-                )
-            }
-            .onAppear {
-                Task {
-                    try await viewModel.getUserBookAction(bookId: book.bookId)
-                    try await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
-                }
-            }
-            .onDisappear {
-                showBookActionSheet = false
-            }
-        .edgesIgnoringSafeArea(.bottom)
+        }
     }
 }
 
@@ -116,7 +117,6 @@ extension BookView {
                     .foregroundColor(.white.opacity(0.7))
                     .padding(.top, 5)
                 
-//                book.description.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
                 Text(book.description.htmlStripped)
                     .font(.system(size: 15))
                     .font(.body)
@@ -146,28 +146,53 @@ extension BookView {
             } label: {
                 HStack {
                     Image(systemName: "plus.circle")
+                        .fontWeight(.bold)
                     Text("Add to library")
+                        .fontWeight(.bold)
 
                 }
-                .frame(width: UIScreen.main.bounds.width / 3)
+                .frame(height: 35)
+                .frame(width: 170)
                 .font(.system(size: 14))
                 .foregroundColor(.white)
                 .padding(10)
-                .background(Color.appColorBuff)
-                .cornerRadius(20)
+                .background(Color.appColorOrange)
+                .cornerRadius(30)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 20)
+                    RoundedRectangle(cornerRadius: 30)
                         .stroke(Color.clear, lineWidth: 1)
                 )
 
             }
-            .adaptiveSheet(isPresented: $showBookActionSheet, detents: [.medium()]) {
-                BookActionView(
-                    viewModel: viewModel,
-                    showBookActionSheet: $showBookActionSheet,
-                    actionSelected: viewModel.userActions,
-                    book: book
+            Spacer()
+        }
+    }
+    
+    private var saveToFavoritesButton: some View {
+        HStack {
+            Spacer()
+            NavigationLink {
+                AddToFavoritesView(book: book)
+            } label: {
+                HStack {
+                    Image(systemName: "star")
+                        .fontWeight(.bold)
+                    Text("Add to favorites")
+                        .fontWeight(.bold)
+
+                }
+                .frame(height: 35)
+                .frame(width: 170)
+                .font(.system(size: 14))
+                .foregroundColor(.white)
+                .padding(10)
+                .background(Color.blue)
+                .cornerRadius(30)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 30)
+                        .stroke(Color.clear, lineWidth: 1)
                 )
+
             }
             Spacer()
         }
@@ -179,17 +204,20 @@ extension BookView {
         } label: {
             HStack {
                 Image(systemName: "checkmark.circle.fill")
+                    .fontWeight(.bold)
                 Text("Saved to library")
+                    .fontWeight(.bold)
             }
-            .frame(minWidth: 0, maxWidth: .infinity)
-            .font(.system(size: 18))
-            .padding()
-            .background(Color.green)
+            .frame(height: 35)
+            .frame(width: 170)
+            .font(.system(size: 14))
             .foregroundColor(.white)
-            .cornerRadius(25)
+            .padding(10)
+            .background(.green)
+            .cornerRadius(30)
             .overlay(
-                RoundedRectangle(cornerRadius: 25)
-                    .stroke(Color.green, lineWidth: 2)
+                RoundedRectangle(cornerRadius: 30)
+                    .stroke(Color.clear, lineWidth: 1)
             )
         }
 

@@ -14,7 +14,7 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            Color.appBackgroundColor.ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             VStack {
                 if viewModel.isLoadingFeed {
                     VStack {
@@ -22,7 +22,7 @@ struct HomeView: View {
                         Text("Getting your feed...")
                             .foregroundColor(.white)
                             .fontWeight(.bold)
-                        LoadingIndicator(animation: .circleTrim, color: .white, speed: .fast)
+                        LoadingIndicator(animation: .circleTrim, color: .black, speed: .fast)
                         Spacer()
                         Spacer()
                     }
@@ -32,56 +32,59 @@ struct HomeView: View {
                             VStack {
                                 ForEach(0..<viewModel.post.count, id: \.self) { index in
                                     HStack {
-                                        NavigationLink {
-                                            OtherUserProfileView(userId: viewModel.post[index].user.userId)
-                                        } label: {
-                                            Image(uiImage: viewModel.post[index].profilePicture)
-                                                .resizable()
-                                                .frame(width: 60, height: 60)
-                                                .clipShape(Circle())
-                                                .shadow(radius: 10)
-                                        }
-                                        VStack(alignment: .leading) {
-                                            HStack {
-                                                Text(viewModel.post[index].user.displayname ?? "")
-                                                    .fontWeight(.bold)
-                                                    .foregroundColor(.white)
-                                                
-                                                Text(viewModel.post[index].action)
-                                                    .foregroundColor(.white)
-                                                    .offset(x: -5)
-                                                    .font(.system(size: 14))
-                                            }
-                                            
-                                            Text(viewModel.post[index].book.title)
-                                                .foregroundColor(.white)
-                                                .fontWeight(.light)
-                                            
-                                            Text(viewModel.post[index].dateString)
-                                                .fontWeight(.light)
-                                                .fontWeight(.bold)
-                                                .font(.system(size: 14))
-                                                .foregroundColor(.white.opacity(0.5))
-                                        }
-                                        Spacer()
-                                        NavigationLink {
-                                            BookView(book: viewModel.post[index].book)
-                                        } label: {
-                                            if let image = viewModel.post[index].book.coverPhoto {
-                                                Image(uiImage: image)
+                                        HStack {
+                                            NavigationLink {
+                                                OtherUserProfileView(userId: viewModel.post[index].user.userId)
+                                            } label: {
+                                                Image(uiImage: viewModel.post[index].profilePicture)
                                                     .resizable()
-                                                    .frame(width: 65, height: 100)
-                                                    .cornerRadius(10)
+                                                    .frame(width: 60, height: 60)
+                                                    .clipShape(Circle())
                                                     .shadow(radius: 10)
                                             }
+                                            VStack(alignment: .leading) {
+                                                HStack {
+                                                    Text(viewModel.post[index].user.displayname ?? "")
+                                                        .fontWeight(.bold)
+                                                        .foregroundColor(.black)
+                                                    
+                                                    Text(viewModel.post[index].action)
+                                                        .foregroundColor(.black)
+                                                        .offset(x: -5)
+                                                        .font(.system(size: 14))
+                                                }
+                                                
+                                                Text(viewModel.post[index].book.title)
+                                                    .foregroundColor(.black)
+                                                    .fontWeight(.light)
+                                                
+                                                Text(viewModel.post[index].dateString)
+                                                    .fontWeight(.light)
+                                                    .fontWeight(.bold)
+                                                    .font(.system(size: 14))
+                                                    .foregroundColor(.black.opacity(0.5))
+                                            }
+                                            Spacer()
+                                            NavigationLink {
+                                                BookView(book: viewModel.post[index].book)
+                                            } label: {
+                                                if let image = viewModel.post[index].book.coverPhoto {
+                                                    Image(uiImage: image)
+                                                        .resizable()
+                                                        .frame(width: 65, height: 100)
+                                                        .cornerRadius(10)
+                                                        .shadow(radius: 10)
+                                                }
+                                            }
                                         }
+                                        .padding(5)
                                     }
-                                    .padding(.horizontal, 8)
                                     .frame(height: 120)
-                                    .background(Color.appColorBeige.opacity(0.3))
+                                    .background(.white)
                                     .clipShape(RoundedRectangle(cornerRadius:10))
-                                    .frame(maxWidth: .infinity)
                                     .shadow(radius: 10)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 8)
                                 }
                             }
                             .padding(.bottom, 120)
@@ -91,7 +94,7 @@ struct HomeView: View {
                         VStack {
                             Spacer()
                             Text("Add some friends to see activites here!")
-                                .foregroundColor(.white.opacity(0.7))
+                                .foregroundColor(.black.opacity(0.7))
                                 .fontWeight(.bold)
                             Spacer()
                         }
@@ -99,7 +102,7 @@ struct HomeView: View {
                     Spacer()
                 }
             }
-            .padding(5)
+//            .padding(5)
         }
     }
 }

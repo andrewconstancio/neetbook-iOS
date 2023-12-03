@@ -18,9 +18,9 @@ final class LibraryViewModel: ObservableObject {
         do {
             isLoading = true
             let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            self.booksReading = try await BookUserManager.shared.getReadingUserAddedBooks(userId: userId)
-            self.booksWantToRead = try await BookUserManager.shared.getWantToReadUserAddedBooks(userId: userId)
-            self.booksRead = try await BookUserManager.shared.getReadUserAddedBooks(userId: userId)
+            booksReading = try await BookUserManager.shared.getReadingUserAddedBooks(userId: userId)
+            booksWantToRead = try await BookUserManager.shared.getWantToReadUserAddedBooks(userId: userId)
+            booksRead = try await BookUserManager.shared.getReadUserAddedBooks(userId: userId)
             isLoading = false
         } catch {
             throw error

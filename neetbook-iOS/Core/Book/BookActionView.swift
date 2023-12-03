@@ -13,7 +13,6 @@ struct BookActionView: View {
     @Binding var showBookActionSheet: Bool
     @State var actionSelected: ReadingActions?
     @State private var currentPage: String = "0"
-    @Environment(\.colorScheme) var colorScheme
     @State private var showFavoritesView: Bool = false
     
     let book: Book
@@ -25,41 +24,40 @@ struct BookActionView: View {
     }()
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .leading, spacing: 10) {
-                // title
-                titleText
+        VStack(alignment: .leading, spacing: 10) {
+            // title
+            titleText
+            Spacer()
+            HStack {
                 Spacer()
-//                if viewModel.savedToFavorites {
-//                    addedToFavorites
-//                } else {
-//                    addToFavorites
-//                }
-                // reading button
                 readingButton
-                // want to read button
+                Spacer()
+            }
+            HStack {
+                Spacer()
                 wantToReadButton
-                // read button
+                Spacer()
+            }
+            HStack {
+                Spacer()
                 readButton
                 Spacer()
-                // save button
+            }
+            Spacer()
+            // save button
+            HStack {
+                Spacer()
                 saveButton
+                Spacer()
             }
-            //            .sheet(isPresented: $showFavoritesView) {
-            //                AddToFavoritesView(book: book)
-            //                    .onDisappear {
-            //                        Task {
-            //                            try? await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
-            //                        }
-            //                    }
-            //            }
-            .onAppear {
-                Task {
-                    try? await viewModel.getUserBookAction(bookId: book.bookId)
-                }
-            }
-            .padding()
+            Spacer()
         }
+        .onAppear {
+            Task {
+                try? await viewModel.getUserBookAction(bookId: book.bookId)
+            }
+        }
+        .padding()
     }
 }
 
@@ -68,7 +66,7 @@ extension BookActionView {
         Text("So you like this book?")
             .font(.title2)
             .fontWeight(.bold)
-            .foregroundColor(colorScheme == .dark ? Color.appColorBeige : Color.black)
+            .foregroundColor(.black)
     }
     
     private var addToFavorites: some View {
@@ -136,10 +134,12 @@ extension BookActionView {
                         .offset(x: -20)
                 }
             }
-            .foregroundColor(.black)
-            .frame(maxWidth: .infinity, maxHeight: 50)
-            .background(viewModel.userActions == .reading ? Color.appColorYellow : .white)
-            .cornerRadius(10)
+            .foregroundColor(viewModel.userActions == .reading ? .white : .black)
+            .frame(height: 65)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 5)
+            .background(viewModel.userActions == .reading ? Color.appColorPurple : .white)
+            .cornerRadius(30)
         }
     }
     
@@ -184,10 +184,12 @@ extension BookActionView {
                         .offset(x: -20)
                 }
             }
-            .foregroundColor(.black)
-            .frame(maxWidth: .infinity, maxHeight: 50)
-            .background(viewModel.userActions == .wantToRead ? Color.appColorYellow : .white)
-            .cornerRadius(10)
+            .foregroundColor(viewModel.userActions == .wantToRead  ? .white : .black)
+            .frame(height: 65)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 5)
+            .background(viewModel.userActions == .wantToRead ? Color.appColorPurple : .white)
+            .cornerRadius(30)
         }
     }
     
@@ -210,10 +212,12 @@ extension BookActionView {
                         .offset(x: -20)
                 }
             }
-            .foregroundColor(.black)
-            .frame(maxWidth: .infinity, maxHeight: 50)
-            .background(viewModel.userActions == .read ? Color.appColorYellow : .white)
-            .cornerRadius(10)
+            .foregroundColor(viewModel.userActions == .read  ? .white : .black)
+            .frame(height: 65)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 5)
+            .background(viewModel.userActions == .read ? Color.appColorPurple : .white)
+            .cornerRadius(30)
         }
     }
     
@@ -228,9 +232,9 @@ extension BookActionView {
             Text("Save")
                 .fontWeight(.bold)
                 .foregroundColor(.white)
-                .frame(maxWidth: .infinity, maxHeight: 50)
-                .background(.blue)
-                .cornerRadius(20)
+                .frame(width: 300, height: 60)
+                .background(Color.appColorOrange)
+                .cornerRadius(50)
         }
     }
 }

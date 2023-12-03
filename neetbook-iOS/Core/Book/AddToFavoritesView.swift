@@ -11,6 +11,7 @@ struct AddToFavoritesView: View {
     let book: Book
     @StateObject private var viewModel = AddToFavoritesViewModel()
     @State private var isEditing = false
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationView {
@@ -60,6 +61,8 @@ struct AddToFavoritesView: View {
                     }
                     Spacer()
             }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
             .onAppear {
                 Task {
                     try? await viewModel.getFavoriteBooks(toSaveBook: book)

@@ -75,8 +75,8 @@ extension CustomTabBarView {
         }
         .frame(height: 80)
         .padding(6)
-        .background(Color.appNavBarBackgroundColor)
-        .cornerRadius(10)
+        .background(Color.appColorPurple)
+        .cornerRadius(20)
     }
     
     private func switchToTab(tab: TabBarItem) {

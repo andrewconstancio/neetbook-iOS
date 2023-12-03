@@ -57,7 +57,7 @@ struct CommentView: View {
             .foregroundColor(.white)
             .frame(height: 250)
             .frame(maxWidth: .infinity)
-            .background(Color.appBackgroundColor)
+            .background(Color.black)
             .cornerRadius(30, corners: [.topLeft, .topRight])
 
         } customize: {

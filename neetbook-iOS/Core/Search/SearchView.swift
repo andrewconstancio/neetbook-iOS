@@ -14,7 +14,7 @@ struct SearchView: View {
     
     var body: some View {
         ZStack {
-            Color.appBackgroundColor.ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             ScrollView {
             VStack {
                 VStack(alignment: .leading, spacing: 5) {
@@ -33,7 +33,7 @@ struct SearchView: View {
                                     .foregroundColor(viewModel.searchType == "books" ? Color.white : Color.black.opacity(0.5))
                                     .padding(10)
                             }
-                            .background(viewModel.searchType == "books" ? Color.appColorCambridgeBlue : Color.white)
+                            .background(viewModel.searchType == "books" ? Color.appColorPurple : Color.white)
                             .cornerRadius(15)
                             
                             Button {
@@ -47,7 +47,7 @@ struct SearchView: View {
                                     .foregroundColor(viewModel.searchType == "users" ? Color.white : Color.black.opacity(0.5))
                                     .padding(10)
                             }
-                            .background(viewModel.searchType == "users" ? Color.appColorCambridgeBlue : Color.white)
+                            .background(viewModel.searchType == "users" ? Color.appColorPurple : Color.white)
                             .cornerRadius(15)
                         }
                         .padding(.horizontal)
@@ -79,11 +79,11 @@ struct SearchView: View {
                                         VStack(alignment: .leading) {
                                             Text(viewModel.searchBookResults[value].title)
                                                 .font(.headline)
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.black)
                                             
                                             Text(viewModel.searchBookResults[value].author)
                                                 .font(.subheadline)
-                                                .foregroundColor(.white.opacity(0.5))
+                                                .foregroundColor(.black.opacity(0.5))
                                         }
                                         Spacer()
                                     }
@@ -115,11 +115,11 @@ struct SearchView: View {
                                             VStack(alignment: .leading) {
                                                 Text(user.displayName)
                                                     .font(.headline)
-                                                    .foregroundColor(.white)
+                                                    .foregroundColor(.black)
                                                 
                                                 Text("\(user.username)#\(user.hashcode)")
                                                     .font(.subheadline)
-                                                    .foregroundColor(.white.opacity(0.5))
+                                                    .foregroundColor(.black.opacity(0.5))
                                             }
                                             Spacer()
                                         }
