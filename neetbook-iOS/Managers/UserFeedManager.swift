@@ -139,11 +139,7 @@ final class UserFeedManager {
                         }
                         
                         guard let book = bookData else { return nil }
-//                        let coverURL = book.coverURL
-//
-//                        var coverImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-//                        coverImage = try await UserManager.shared.getURLImageAsUIImage(path: coverURL)
-                        
+
                         return PostFeedInstance(
                             action: actionText,
                             user: user,

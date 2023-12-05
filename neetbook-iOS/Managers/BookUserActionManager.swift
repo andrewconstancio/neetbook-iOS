@@ -24,6 +24,12 @@ struct BookUserActionModel: Codable {
     }
 }
 
+struct BookActionStats {
+    let readingCount: Int
+    let wantToReadCount: Int
+    let readCount: Int
+}
+
 final class BookUserActionManager {
     
     
@@ -84,5 +90,26 @@ final class BookUserActionManager {
         } catch {
             throw error
         }
+    }
+    
+    func getBookActionStats(bookId: String) async throws -> BookActionStats {
+        let readingQuerySnapshot = collection
+            .whereField("book_id", isEqualTo: bookId)
+            .whereField("action", isEqualTo: "Reading")
+        
+        let wantToReadQuerySnapshot = collection
+            .whereField("book_id", isEqualTo: bookId)
+            .whereField("action", isEqualTo: "Want To Read")
+        
+        let readQuerySnapshot = collection
+            .whereField("book_id", isEqualTo: bookId)
+            .whereField("action", isEqualTo: "Read")
+        
+        
+        let dataReadingCount = try await readingQuerySnapshot.getDocuments().count
+        let dataWantToReadCount = try await wantToReadQuerySnapshot.getDocuments().count
+        let dataReadCount = try await readQuerySnapshot.getDocuments().count
+        
+        return BookActionStats(readingCount: dataReadingCount, wantToReadCount: dataWantToReadCount, readCount: dataReadCount)
     }
 }

@@ -127,6 +127,15 @@
       }
     },
     {
+      "identity" : "pow",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/EmergeTools/Pow",
+      "state" : {
+        "revision" : "825e0f112af5ed556480ec44c1df934c21f49fd8",
+        "version" : "1.0.1"
+      }
+    },
+    {
       "identity" : "promises",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",

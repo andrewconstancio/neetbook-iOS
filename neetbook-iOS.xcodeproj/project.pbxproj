@@ -11,6 +11,7 @@
 		1C2D4C812B1AC9ED00828D16 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 1C2D4C802B1AC9ED00828D16 /* PopupView */; };
 		1C2D4C832B1AD3E000828D16 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C822B1AD3E000828D16 /* CommentView.swift */; };
 		1C2D4C852B1C000300828D16 /* NavBackButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C842B1C000300828D16 /* NavBackButtonView.swift */; };
+		1C2D4C882B1D7BFE00828D16 /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 1C2D4C872B1D7BFE00828D16 /* Pow */; };
 		1C6A84F12AF1A7E800266135 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F02AF1A7E800266135 /* EditProfileViewModel.swift */; };
 		1C6A84F32AFF044300266135 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F22AFF044300266135 /* HomeViewModel.swift */; };
 		1C6A84F52AFF4D9900266135 /* UserInteractions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F42AFF4D9900266135 /* UserInteractions.swift */; };
@@ -243,6 +244,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C2D4C882B1D7BFE00828D16 /* Pow in Frameworks */,
 				1CC81F8D2A5A2A6F001D56E1 /* GoogleSignInSwift in Frameworks */,
 				1C6A85042B01CBAA00266135 /* SwiftfulLoadingIndicators in Frameworks */,
 				1CE3A2A92ABA828F003BAD2A /* VisibilityTrackingScrollView in Frameworks */,
@@ -630,6 +632,7 @@
 				1CE3A2A82ABA828F003BAD2A /* VisibilityTrackingScrollView */,
 				1C6A85032B01CBAA00266135 /* SwiftfulLoadingIndicators */,
 				1C2D4C802B1AC9ED00828D16 /* PopupView */,
+				1C2D4C872B1D7BFE00828D16 /* Pow */,
 			);
 			productName = "neetbook-iOS";
 			productReference = 1CC81F272A5A20C1001D56E1 /* neetbook-iOS.app */;
@@ -710,6 +713,7 @@
 				1CE3A2A72ABA828F003BAD2A /* XCRemoteSwiftPackageReference "VisibilityTrackingScrollView" */,
 				1C6A85022B01CBAA00266135 /* XCRemoteSwiftPackageReference "SwiftfulLoadingIndicators" */,
 				1C2D4C7F2B1AC9ED00828D16 /* XCRemoteSwiftPackageReference "PopupView" */,
+				1C2D4C862B1D7BFE00828D16 /* XCRemoteSwiftPackageReference "Pow" */,
 			);
 			productRefGroup = 1CC81F282A5A20C1001D56E1 /* Products */;
 			projectDirPath = "";
@@ -1206,6 +1210,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		1C2D4C862B1D7BFE00828D16 /* XCRemoteSwiftPackageReference "Pow" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EmergeTools/Pow";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		1C6A85022B01CBAA00266135 /* XCRemoteSwiftPackageReference "SwiftfulLoadingIndicators" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftfulThinking/SwiftfulLoadingIndicators.git";
@@ -1253,6 +1265,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1C2D4C7F2B1AC9ED00828D16 /* XCRemoteSwiftPackageReference "PopupView" */;
 			productName = PopupView;
+		};
+		1C2D4C872B1D7BFE00828D16 /* Pow */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1C2D4C862B1D7BFE00828D16 /* XCRemoteSwiftPackageReference "Pow" */;
+			productName = Pow;
 		};
 		1C6A85032B01CBAA00266135 /* SwiftfulLoadingIndicators */ = {
 			isa = XCSwiftPackageProductDependency;

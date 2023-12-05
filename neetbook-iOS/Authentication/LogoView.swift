@@ -10,7 +10,7 @@ import SwiftUI
 struct LogoView: View {
     var body: some View {
         ZStack {
-            Color.appBackgroundColor
+            Color.appColorPurple
                 .ignoresSafeArea(.all)
             Text("neetbook.")
                 .frame(maxWidth: .infinity)

@@ -26,36 +26,31 @@ struct BookCommentSectionView: View {
                 }
             } else {
                 Button {
-                    
-                } label: {
-                    HStack {
-                        Image(systemName: "pencil")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                        Text("Leave a note")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        viewModel.showCommentSection = false
                     }
-                    .frame(height: 65)
-                    .frame(maxWidth: .infinity)
-                    .background(.black)
-                    .cornerRadius(30)
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.black)
+                        .fontWeight(.bold)
+                        .font(.system(size: 16))
                 }
                 .padding(.top, 10)
-//                TextField("", text: $viewModel.userNewComment, axis: .vertical)
-//                .placeholder(when: viewModel.userNewComment.isEmpty) {
-//                    Text("Leave a note...")
-//                        .foregroundColor(.gray)
-//                }
-//                .multilineTextAlignment(.leading)
-//                .font(.system(size: 14))
-//                .padding(.top, 20)
-//                .padding()
-//                .background(.white)
-//                .overlay(
-//                   RoundedRectangle(cornerRadius: 15)
-//                    .stroke(Color.white.opacity(0.5))
-//               )
+                
+                TextField("", text: $viewModel.userNewComment, axis: .vertical)
+                .placeholder(when: viewModel.userNewComment.isEmpty) {
+                    Text("Leave a comment...")
+                        .foregroundColor(.gray)
+                }
+                .multilineTextAlignment(.leading)
+                .font(.system(size: 14))
+                .padding(.top, 20)
+                .padding()
+                .background(.white)
+                .overlay(
+                   RoundedRectangle(cornerRadius: 15)
+                    .stroke(Color.white.opacity(0.5))
+               )
                 
                 if !viewModel.userNewComment.isEmpty && viewModel.userNewComment.count > 3 {
                     Button {

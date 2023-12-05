@@ -38,26 +38,70 @@ struct BookView: View {
             }
             .padding(.top, 120)
             
-            VStack(alignment: .leading) {
-                bookTitle
-                authorName
-                description
-                
-                HStack {
-                    if viewModel.userActions != nil && viewModel.savedActionToDB {
-                        savedToBookshelfButton
-                    } else {
-                        addToBookshelfButton
+            VStack() {
+                if viewModel.showCommentSection {
+                    BookCommentSectionView(viewModel: viewModel, bookId: book.bookId)
+                } else {
+                    bookTitle
+                    authorName
+                    description
+                    HStack {
+                        if viewModel.userActions != nil && viewModel.savedActionToDB {
+                            savedToBookshelfButton
+                        } else {
+                            addToBookshelfButton
+                        }
+                        saveToFavoritesButton
                     }
-                    saveToFavoritesButton
+                    showCommentSectionButton
+                    Spacer()
+                    HStack {
+                        VStack {
+                            Text("\(viewModel.bookStats?.readingCount ?? 0)")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                            
+                            Image(systemName: "book.fill")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                        }
+                        Spacer()
+                        VStack {
+                            Text("\(viewModel.bookStats?.wantToReadCount ?? 0)")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                            
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                        }
+                        Spacer()
+                        VStack {
+                            Text("\(viewModel.bookStats?.readCount ?? 0)")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                            
+                            Image(systemName: "book.closed.fill")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                        }
+                    }
+                    .padding(.horizontal, 60)
+                    Spacer()
+                    Spacer()
                 }
-                //comment section
-                BookCommentSectionView(viewModel: viewModel, bookId: book.bookId)
             }
             .padding()
             .edgesIgnoringSafeArea(.all)
             .background(Color.white)
-            .cornerRadius(25, corners: [.topLeft, .topRight])
+            .cornerRadius(30, corners: [.topLeft, .topRight])
+            
         }
         .overlay(Color.black.opacity(showBookActionSheet ? 0.3 : 0.0))
         .blur(radius: showBookActionSheet ? 2 : 0)
@@ -90,6 +134,7 @@ struct BookView: View {
             Task {
                 try await viewModel.getUserBookAction(bookId: book.bookId)
                 try await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
+                try await viewModel.getBookStats(bookId: book.bookId)
             }
         }
     }
@@ -104,7 +149,7 @@ extension BookView {
     }
     
     private var authorName: some View {
-        Text(book.author)
+        Text("by \(book.author)")
             .foregroundColor(.black.opacity(0.7))
     }
     
@@ -220,7 +265,25 @@ extension BookView {
                     .stroke(Color.clear, lineWidth: 1)
             )
         }
-
+    }
+    
+    private var showCommentSectionButton: some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                viewModel.showCommentSection = true
+            }
+        } label: {
+            HStack {
+                Text("Comments")
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+            }
+            .frame(height: 65)
+            .frame(maxWidth: .infinity)
+            .background(.black)
+            .cornerRadius(30)
+        }
+        .padding(.top, 10)
     }
     
 }

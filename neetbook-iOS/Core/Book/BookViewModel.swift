@@ -16,6 +16,8 @@ final class BookViewModel: ObservableObject {
     @Published var savedActionToDB: Bool = false
     @Published var savedToFavorites: Bool = false
     @Published var isLoadingComments: Bool = false
+    @Published var showCommentSection: Bool = false
+    @Published private(set) var bookStats: BookActionStats? = nil
         
     func getUserBookAction(bookId: String) async throws {
         do {
@@ -103,5 +105,9 @@ final class BookViewModel: ObservableObject {
     func checkIfUserAddedBookToFavoritesList(bookId: String) async throws {
         let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
         savedToFavorites = try await BookUserManager.shared.checkIfBookAddedToFavorites(userId: userId, bookId: bookId)
+    }
+    
+    func getBookStats(bookId: String) async throws {
+        bookStats = try await BookUserActionManager.shared.getBookActionStats(bookId: bookId)
     }
 }

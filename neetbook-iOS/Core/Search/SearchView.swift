@@ -58,10 +58,9 @@ struct SearchView: View {
                 if viewModel.loadingBooks || viewModel.loadingUsers {
                     Spacer()
                     Spacer()
-                    LoadingIndicator(animation: .circleTrim, color: .white, speed: .fast)
+                    LoadingIndicator(animation: .circleTrim, color: .black, speed: .fast)
                     Spacer()
-                }
-
+                } else {
                     if viewModel.searchType == "books" {
                         if viewModel.searchBookResults.count > 0 {
                             ForEach(0..<viewModel.searchBookResults.count, id: \.self) { value in
@@ -135,6 +134,7 @@ struct SearchView: View {
                             
                         }
                     }
+                }
                 }
                 .padding(.bottom, 120)
             }
