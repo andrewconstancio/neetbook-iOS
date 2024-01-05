@@ -43,7 +43,9 @@ final class BookUserManager {
                     guard let bookId = document["book_id"] as? String else {
                         throw URLError(.badServerResponse)
                     }
-                    guard var book = try await BookDataService.shared.fetchBookInfo(bookId: bookId) else { return nil }
+                    guard var book = try await BookDataService.shared.fetchBookInfo(bookId: bookId) else {
+                        return nil
+                    }
                     
                     book.setUserAction(action: document["action"] as? String ?? "")
                     book.setUserActionDate(date: (document["date_created"] as? Timestamp)?.dateValue() ?? Date())

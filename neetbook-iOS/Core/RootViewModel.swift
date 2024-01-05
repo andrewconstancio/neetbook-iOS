@@ -16,7 +16,6 @@ final class RootViewModel: ObservableObject {
             let dbUser = try? await UserManager.shared.getUser(userId: authUser?.uid ?? "")
             return dbUser == nil
         }
-        
         return true
     }
 }

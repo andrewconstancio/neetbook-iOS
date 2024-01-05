@@ -10,7 +10,8 @@ import SwiftfulLoadingIndicators
 
 struct BookCommentSectionView: View {
     @ObservedObject var viewModel: BookViewModel
-    let bookId: String
+    let book: Book
+//    let bookId: String
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -25,17 +26,10 @@ struct BookCommentSectionView: View {
                     Spacer()
                 }
             } else {
-                Button {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        viewModel.showCommentSection = false
-                    }
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.black)
-                        .fontWeight(.bold)
-                        .font(.system(size: 16))
-                }
-                .padding(.top, 10)
+                Text(book.title)
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
                 
                 TextField("", text: $viewModel.userNewComment, axis: .vertical)
                 .placeholder(when: viewModel.userNewComment.isEmpty) {
@@ -44,18 +38,19 @@ struct BookCommentSectionView: View {
                 }
                 .multilineTextAlignment(.leading)
                 .font(.system(size: 14))
-                .padding(.top, 20)
+                .padding(10)
                 .padding()
                 .background(.white)
                 .overlay(
-                   RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.white.opacity(0.5))
+                   RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.black.opacity(0.5))
                )
                 
                 if !viewModel.userNewComment.isEmpty && viewModel.userNewComment.count > 3 {
                     Button {
                         Task {
-                            try? await viewModel.addUserBookComment(bookId: bookId)
+                            try? await viewModel.addUserBookComment(bookId: book.bookId)
+                            hideKeyboard()
                         }
                     } label: {
                         Text("Post")
@@ -69,22 +64,25 @@ struct BookCommentSectionView: View {
                     }
                 }
                 if(viewModel.bookComments.count > 0) {
-                    ForEach(0..<viewModel.bookComments.count, id: \.self) { index in
-                        CommentView(bookViewModel: viewModel, bookId: bookId, currentUserId: viewModel.currentUserId, comment: viewModel.bookComments[index])
+                    ScrollView {
+                        ForEach(0..<viewModel.bookComments.count, id: \.self) { index in
+                            CommentView(bookViewModel: viewModel, bookId: book.bookId, currentUserId: viewModel.currentUserId, comment: viewModel.bookComments[index])
+                        }
                     }
+                    .scrollIndicators(.hidden)
                 }
             }
-            
             Spacer()
         }
+        .padding(10)
         .task {
-            try? await viewModel.getAllBookComments(bookId: bookId)
+            try? await viewModel.getAllBookComments(bookId: book.bookId)
         }
     }
 }
 
-struct BookCommentSectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        BookCommentSectionView(viewModel: BookViewModel(), bookId: "asdfasdf")
-    }
-}
+//struct BookCommentSectionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        BookCommentSectionView(viewModel: BookViewModel(), bookId: "asdfasdf")
+//    }
+//}

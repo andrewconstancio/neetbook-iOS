@@ -8,9 +8,11 @@
 import SwiftUI
 import SwiftfulLoadingIndicators
 
+
 struct HomeView: View {
     @Binding var showSignInView: Bool
     @StateObject private var viewModel = HomeViewModel()
+    @State private var isHide = false
     
     var body: some View {
         ZStack {
@@ -30,6 +32,24 @@ struct HomeView: View {
                     if viewModel.post.count > 0 {
                         ScrollView {
                             VStack {
+                                GeometryReader{ reader -> AnyView in
+                                    let yAxis = reader.frame(in: .global).minY
+                                    if yAxis < 0 && !isHide{
+                                        DispatchQueue.main.async {
+                                            withAnimation{isHide = true}
+                                        }
+                                    }
+                                    if yAxis > 0 && isHide {
+                                        DispatchQueue.main.async {
+                                            withAnimation{isHide = false}
+                                        }
+                                    }
+                                    return AnyView(
+                                        Text("")
+                                            .frame(width: 0, height: 0)
+                                    )
+                                }
+                                .frame(width: 0, height: 0)
                                 ForEach(0..<viewModel.post.count, id: \.self) { index in
                                     HStack {
                                         HStack {
@@ -47,17 +67,17 @@ struct HomeView: View {
                                                     Text(viewModel.post[index].user.displayname ?? "")
                                                         .fontWeight(.bold)
                                                         .foregroundColor(.black)
-                                                    
+
                                                     Text(viewModel.post[index].action)
                                                         .foregroundColor(.black)
                                                         .offset(x: -5)
                                                         .font(.system(size: 14))
                                                 }
-                                                
+
                                                 Text(viewModel.post[index].book.title)
                                                     .foregroundColor(.black)
                                                     .fontWeight(.light)
-                                                
+
                                                 Text(viewModel.post[index].dateString)
                                                     .fontWeight(.light)
                                                     .fontWeight(.bold)
@@ -82,13 +102,15 @@ struct HomeView: View {
                                     .frame(height: 120)
                                     .background(.white)
                                     .clipShape(RoundedRectangle(cornerRadius:10))
-                                    .shadow(radius: 10)
+                                    .shadow(radius: 3)
                                     .frame(maxWidth: .infinity)
                                     .padding(.horizontal, 8)
                                 }
                             }
+                            .padding(.top, 30)
                             .padding(.bottom, 120)
                         }
+                        .toolbar(isHide ? .hidden : .visible)
                         .scrollIndicators(.hidden)
                     } else {
                         VStack {
@@ -102,7 +124,6 @@ struct HomeView: View {
                     Spacer()
                 }
             }
-//            .padding(5)
         }
     }
 }

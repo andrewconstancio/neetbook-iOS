@@ -11,7 +11,7 @@
 		1C2D4C812B1AC9ED00828D16 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 1C2D4C802B1AC9ED00828D16 /* PopupView */; };
 		1C2D4C832B1AD3E000828D16 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C822B1AD3E000828D16 /* CommentView.swift */; };
 		1C2D4C852B1C000300828D16 /* NavBackButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C842B1C000300828D16 /* NavBackButtonView.swift */; };
-		1C2D4C882B1D7BFE00828D16 /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 1C2D4C872B1D7BFE00828D16 /* Pow */; };
+		1C4ACFFC2B4777B4009C10E8 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4ACFFB2B4777B4009C10E8 /* PageTitleView.swift */; };
 		1C6A84F12AF1A7E800266135 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F02AF1A7E800266135 /* EditProfileViewModel.swift */; };
 		1C6A84F32AFF044300266135 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F22AFF044300266135 /* HomeViewModel.swift */; };
 		1C6A84F52AFF4D9900266135 /* UserInteractions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F42AFF4D9900266135 /* UserInteractions.swift */; };
@@ -140,6 +140,7 @@
 		1C2D4C7D2B19702100828D16 /* FittedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittedScrollView.swift; sourceTree = "<group>"; };
 		1C2D4C822B1AD3E000828D16 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		1C2D4C842B1C000300828D16 /* NavBackButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBackButtonView.swift; sourceTree = "<group>"; };
+		1C4ACFFB2B4777B4009C10E8 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
 		1C6A84F02AF1A7E800266135 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
 		1C6A84F22AFF044300266135 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		1C6A84F42AFF4D9900266135 /* UserInteractions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInteractions.swift; sourceTree = "<group>"; };
@@ -244,7 +245,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C2D4C882B1D7BFE00828D16 /* Pow in Frameworks */,
 				1CC81F8D2A5A2A6F001D56E1 /* GoogleSignInSwift in Frameworks */,
 				1C6A85042B01CBAA00266135 /* SwiftfulLoadingIndicators in Frameworks */,
 				1CE3A2A92ABA828F003BAD2A /* VisibilityTrackingScrollView in Frameworks */,
@@ -312,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				1CA4C4E62AA6750E007C1AD3 /* SearchBarView.swift */,
+				1C4ACFFB2B4777B4009C10E8 /* PageTitleView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -632,7 +633,6 @@
 				1CE3A2A82ABA828F003BAD2A /* VisibilityTrackingScrollView */,
 				1C6A85032B01CBAA00266135 /* SwiftfulLoadingIndicators */,
 				1C2D4C802B1AC9ED00828D16 /* PopupView */,
-				1C2D4C872B1D7BFE00828D16 /* Pow */,
 			);
 			productName = "neetbook-iOS";
 			productReference = 1CC81F272A5A20C1001D56E1 /* neetbook-iOS.app */;
@@ -800,6 +800,7 @@
 				1C6A85062B0471DA00266135 /* OtherUserProfileViewModel.swift in Sources */,
 				1C6A85082B098E3300266135 /* TestView.swift in Sources */,
 				1C6A84FF2AFFFE6D00266135 /* CurrentUserViewModel.swift in Sources */,
+				1C4ACFFC2B4777B4009C10E8 /* PageTitleView.swift in Sources */,
 				1CE3A2BB2ADCA87A003BAD2A /* String-Ext.swift in Sources */,
 				1C2D4C832B1AD3E000828D16 /* CommentView.swift in Sources */,
 				1CC81F9A2A5B40E0001D56E1 /* AuthenticationViewModel.swift in Sources */,
@@ -1265,11 +1266,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1C2D4C7F2B1AC9ED00828D16 /* XCRemoteSwiftPackageReference "PopupView" */;
 			productName = PopupView;
-		};
-		1C2D4C872B1D7BFE00828D16 /* Pow */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1C2D4C862B1D7BFE00828D16 /* XCRemoteSwiftPackageReference "Pow" */;
-			productName = Pow;
 		};
 		1C6A85032B01CBAA00266135 /* SwiftfulLoadingIndicators */ = {
 			isa = XCSwiftPackageProductDependency;

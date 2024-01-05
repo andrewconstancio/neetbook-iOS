@@ -32,7 +32,7 @@ struct ContentView: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text(tabSelection.title)
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
                     .fontWeight(.bold)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -50,46 +50,6 @@ struct ContentView: View {
             }
         }
         .ignoresSafeArea(edges: .bottom)
-//        TabView {
-//            HomeView(showSignInView: $showSignInView)
-//                .environmentObject(currentUserViewModel)
-//                .tabItem {
-//                    Image(systemName: TabBarItem.home.iconName)
-//                }
-//
-//            SearchView()
-//                .environmentObject(currentUserViewModel)
-//                .tabItem {
-//                    Image(systemName: TabBarItem.search.iconName)
-//                }
-//
-//            NotifcationsView()
-//                .tabItem {
-//                    Image(systemName: TabBarItem.notificaiton.iconName)
-//                }
-//
-//            LibraryView()
-//                .tabItem {
-//                    Image(systemName: TabBarItem.library.iconName)
-//                }
-//         }
-//        .toolbar {
-//            ToolbarItem(placement: .navigationBarTrailing) {
-//                NavigationLink {
-//                    ProfileView(showSignInView: $showSignInView)
-//                        .environmentObject(currentUserViewModel)
-//                } label: {
-//                    if let image = currentUserViewModel.profilePicture {
-//                        Image(uiImage: image)
-//                            .resizable()
-//                            .frame(width: 40, height: 40)
-//                            .clipShape(Circle())
-//                    }
-//                }
-//            }
-//        }
-//        .accentColor(Color.pink)
-//        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
 

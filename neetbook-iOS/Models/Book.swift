@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct Book: Identifiable, Codable {
     var id = UUID()
     let bookId: String
@@ -15,8 +14,6 @@ struct Book: Identifiable, Codable {
     let author: String
     let coverURL: String
     let description: String
-    let pageCount: Int
-    let categories: [String]
     var userAction: String?
     var userActionDate: Date?
     

@@ -11,16 +11,13 @@ import SwiftfulLoadingIndicators
 struct SearchView: View {
     @StateObject private var viewModel = SearchViewModel()
     @State private var isEditing = false
+    @State private var isHide = false
     
     var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
             ScrollView {
-            VStack {
-                VStack(alignment: .leading, spacing: 5) {
-                    SearchBarView(searchText: $viewModel.searchText, isEditing: $isEditing)
-                     
-//                    if isEditing {
+                VStack {
+                    VStack(alignment: .leading, spacing: 5) {
+                        SearchBarView(searchText: $viewModel.searchText, isEditing: $isEditing)
                         HStack {
                             Button {
                                 withAnimation(.easeInOut(duration: 0.2)) {
@@ -53,94 +50,94 @@ struct SearchView: View {
                         .padding(.horizontal)
                     }
                     .padding(.bottom, 10)
-//                }
-                
-                if viewModel.loadingBooks || viewModel.loadingUsers {
-                    Spacer()
-                    Spacer()
-                    LoadingIndicator(animation: .circleTrim, color: .black, speed: .fast)
-                    Spacer()
-                } else {
-                    if viewModel.searchType == "books" {
-                        if viewModel.searchBookResults.count > 0 {
-                            ForEach(0..<viewModel.searchBookResults.count, id: \.self) { value in
-                                NavigationLink {
-                                    BookView(book: viewModel.searchBookResults[value])
-                                } label: {
-                                    HStack {
-                                        if let coverPhoto = viewModel.searchBookResults[value].coverPhoto{
-                                            Image(uiImage: coverPhoto)
-                                                .resizable()
-                                                .frame(width: 60, height: 100)
-                                                .cornerRadius(10)
-                                                .shadow(radius: 5)
-                                        }
-                                        VStack(alignment: .leading) {
-                                            Text(viewModel.searchBookResults[value].title)
-                                                .font(.headline)
-                                                .foregroundColor(.black)
-                                            
-                                            Text(viewModel.searchBookResults[value].author)
-                                                .font(.subheadline)
-                                                .foregroundColor(.black.opacity(0.5))
-                                        }
-                                        Spacer()
-                                    }
-                                    .padding()
-                                    .frame(height: 100)
-                                    .frame(maxWidth: .infinity)
-                                    .cornerRadius(10)
-                                }
-                            }
-                        } else if viewModel.searchBookResults.count == 0
-                                    && !viewModel.loadingBooks
-                                    && viewModel.searchText != "" {
-                            noSearchResultsFound
-                        }
-                    }
                     
-                    if viewModel.searchType == "users" {
-                        if viewModel.searchUsersResults.count > 0 {
-                                ForEach(viewModel.searchUsersResults, id: \.self) { user in
+                    if viewModel.loadingBooks || viewModel.loadingUsers {
+                        Spacer()
+                        Spacer()
+                        LoadingIndicator(animation: .circleTrim, color: .black, speed: .fast)
+                        Spacer()
+                    } else {
+                        if viewModel.searchType == "books" {
+                            if viewModel.searchBookResults.count > 0 {
+                                ForEach(0..<viewModel.searchBookResults.count, id: \.self) { value in
                                     NavigationLink {
-                                        OtherUserProfileView(userId: user.id)
+                                        BookView(book: viewModel.searchBookResults[value])
                                     } label: {
                                         HStack {
-                                            Image(uiImage: user.profilePicture)
-                                                .resizable()
-                                                .frame(width: 50, height: 50)
-                                                .clipShape(Circle())
-                                                .shadow(radius: 10)
+                                            if let coverPhoto = viewModel.searchBookResults[value].coverPhoto{
+                                                Image(uiImage: coverPhoto)
+                                                    .resizable()
+                                                    .frame(width: 60, height: 100)
+                                                    .cornerRadius(10)
+                                                    .shadow(radius: 5)
+                                            }
                                             VStack(alignment: .leading) {
-                                                Text(user.displayName)
+                                                Text(viewModel.searchBookResults[value].title)
                                                     .font(.headline)
                                                     .foregroundColor(.black)
+                                                    .multilineTextAlignment(.leading)
                                                 
-                                                Text("\(user.username)#\(user.hashcode)")
+                                                Text(viewModel.searchBookResults[value].author)
                                                     .font(.subheadline)
                                                     .foregroundColor(.black.opacity(0.5))
+                                                    .multilineTextAlignment(.leading)
                                             }
                                             Spacer()
                                         }
                                         .padding()
+                                        .frame(height: 100)
                                         .frame(maxWidth: .infinity)
                                         .cornerRadius(10)
                                     }
+                                }
+                            } else if viewModel.searchBookResults.count == 0
+                                        && !viewModel.loadingBooks
+                                        && viewModel.searchText != "" {
+                                noSearchResultsFound
                             }
-                        } else if viewModel.searchUsersResults.count == 0
-                                    && !viewModel.loadingUsers
-                                    && viewModel.searchText != "" {
-                            noSearchResultsFound
-                            
+                        }
+                        
+                        if viewModel.searchType == "users" {
+                            if viewModel.searchUsersResults.count > 0 {
+                                    ForEach(viewModel.searchUsersResults, id: \.self) { user in
+                                        NavigationLink {
+                                            OtherUserProfileView(userId: user.id)
+                                        } label: {
+                                            HStack {
+                                                Image(uiImage: user.profilePicture)
+                                                    .resizable()
+                                                    .frame(width: 50, height: 50)
+                                                    .clipShape(Circle())
+                                                    .shadow(radius: 10)
+                                                VStack(alignment: .leading) {
+                                                    Text(user.displayName)
+                                                        .font(.headline)
+                                                        .foregroundColor(.black)
+                                                    
+                                                    Text("\(user.username)#\(user.hashcode)")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.black.opacity(0.5))
+                                                }
+                                                Spacer()
+                                            }
+                                            .padding()
+                                            .frame(maxWidth: .infinity)
+                                            .cornerRadius(10)
+                                        }
+                                }
+                            } else if viewModel.searchUsersResults.count == 0
+                                        && !viewModel.loadingUsers
+                                        && viewModel.searchText != "" {
+                                noSearchResultsFound
+                                
+                            }
                         }
                     }
                 }
-                }
                 .padding(.bottom, 120)
             }
-            Spacer()
+            .scrollDismissesKeyboard(.immediately)
         }
-    }
 }
 
 extension SearchView {

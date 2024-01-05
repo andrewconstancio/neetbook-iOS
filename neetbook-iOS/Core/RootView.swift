@@ -10,21 +10,22 @@ import SwiftUI
 struct RootView: View {
     @StateObject private var viewModel = RootViewModel()
     @StateObject private var currentUserViewModel = CurrentUserViewModel()
-    @State private var showSignInView: Bool = true
-    @State private var showProfileSetUpView: Bool = true
+    @State private var showSignInView: Bool = false
+    @State private var showProfileSetUpView: Bool = false
     
     var body: some View {
         ZStack {
             if !showSignInView && !showProfileSetUpView {
-                NavigationView {
+                NavigationStack {
                     ContentView(showSignInView: $showSignInView)
                         .environmentObject(currentUserViewModel)
-                        .onAppear {
+                   	     .onAppear {
                             Task {
                                 try? await currentUserViewModel.loadCurrentUser()
                             }
                         }
                 }
+                .navigationViewStyle(StackNavigationViewStyle())
             }
             
             if viewModel.isLoading {
@@ -43,7 +44,7 @@ struct RootView: View {
                 viewModel.isLoading = true
                 let result = try await viewModel.checkIfInvalidUser()
                 viewModel.isLoading = false
-                (self.showSignInView, self.showProfileSetUpView) = (result, result)
+                self.showSignInView = result
             }
         }
     }

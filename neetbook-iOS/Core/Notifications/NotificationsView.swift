@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Pow
 
 struct NotificationView: View {
     @StateObject private var viewModel = NotificationsViewModel()

@@ -143,27 +143,27 @@ extension BookActionView {
         }
     }
     
-    private var pageCountInput: some View {
-        VStack {
-            Text("Put your current page if you want to!")
-                .foregroundColor(Color.appColorGreen)
-            Text("Page total: \(book.pageCount)")
-                .foregroundColor(.black)
-            
-            TextField("", value: $currentPage, formatter: formatter)
-                .padding()
-                .background(Color.white)
-                .cornerRadius(10)
-                .keyboardType(.numberPad)
-                .onReceive(Just(currentPage)) { newValue in
-                      let filtered = newValue.filter { "0123456789".contains($0) }
-                      if filtered != newValue {
-                          self.currentPage = filtered
-                      }
-                }
-        }
-        .padding()
-    }
+//    private var pageCountInput: some View {
+//        VStack {
+//            Text("Put your current page if you want to!")
+//                .foregroundColor(Color.appColorGreen)
+//            Text("Page total: \(book.pageCount)")
+//                .foregroundColor(.black)
+//
+//            TextField("", value: $currentPage, formatter: formatter)
+//                .padding()
+//                .background(Color.white)
+//                .cornerRadius(10)
+//                .keyboardType(.numberPad)
+//                .onReceive(Just(currentPage)) { newValue in
+//                      let filtered = newValue.filter { "0123456789".contains($0) }
+//                      if filtered != newValue {
+//                          self.currentPage = filtered
+//                      }
+//                }
+//        }
+//        .padding()
+//    }
     
     private var wantToReadButton: some View {
         Button {
@@ -239,8 +239,8 @@ extension BookActionView {
     }
 }
 
-struct BookActionView_Previews: PreviewProvider {
-    static var previews: some View {
-        BookActionView(viewModel: BookViewModel(), showBookActionSheet: .constant(true), book: Book(bookId: "123", title: "123", author: "123", coverURL: "123", description: "123", pageCount: 2, categories: ["123"]))
-    }
-}
+//struct BookActionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        BookActionView(viewModel: BookViewModel(), showBookActionSheet: .constant(true), book: Book(bookId: "123", title: "123", author: "123", coverURL: "123", description: "123", pageCount: 2, categories: ["123"]))
+//    }
+//}

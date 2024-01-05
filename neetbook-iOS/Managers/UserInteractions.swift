@@ -25,7 +25,6 @@ struct UserSearchResult: Identifiable, Hashable {
 final class UserInteractions {
     
     static let shared = UserInteractions()
-    private init() {}
     
     private let userCollection = Firestore.firestore().collection("users")
     private let userFollowRequestCollection = Firestore.firestore().collection("UserFollowRequest")

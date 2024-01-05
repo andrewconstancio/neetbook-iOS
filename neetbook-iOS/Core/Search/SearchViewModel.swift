@@ -26,20 +26,20 @@ final class SearchViewModel: ObservableObject {
     
     func addSubscribers() {
         $searchText
-            .debounce(for: 0.3, scheduler: RunLoop.main)
-            .sink { value in
+            .debounce(for: 0.3, scheduler: DispatchQueue.main)
+            .sink { [weak self] value in
                 if value.count > 3 {
-                    Task {
-                        if self.searchType == "books" && self.recentlySearchedBookText != value {
-                            self.loadingBooks = true
-                            try await self.searchBooksTextAction(searchText: value)
-                        } else if self.recentlySearchedUserText != value {
-                            self.loadingUsers = true
-                            try await self.searchUsersTextAction(searchText: value)
+                        if self?.searchType == "books" && self?.recentlySearchedBookText != value {
+                            Task {
+                                try await self?.searchBooksTextAction(searchText: value)
+                            }
+                        } else if self?.recentlySearchedUserText != value {
+                            Task {
+                                try await self?.searchUsersTextAction(searchText: value)
+                            }
                         }
-                    }
                 } else {
-                    self.clearSearchVars()
+                    self?.clearSearchVars()
                 }
             }
             .store(in: &cancellables)
@@ -55,12 +55,18 @@ final class SearchViewModel: ObservableObject {
     }
     
     func searchBooksTextAction(searchText: String) async throws {
-        searchBookResults = try await BookDataService.shared.searchBooks(query: searchText)
-        recentlySearchedBookText = searchText
-        loadingBooks = false
+        do {
+            self.loadingBooks = true
+            searchBookResults = try await BookDataService.shared.searchBooks(searchText: searchText)
+            recentlySearchedBookText = searchText
+            loadingBooks = false
+        } catch let error {
+            print(error.localizedDescription)
+        }
     }
     
     func searchUsersTextAction(searchText: String) async throws {
+        self.loadingUsers = true
         let currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
         searchUsersResults = try await UserInteractions.shared.searchForUser(searchText: searchText, currentUserId: currentUserId)
         recentlySearchedUserText = searchText
