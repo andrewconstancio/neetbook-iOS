@@ -31,13 +31,13 @@ struct DataOfBirthView: View {
                 in: dateClosedRange,
                 displayedComponents: .date
             )
-                .datePickerStyle(WheelDatePickerStyle())
-                .labelsHidden()
-                .fixedSize()
-                .onChange(of: viewModel.dateOfBirth) { newValue in
-                    viewModel.checkDateOfBirth(dob: newValue)
-                }
-                .accentColor(.white)
+            .accentColor(.white)
+            .datePickerStyle(WheelDatePickerStyle())
+            .labelsHidden()
+            .fixedSize()
+            .onChange(of: viewModel.dateOfBirth) { newValue in
+                viewModel.checkDateOfBirth(dob: newValue)
+            }
             
             Spacer()
             Button {

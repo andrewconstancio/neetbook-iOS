@@ -26,77 +26,85 @@ struct BookView: View {
     
     var body: some View {
         FittedScrollView {
-            VStack {
-                if let coverPhoto = book.coverPhoto {
-                    Image(uiImage: coverPhoto)
-                        .resizable()
-                        .frame(width: 125, height: 200)
-                        .cornerRadius(10)
-                        .shadow(radius: 10)
-                        .padding(.bottom, 20)
-                }
-            }
-            .padding(.top, 120)
-            
-            VStack() {
-                bookTitle
-                authorName
-                description
-                HStack {
-                    if viewModel.userActions != nil && viewModel.savedActionToDB {
-                        savedToBookshelfButton
-                    } else {
-                        addToBookshelfButton
-                    }
-                    saveToFavoritesButton
-                }
-                showCommentSectionButton
-                Spacer()
-                HStack {
-                    VStack {
-                        Text("\(viewModel.bookStats?.readingCount ?? 0)")
-                            .foregroundColor(.black)
-                            .fontWeight(.bold)
-                            .font(.system(size: 20))
-                        
-                        Image(systemName: "book.fill")
-                            .foregroundColor(.black)
-                            .fontWeight(.bold)
-                            .font(.system(size: 20))
-                    }
+            if viewModel.bookInfoIsLoading {
+                VStack {
                     Spacer()
-                    VStack {
-                        Text("\(viewModel.bookStats?.wantToReadCount ?? 0)")
-                            .foregroundColor(.black)
-                            .fontWeight(.bold)
-                            .font(.system(size: 20))
-                        
-                        Image(systemName: "heart.fill")
-                            .foregroundColor(.black)
-                            .fontWeight(.bold)
-                            .font(.system(size: 20))
-                    }
+                    LoadingIndicator(animation: .threeBalls, color: .black, speed: .fast)
                     Spacer()
-                    VStack {
-                        Text("\(viewModel.bookStats?.readCount ?? 0)")
-                            .foregroundColor(.black)
-                            .fontWeight(.bold)
-                            .font(.system(size: 20))
-                        
-                        Image(systemName: "book.closed.fill")
-                            .foregroundColor(.black)
-                            .fontWeight(.bold)
-                            .font(.system(size: 20))
+                }
+            } else {
+                VStack {
+                    if let coverPhoto = book.coverPhoto {
+                        Image(uiImage: coverPhoto)
+                            .resizable()
+                            .frame(width: 125, height: 200)
+                            .cornerRadius(10)
+                            .shadow(radius: 10)
+                            .padding(.bottom, 20)
                     }
                 }
-                .padding(.horizontal, 60)
-                Spacer()
-                Spacer()
+                .padding(.top, 120)
+                
+                VStack() {
+                    bookTitle
+                    authorName
+                    description
+                    HStack {
+                        if viewModel.userActions != nil && viewModel.savedActionToDB {
+                            savedToBookshelfButton
+                        } else {
+                            addToBookshelfButton
+                        }
+                        saveToFavoritesButton
+                    }
+                    showCommentSectionButton
+                    Spacer()
+                    HStack {
+                        VStack {
+                            Text("\(viewModel.bookStats?.readingCount ?? 0)")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                            
+                            Image(systemName: "book.fill")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                        }
+                        Spacer()
+                        VStack {
+                            Text("\(viewModel.bookStats?.wantToReadCount ?? 0)")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                            
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                        }
+                        Spacer()
+                        VStack {
+                            Text("\(viewModel.bookStats?.readCount ?? 0)")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                            
+                            Image(systemName: "book.closed.fill")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                                .font(.system(size: 20))
+                        }
+                    }
+                    .padding(.horizontal, 60)
+                    Spacer()
+                    Spacer()
+                }
+                .padding()
+                .edgesIgnoringSafeArea(.all)
+                .background(Color.white)
+                .cornerRadius(30, corners: [.topLeft, .topRight])
             }
-            .padding()
-            .edgesIgnoringSafeArea(.all)
-            .background(Color.white)
-            .cornerRadius(30, corners: [.topLeft, .topRight])
         }
         .onTapGesture {
             hideKeyboard()
@@ -109,6 +117,9 @@ struct BookView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: NavBackButtonView(color: .white, dismiss: self.dismiss))
         .toolbarBackground(.hidden, for: .navigationBar)
+        .task {
+            try? await viewModel.getBookMainInformation(bookId: book.bookId)
+        }
         .popup(isPresented: $showBookActionSheet) {
             BookActionView(
                 viewModel: viewModel,
@@ -127,13 +138,6 @@ struct BookView: View {
                 .type(.toast)
                 .dragToDismiss(true)
                 .closeOnTap(false)
-        }
-        .onAppear {
-            Task {
-                try await viewModel.getUserBookAction(bookId: book.bookId)
-                try await viewModel.checkIfUserAddedBookToFavoritesList(bookId: book.bookId)
-                try await viewModel.getBookStats(bookId: book.bookId)
-            }
         }
         .sheet(isPresented: $viewModel.showCommentSection) {
             BookCommentSectionView(viewModel: viewModel, book: book)
@@ -278,7 +282,6 @@ extension BookView {
         }
         .padding(.top, 10)
     }
-    
 }
 
 struct BookView_Previews: PreviewProvider {

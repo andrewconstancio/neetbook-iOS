@@ -11,6 +11,10 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseStorage
 
+enum UserError: Error {
+    case failedDeleteUserData
+}
+
 
 final class UserManager {
     
@@ -43,9 +47,14 @@ final class UserManager {
     }
     
     func getUser(userId: String) async throws -> DBUser {
-        try await userDocument(userId: userId).getDocument(as: DBUser.self, decoder: decoder)
+        let userExist = try await checkUserExist(userId: userId)
+        if userExist {
+            return try await userDocument(userId: userId).getDocument(as: DBUser.self, decoder: decoder)
+        } else {
+            return DBUser(userId: "abcd", username: "Deleted", displayname: "Delete User")
+        }
     }
-    
+
     func checkUserExist(userId: String) async throws -> Bool {
         let userExist: Bool
         let db = Firestore.firestore()
@@ -149,7 +158,7 @@ final class UserManager {
             for result in results.documents {
                 let otherUserId = result["user_id"] as? String ?? ""
                 let user = try await UserManager.shared.getUser(userId: otherUserId)
-                
+
                 let displayName = user.displayname ?? ""
                 let username = user.username ?? ""
                 let hashcode = user.hashcode ?? ""

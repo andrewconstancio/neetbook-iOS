@@ -12,6 +12,8 @@
 		1C2D4C832B1AD3E000828D16 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C822B1AD3E000828D16 /* CommentView.swift */; };
 		1C2D4C852B1C000300828D16 /* NavBackButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C842B1C000300828D16 /* NavBackButtonView.swift */; };
 		1C4ACFFC2B4777B4009C10E8 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4ACFFB2B4777B4009C10E8 /* PageTitleView.swift */; };
+		1C4ACFFE2B47B2CF009C10E8 /* DeleteAccountPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4ACFFD2B47B2CF009C10E8 /* DeleteAccountPopupView.swift */; };
+		1C4AD0002B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4ACFFF2B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift */; };
 		1C6A84F12AF1A7E800266135 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F02AF1A7E800266135 /* EditProfileViewModel.swift */; };
 		1C6A84F32AFF044300266135 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F22AFF044300266135 /* HomeViewModel.swift */; };
 		1C6A84F52AFF4D9900266135 /* UserInteractions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F42AFF4D9900266135 /* UserInteractions.swift */; };
@@ -141,6 +143,8 @@
 		1C2D4C822B1AD3E000828D16 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		1C2D4C842B1C000300828D16 /* NavBackButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBackButtonView.swift; sourceTree = "<group>"; };
 		1C4ACFFB2B4777B4009C10E8 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
+		1C4ACFFD2B47B2CF009C10E8 /* DeleteAccountPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountPopupView.swift; sourceTree = "<group>"; };
+		1C4ACFFF2B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouldNoDeleteAccountPopupView.swift; sourceTree = "<group>"; };
 		1C6A84F02AF1A7E800266135 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
 		1C6A84F22AFF044300266135 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		1C6A84F42AFF4D9900266135 /* UserInteractions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInteractions.swift; sourceTree = "<group>"; };
@@ -524,6 +528,8 @@
 			children = (
 				1CC81F702A5A2244001D56E1 /* SettingsView.swift */,
 				1CC81F962A5B408B001D56E1 /* SettingViewModel.swift */,
+				1C4ACFFD2B47B2CF009C10E8 /* DeleteAccountPopupView.swift */,
+				1C4ACFFF2B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -759,6 +765,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1CEDE21A2A8F2841005DEDBA /* ProfileSetUpViewRootViewModel.swift in Sources */,
+				1C4AD0002B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift in Sources */,
 				1CEDE2222A945E6F005DEDBA /* UserNameSetupView.swift in Sources */,
 				1CA4C4F52AA74D29007C1AD3 /* TagCloudView.swift in Sources */,
 				1CEDE2262A945F0D005DEDBA /* DataOfBirthView.swift in Sources */,
@@ -806,6 +813,7 @@
 				1CC81F9A2A5B40E0001D56E1 /* AuthenticationViewModel.swift in Sources */,
 				1CB1B3CC2A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift in Sources */,
 				1CE3A2BD2ADCA9A0003BAD2A /* ProfileViewModel.swift in Sources */,
+				1C4ACFFE2B47B2CF009C10E8 /* DeleteAccountPopupView.swift in Sources */,
 				1CC81F972A5B408B001D56E1 /* SettingViewModel.swift in Sources */,
 				1CA4C4FD2AA95C91007C1AD3 /* BookUserActionManager.swift in Sources */,
 				1CB1B3C92A5B9DDB009F6914 /* CustomNavLink.swift in Sources */,
@@ -998,6 +1006,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "neetbook-iOS/neetbook_iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1015,20 +1024,21 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kuma.neetbook-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1037,6 +1047,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "neetbook-iOS/neetbook_iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1054,20 +1065,21 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kuma.neetbook-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

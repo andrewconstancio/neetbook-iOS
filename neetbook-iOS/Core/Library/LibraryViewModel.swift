@@ -16,12 +16,12 @@ final class LibraryViewModel: ObservableObject {
     
     func getUserBooks() async throws {
         do {
-            isLoading = true
+//            isLoading = true
             let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
             booksReading = try await BookUserManager.shared.getReadingUserAddedBooks(userId: userId)
             booksWantToRead = try await BookUserManager.shared.getWantToReadUserAddedBooks(userId: userId)
             booksRead = try await BookUserManager.shared.getReadUserAddedBooks(userId: userId)
-            isLoading = false
+//            isLoading = false
         } catch {
             throw error
         }

@@ -10,7 +10,7 @@ import SwiftUI
 extension Color {
     public static var appBackgroundColor: Color {
 //        return Color(red: 0.14, green: 0.14, blue: 0.14)
-        return Color(hex: "454545")
+        return Color(hex: "1b1545")
     }
     
     public static var appNavBarBackgroundColor: Color {

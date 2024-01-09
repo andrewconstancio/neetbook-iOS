@@ -17,7 +17,7 @@ struct NextButton: ButtonStyle {
             .foregroundColor(self.isValid ? .white : .white.opacity(0.3))
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(self.isValid ? Color.appColorCeladon : Color.appColorCeladon.opacity(0.3))
+                    .fill(self.isValid ? Color.appColorOrange : Color.appColorCeladon.opacity(0.3))
             )
             .font(.title3)
             .fontWeight(.medium)

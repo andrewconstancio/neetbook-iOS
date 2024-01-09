@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import PopupView
 
 struct SettingsView: View {
     
     @StateObject private var viewModel = SettingsViewModel()
     @Binding var showSignInView: Bool
+    @State private var showCouldNotDeleteAccountPopup: Bool = false
+    @State private var showingDeleteAccountPopup = false
     
     var body: some View {
         List {
@@ -27,14 +30,7 @@ struct SettingsView: View {
             }
              
             Button(role: .destructive) {
-                Task {
-                    do {
-                        try await viewModel.deleteAccount()
-                        showSignInView = true
-                    } catch {
-                        print(error)
-                    }
-                }
+                showingDeleteAccountPopup = true
             } label: {
                 Text("Delete Account")
             }
@@ -43,6 +39,18 @@ struct SettingsView: View {
                 emailSection
             }
     
+        }
+        .blur(radius: showingDeleteAccountPopup ? 2 : 0)
+        .popup(isPresented: $showingDeleteAccountPopup) { // 3
+            DeleteAccountPopupView(
+                viewModel: viewModel,
+                showSignInView: $showSignInView,
+                showCouldNotDeleteAccountPopup: $showCouldNotDeleteAccountPopup,
+                showingDeleteAccountPopup: $showingDeleteAccountPopup
+            )
+        }
+        .popup(isPresented: $showCouldNotDeleteAccountPopup) { // 3
+            CouldNoDeleteAccountPopupView(showCouldNotDeleteAccountPopup: $showCouldNotDeleteAccountPopup)
         }
         .onAppear {
             viewModel.loadAuthProviders()

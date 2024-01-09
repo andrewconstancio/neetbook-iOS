@@ -136,6 +136,7 @@ struct SearchView: View {
                 }
                 .padding(.bottom, 120)
             }
+            .background(Color.white)
             .scrollDismissesKeyboard(.immediately)
         }
 }

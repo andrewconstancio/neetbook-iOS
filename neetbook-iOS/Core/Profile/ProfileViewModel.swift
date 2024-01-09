@@ -10,6 +10,7 @@ import SwiftUI
 @MainActor
 final class ProfileViewModel: ObservableObject {
     @Published private(set) var user: DBUser? = nil
+    @Published var isLoadingMainData: Bool = false
     @Published var favoriteBooks: [FavoriteBook] = []
     @Published var activity: [PostFeedInstance] = []
     @Published var photoURL: String = ""
@@ -17,11 +18,29 @@ final class ProfileViewModel: ObservableObject {
     @Published var followerCount = 0
     
     func loadCurrentUser() async throws {
+        isLoadingMainData = true
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-        self.user = try await UserManager.shared.getUser(userId: authDataResult.uid)
-        followingCount = try await UserManager.shared.getFollowingCount(userId: authDataResult.uid)
-        followerCount = try await UserManager.shared.getFollowerCount(userId: authDataResult.uid)
-        try await self.getUserActivity(userId: authDataResult.uid)
+        user = try await UserManager.shared.getUser(userId: authDataResult.uid)
+        try await setUserFollowingList(userId: authDataResult.uid)
+        try await setUserFollowerList(userId: authDataResult.uid)
+        try await getUserActivity(userId: authDataResult.uid)
+        isLoadingMainData = false
+    }
+    
+    func setUserFollowingList(userId: String) async throws {
+        do {
+            followingCount = try await UserManager.shared.getFollowingCount(userId: userId)
+        } catch {
+            throw error
+        }
+    }
+    
+    func setUserFollowerList(userId: String) async throws {
+        do {
+            followerCount = try await UserManager.shared.getFollowerCount(userId: userId)
+        } catch {
+            throw error
+        }
     }
     
     func getUserActivity(userId: String) async throws {

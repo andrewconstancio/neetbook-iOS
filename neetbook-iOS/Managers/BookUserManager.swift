@@ -29,46 +29,48 @@ final class BookUserManager {
     private let userCollection = Firestore.firestore().collection("users")
     
     func getReadingUserAddedBooks(userId: String) async throws -> [Book] {
-        let querySnapshot = try await collection
-                                .whereField("user_id", isEqualTo: userId)
-                                .whereField("action", isEqualTo: "Reading")
-                                .order(by: "date_created", descending: true)
-                                .getDocuments()
-        
-        
-        return try await withThrowingTaskGroup(of: Book?.self) { group in
-            var books: [Book] = []
-            for document in querySnapshot.documents {
-                group.addTask {
-                    guard let bookId = document["book_id"] as? String else {
-                        throw URLError(.badServerResponse)
-                    }
-                    guard var book = try await BookDataService.shared.fetchBookInfo(bookId: bookId) else {
-                        return nil
-                    }
-                    
-                    book.setUserAction(action: document["action"] as? String ?? "")
-                    book.setUserActionDate(date: (document["date_created"] as? Timestamp)?.dateValue() ?? Date())
-                    
-                    return book
-                }
-            }
+        do {
+            let querySnapshot = try await collection
+                                    .whereField("user_id", isEqualTo: userId)
+                                    .whereField("action", isEqualTo: "Reading")
+                                    .order(by: "date_created", descending: true)
+                                    .getDocuments()
             
-            for try await book in group {
-                 if let book = book {
-                     books.append(book)
+            return try await withThrowingTaskGroup(of: Book?.self) { group in
+                var books: [Book] = []
+                for document in querySnapshot.documents {
+                    group.addTask {
+                        guard let bookId = document["book_id"] as? String else {
+                            throw URLError(.badServerResponse)
+                        }
+                        guard var book = try await BookDataService.shared.fetchBookInfo(bookId: bookId) else {
+                            return nil
+                        }
+                        
+                        book.setUserAction(action: document["action"] as? String ?? "")
+                        book.setUserActionDate(date: (document["date_created"] as? Timestamp)?.dateValue() ?? Date())
+                        return book
+                    }
+                }
+                
+                for try await book in group {
+                     if let book = book {
+                         books.append(book)
+                     }
                  }
-             }
-            
-            books.sort {
-                if let actionDateOne = $0.userActionDate, let actionDateTwo = $1.userActionDate {
-                    return actionDateOne > actionDateTwo
-                } else {
-                    return false
+                
+                books.sort {
+                    if let actionDateOne = $0.userActionDate, let actionDateTwo = $1.userActionDate {
+                        return actionDateOne > actionDateTwo
+                    } else {
+                        return false
+                    }
                 }
-            }
 
-            return books
+                return books
+            }
+        } catch let error {
+            throw error
         }
     }
     

@@ -75,9 +75,9 @@ struct ContentSetupView: View {
                                     .frame(width: UIScreen.main.bounds.width)
                                     .id(3)
                             
-                                SetupSelectedGenresView(viewModel: viewModel, showProfileSetUpView: $showProfileSetUpView)
-                                    .frame(width: UIScreen.main.bounds.width)
-                                    .id(4)
+//                                SetupSelectedGenresView(viewModel: viewModel, showProfileSetUpView: $showProfileSetUpView)
+//                                    .frame(width: UIScreen.main.bounds.width)
+//                                    .id(4)
                             
                         }
                         .onChange(of: viewModel.setProgressIndexStep) { newValue in
@@ -123,7 +123,7 @@ struct SetupProfileProgressView: View {
     
     var body: some View {
         HStack(spacing: 5) {
-            ForEach(1..<5) { index in
+            ForEach(1..<4) { index in
                 Rectangle()
                     .frame(width: 30, height: 5)
                     .foregroundColor(viewModel.setProgressIndexStep >= index ? .white : .white.opacity(0.5))

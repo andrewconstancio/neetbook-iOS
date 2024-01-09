@@ -7,6 +7,12 @@
 
 import Foundation
 import Firebase
+import FirebaseFirestore
+import FirebaseFirestoreSwift
+
+enum AuthErrors: Error {
+    case couldNotDeleteAccountSignOut
+}
 
 struct AuthDataResultModel {
     let uid: String
@@ -30,6 +36,7 @@ final class AuthenticationManager {
     
     static let shared = AuthenticationManager()
     private init() {}
+    private let userCollection = Firestore.firestore().collection("users")
     
     func getAuthenticatedUser() throws -> AuthDataResultModel {
         guard let user = Auth.auth().currentUser else {
@@ -73,10 +80,27 @@ final class AuthenticationManager {
     
     func delete() async throws {
         guard let user = Auth.auth().currentUser else {
-            throw URLError(.badURL)
+            throw URLError(.badServerResponse)
+        }
+        do {
+            try await user.delete()
+            try await deleteUserProfile()
+        } catch {
+            throw AuthErrors.couldNotDeleteAccountSignOut
+        }
+    }
+    
+    func deleteUserProfile() async throws {
+        guard let user = Auth.auth().currentUser else {
+            throw URLError(.badServerResponse)
         }
         
-        try await user.delete()
+        do {
+            let document = userCollection.document(user.uid)
+            try await document.delete()
+        } catch {
+            throw AuthErrors.couldNotDeleteAccountSignOut
+        }
     }
 }
 

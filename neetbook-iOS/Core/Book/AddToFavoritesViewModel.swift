@@ -15,10 +15,12 @@ import SwiftUI
 	
 @MainActor
 class AddToFavoritesViewModel: ObservableObject {
+    @Published var isLoadingMainData: Bool = false
     @Published var books: [FavoriteBook] = []
     
     func getFavoriteBooks(toSaveBook: Book) async throws {
         do {
+            isLoadingMainData = true
             let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
             self.books = try await BookUserManager.shared.getFavoriteBooks(userId: userId)
             
@@ -35,6 +37,7 @@ class AddToFavoritesViewModel: ObservableObject {
                 self.books.append(newFavBook)
             }
 
+            isLoadingMainData = false
         } catch {
             throw error
         }

@@ -81,9 +81,14 @@ struct LibraryView: View {
             }
         }
         .background(Color.white.ignoresSafeArea())
-        .onAppear {
-            Task {
-                try? await viewModel.getUserBooks()
+        .task {
+            try? await viewModel.getUserBooks()
+        }
+        .refreshable {
+            do {
+                try await viewModel.getUserBooks()
+            } catch let error {
+                print(error)
             }
         }
         .gesture(

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftfulLoadingIndicators
 
 struct AddToFavoritesView: View {
     let book: Book
@@ -14,13 +15,27 @@ struct AddToFavoritesView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        NavigationView {
-            VStack {
+        VStack {
+            Text("Favorites List")
+                .font(.system(size: 16))
+                .fontWeight(.bold)
+                .foregroundColor(.black)
+            
+            if viewModel.isLoadingMainData {
+                VStack {
+                    Spacer()
+                    LoadingIndicator(animation: .threeBalls, color: .black, speed: .fast)
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity)
+            } else {
                 Spacer()
                 List {
                     ForEach(viewModel.books) { fav in
                         HStack {
                             Text("\(fav.row)")
+                                .foregroundColor(.black)
+                                .bold()
                             AsyncImage(url: URL(string: fav.book.coverURL)) { image in
                                 image
                                     .resizable()
@@ -30,8 +45,20 @@ struct AddToFavoritesView: View {
                             } placeholder: {
                                 ProgressView()
                             }
+                            
+                            VStack(alignment: .leading) {
+                                Text(fav.book.title)
+                                    .font(.system(size: 16))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.black)
+                                
+                                Text(fav.book.author)
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.black.opacity(0.7))
+                            }
                         }
-                        .listRowBackground(fav.newBook ? Color.green.opacity(0.8) : .none)
+                        .listRowBackground(fav.newBook ? Color.green.opacity(0.8) : .white)
                     }
                     .onDelete { indexSet in
                         delete(indexSet: indexSet)
@@ -42,7 +69,6 @@ struct AddToFavoritesView: View {
                     }
                     .navigationBarItems(trailing: EditButton())
                     .scrollContentBackground(.hidden)
-                    .navigationTitle("Your favorite books")
                 
                     Spacer()
                     if isEditing {
@@ -61,16 +87,15 @@ struct AddToFavoritesView: View {
                     }
                     Spacer()
             }
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
-            .onAppear {
-                Task {
-                    try? await viewModel.getFavoriteBooks(toSaveBook: book)
-                    try? await viewModel.saveFavoriteBooks()
-                }
+        }
+        .background(Color.white)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
+        .onAppear {
+            Task {
+                try? await viewModel.getFavoriteBooks(toSaveBook: book)
+                try? await viewModel.saveFavoriteBooks()
             }
-            
-            Spacer()
         }
     }
     

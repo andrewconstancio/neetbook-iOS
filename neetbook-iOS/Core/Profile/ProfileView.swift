@@ -24,75 +24,81 @@ struct ProfileView: View {
     @Namespace private var namespace2
     
     var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
-            VStack() {
+        VStack() {
+            if viewModel.isLoadingMainData {
+                VStack {
+                    Spacer()
+                    LoadingIndicator(animation: .threeBalls, color: .black, speed: .fast)
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity)
+            } else {
                 VStack() {
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading) {
-                                Text(viewModel.user?.displayname ?? "")
-                                    .font(.system(size: 36))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.black)
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading) {
+                            Text(viewModel.user?.displayname ?? "")
+                                .font(.system(size: 36))
+                                .fontWeight(.bold)
+                                .foregroundColor(.black)
 
-                                Text("\(viewModel.user?.username ?? "")#\(viewModel.user?.hashcode ?? "")")
-                                    .font(.subheadline)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.black.opacity(0.7))
+                            Text("\(viewModel.user?.username ?? "")#\(viewModel.user?.hashcode ?? "")")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.black.opacity(0.7))
 
-                                HStack {
-                                    Button {
-                                        showFollowListView = true
-                                    } label: {
-                                        HStack(spacing: 5) {
-                                            Text("\(viewModel.followingCount)")
-                                                .foregroundColor(.black)
-                                                .fontWeight(.bold)
-                                                .font(.system(size: 15))
+                            HStack {
+                                Button {
+                                    showFollowListView = true
+                                } label: {
+                                    HStack(spacing: 5) {
+                                        Text("\(viewModel.followingCount)")
+                                            .foregroundColor(.black)
+                                            .fontWeight(.bold)
+                                            .font(.system(size: 15))
 
-                                            Text("Following")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 15))
-                                        }
-                                    }
-                                    Button {
-                                        showFollowListView = true
-                                    } label: {
-                                        HStack(spacing: 5) {
-                                            Text("\(viewModel.followerCount)")
-                                                .foregroundColor(.black)
-                                                .fontWeight(.bold)
-                                                .font(.system(size: 15))
-
-                                            Text("Followers")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 15))
-                                        }
+                                        Text("Following")
+                                            .foregroundColor(.black)
+                                            .font(.system(size: 15))
                                     }
                                 }
-                                .padding(.top, 10)
+                                Button {
+                                    showFollowListView = true
+                                } label: {
+                                    HStack(spacing: 5) {
+                                        Text("\(viewModel.followerCount)")
+                                            .foregroundColor(.black)
+                                            .fontWeight(.bold)
+                                            .font(.system(size: 15))
+
+                                        Text("Followers")
+                                            .foregroundColor(.black)
+                                            .font(.system(size: 15))
+                                    }
+                                }
                             }
-                            Spacer()
-                            if let profilePic = currentUserViewModel.profilePicture {
-                                Image(uiImage: profilePic)
-                                    .resizable()
-                                    .frame(width: 100, height: 100)
-                                    .clipShape(Circle())
-                                    .overlay(
-                                     Circle()
-                                         .stroke(Color.appColorWedge, lineWidth: 5)
-                                    )
-                                    .padding(5.0)
-                                    .overlay(
-                                      Circle()
-                                        .stroke(Color.appColorCeladon, lineWidth: 5)
-                                    )
-                                    .shadow(radius: 20)
-                            }
+                            .padding(.top, 10)
                         }
+                        Spacer()
+                        if let profilePic = currentUserViewModel.profilePicture {
+                            Image(uiImage: profilePic)
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .overlay(
+                                 Circle()
+                                     .stroke(Color.appColorWedge, lineWidth: 5)
+                                )
+                                .padding(5.0)
+                                .overlay(
+                                  Circle()
+                                    .stroke(Color.appColorCeladon, lineWidth: 5)
+                                )
+                                .shadow(radius: 20)
+                        }
+                    }
                 }
                 .padding()
-    
+
                 HStack(spacing: 20) {
                     Button {
                         showProfileEditView = true
@@ -150,7 +156,7 @@ struct ProfileView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-  
+
                 GeometryReader { geo in
                     VStack {
                         Spacer()
@@ -255,12 +261,15 @@ struct ProfileView: View {
                 }
             }
         }
+        .background(Color.white)
+        .ignoresSafeArea(.all, edges: .bottom)
         .sheet(isPresented: $showFollowListView) {
             if let userId = viewModel.user?.userId {
                 FollowListView(userId: userId)
                     .onDisappear {
                         Task {
-                            try? await viewModel.loadCurrentUser()
+                            try? await viewModel.setUserFollowerList(userId: userId)
+                            try? await viewModel.setUserFollowingList(userId: userId)
                         }
                     }
             }

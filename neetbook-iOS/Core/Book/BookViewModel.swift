@@ -10,6 +10,7 @@ import SwiftUI
 @MainActor
 final class BookViewModel: ObservableObject {
     private(set) var currentUserId: String = ""
+    @Published var bookInfoIsLoading: Bool = false
     @Published var userActions: ReadingActions? = nil
     @Published var userNewComment: String = ""
     @Published private(set) var bookComments: [BookComment] = []
@@ -18,6 +19,14 @@ final class BookViewModel: ObservableObject {
     @Published var isLoadingComments: Bool = false
     @Published var showCommentSection: Bool = false
     @Published private(set) var bookStats: BookActionStats? = nil
+    
+    func getBookMainInformation(bookId: String) async throws {
+        bookInfoIsLoading = true
+        try await getUserBookAction(bookId: bookId)
+        try await checkIfUserAddedBookToFavoritesList(bookId: bookId)
+        try await getBookStats(bookId: bookId)
+        bookInfoIsLoading = false
+    }
         
     func getUserBookAction(bookId: String) async throws {
         do {

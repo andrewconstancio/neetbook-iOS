@@ -26,7 +26,7 @@ enum TabBarItem: Hashable {
         case .library: return "Library"
         case .search: return "Search"
         case .profile: return "Profile"
-        case .notificaiton: return "Notifcation"
+        case .notificaiton: return "Notifcations"
         }
     }
     
