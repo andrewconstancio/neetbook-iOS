@@ -12,10 +12,12 @@ final class RootViewModel: ObservableObject {
     
     func checkIfInvalidUser() async throws -> Bool {
         let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-        if authUser != nil {
-            let dbUser = try? await UserManager.shared.getUser(userId: authUser?.uid ?? "")
-            return dbUser == nil
-        }
-        return true
+        return authUser == nil
+    }
+    
+    func checkIfUserAccountMade() async throws -> Bool {
+        let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+        let dbUser = try? await UserManager.shared.getUser(userId: userId)
+        return dbUser == nil
     }
 }

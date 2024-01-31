@@ -14,6 +14,7 @@ struct Book: Identifiable, Codable {
     let author: String
     let coverURL: String
     let description: String
+    let publishedYear: String
     var userAction: String?
     var userActionDate: Date?
     

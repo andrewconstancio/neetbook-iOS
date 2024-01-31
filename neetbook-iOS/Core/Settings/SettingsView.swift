@@ -9,39 +9,41 @@ import SwiftUI
 import PopupView
 
 struct SettingsView: View {
-    
     @StateObject private var viewModel = SettingsViewModel()
     @Binding var showSignInView: Bool
     @State private var showCouldNotDeleteAccountPopup: Bool = false
     @State private var showingDeleteAccountPopup = false
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        List {
-            Button("Log out") {
-                Task {
-                    do {
-                        try viewModel.signOut()
-                        showSignInView = true
-                        print(showSignInView)
-                    } catch {
-                        print(error)
+        VStack {
+            List {
+                Button("Log out") {
+                    Task {
+                        do {
+                            try viewModel.signOut()
+                            showSignInView = true
+                        } catch {
+                            print(error)
+                        }
                     }
                 }
-            }
-             
-            Button(role: .destructive) {
-                showingDeleteAccountPopup = true
-            } label: {
-                Text("Delete Account")
-            }
+                 
+                Button(role: .destructive) {
+                    showingDeleteAccountPopup = true
+                } label: {
+                    Text("Delete Account")
+                }
 
-            if viewModel.authProviders.contains(.email) {
-                emailSection
+                if viewModel.authProviders.contains(.email) {
+                    emailSection
+                }
             }
-    
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
         }
         .blur(radius: showingDeleteAccountPopup ? 2 : 0)
-        .popup(isPresented: $showingDeleteAccountPopup) { // 3
+        .popup(isPresented: $showingDeleteAccountPopup) {
             DeleteAccountPopupView(
                 viewModel: viewModel,
                 showSignInView: $showSignInView,
@@ -49,12 +51,14 @@ struct SettingsView: View {
                 showingDeleteAccountPopup: $showingDeleteAccountPopup
             )
         }
-        .popup(isPresented: $showCouldNotDeleteAccountPopup) { // 3
+        .popup(isPresented: $showCouldNotDeleteAccountPopup) {
             CouldNoDeleteAccountPopupView(showCouldNotDeleteAccountPopup: $showCouldNotDeleteAccountPopup)
         }
         .onAppear {
             viewModel.loadAuthProviders()
         }
+//        .navigationBarBackButtonHidden(true)
+//        .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
         .navigationTitle("Settings")
     }
 }

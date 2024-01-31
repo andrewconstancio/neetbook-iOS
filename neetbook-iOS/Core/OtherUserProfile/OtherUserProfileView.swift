@@ -315,6 +315,8 @@ struct OtherUserProfileView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity)
+        .background(Color.white)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
         .sheet(isPresented: $showFollowListView) {

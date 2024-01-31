@@ -74,7 +74,6 @@ class OtherUserProfileViewModel: ObservableObject {
     
     func getFavoriteBooks(userId: String) async throws {
         do {
-            print(userId)
             self.favoriteBooks = try await BookUserManager.shared.getFavoriteBooks(userId: userId)
         } catch {
             throw error

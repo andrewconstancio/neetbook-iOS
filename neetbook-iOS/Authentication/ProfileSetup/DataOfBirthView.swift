@@ -10,6 +10,7 @@ import SwiftUI
 struct DataOfBirthView: View {
     @ObservedObject var viewModel: ProfileSetupViewRootViewModel
     @Environment(\.colorScheme) var colorScheme
+    @Binding var showProfileSetUpView: Bool
     
     var dateClosedRange: ClosedRange<Date> {
         let min = Calendar.current.date(byAdding: .year, value: -100, to: Date())!
@@ -31,7 +32,7 @@ struct DataOfBirthView: View {
                 in: dateClosedRange,
                 displayedComponents: .date
             )
-            .accentColor(.white)
+            .colorScheme(.dark)
             .datePickerStyle(WheelDatePickerStyle())
             .labelsHidden()
             .fixedSize()
@@ -41,11 +42,15 @@ struct DataOfBirthView: View {
             
             Spacer()
             Button {
-                withAnimation(.spring()) {
-                    viewModel.setProgressIndexStep += 1
-                 }
+                viewModel.isCreatingNewUser = true
+                viewModel.addSelectedGenresToUser()
+                Task {
+                    try? await viewModel.saveUserProfileImage()
+                    try? await viewModel.saveUser()
+                    showProfileSetUpView = false
+                }
             } label: {
-                Text("Next")
+                Text("Done")
             }
             .buttonStyle(NextButton(isValid: viewModel.validDateOfBirth))
             .disabled(!viewModel.validDateOfBirth)

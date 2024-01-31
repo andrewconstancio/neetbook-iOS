@@ -104,7 +104,7 @@ struct ProfileView: View {
                         showProfileEditView = true
                     } label: {
                         Text("Edit Profile")
-                            .frame(width: UIScreen.main.bounds.width / 3)
+                            .frame(width: UIScreen.main.bounds.width / 2)
                             .font(.system(size: 14))
                             .foregroundColor(.white)
                             .padding(5)
@@ -115,21 +115,21 @@ struct ProfileView: View {
                                     .stroke(Color.clear, lineWidth: 2)
                             )
                     }
-                    NavigationLink {
-                        SettingsView(showSignInView: $showSignInView)
-                    } label: {
-                        Text("Share Profile")
-                            .frame(width: UIScreen.main.bounds.width / 3)
-                            .font(.system(size: 14))
-                            .foregroundColor(.white)
-                            .padding(5)
-                            .background(Color.appColorPurple)
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.clear, lineWidth: 2)
-                            )
-                    }
+//                    NavigationLink {
+//                        SettingsView(showSignInView: $showSignInView)
+//                    } label: {
+//                        Text("Share Profile")
+//                            .frame(width: UIScreen.main.bounds.width / 3)
+//                            .font(.system(size: 14))
+//                            .foregroundColor(.white)
+//                            .padding(5)
+//                            .background(Color.appColorPurple)
+//                            .cornerRadius(10)
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .stroke(Color.clear, lineWidth: 2)
+//                            )
+//                    }
                 }
                 .padding()
                 
@@ -269,7 +269,7 @@ struct ProfileView: View {
                     .onDisappear {
                         Task {
                             try? await viewModel.setUserFollowerList(userId: userId)
-                            try? await viewModel.setUserFollowingList(userId: userId)
+                            try? await viewModel.setUserFollowerList(userId: userId)
                         }
                     }
             }
@@ -289,12 +289,7 @@ struct ProfileView: View {
         .task {
             try? await viewModel.loadCurrentUser()
             try? await viewModel.getPhotoURL()
-        }
-        .onAppear {
-            Task {
-                try? await viewModel.getFavoriteBooks()
-            }
-
+            try? await viewModel.getFavoriteBooks()
             Utilities.shared.hideToolBarBackground()
         }
         .navigationBarBackButtonHidden(true)

@@ -71,7 +71,7 @@ struct ContentSetupView: View {
                                     .frame(width: UIScreen.main.bounds.width)
                                     .id(2)
                             
-                                DataOfBirthView(viewModel: viewModel)
+                                DataOfBirthView(viewModel: viewModel, showProfileSetUpView: $showProfileSetUpView)
                                     .frame(width: UIScreen.main.bounds.width)
                                     .id(3)
                             

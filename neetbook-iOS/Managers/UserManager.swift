@@ -46,12 +46,11 @@ final class UserManager {
         try userDocument(userId: user.userId).setData(from: user, merge: false, encoder: encoder)
     }
     
-    func getUser(userId: String) async throws -> DBUser {
-        let userExist = try await checkUserExist(userId: userId)
-        if userExist {
+    func getUser(userId: String) async throws -> DBUser? {
+        do {
             return try await userDocument(userId: userId).getDocument(as: DBUser.self, decoder: decoder)
-        } else {
-            return DBUser(userId: "abcd", username: "Deleted", displayname: "Delete User")
+        } catch {
+            return nil
         }
     }
 
@@ -94,7 +93,6 @@ final class UserManager {
     func getProfileProfileImageUrl(userId: String) async throws -> String {
         let storageRef = storage.reference(withPath: "profile_images/\(userId)")
         let downloadUrl = try await storageRef.downloadURL()
-        
         
         return downloadUrl.absoluteString
     }
@@ -157,25 +155,28 @@ final class UserManager {
             var users: [FollowingUser] = []
             for result in results.documents {
                 let otherUserId = result["user_id"] as? String ?? ""
-                let user = try await UserManager.shared.getUser(userId: otherUserId)
+                let userData = try await UserManager.shared.getUser(userId: otherUserId)
 
-                let displayName = user.displayname ?? ""
-                let username = user.username ?? ""
-                let hashcode = user.hashcode ?? ""
-                var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-                if let photoUrl = user.photoUrl {
-                    profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
-                }
                 
-                let newNoti = FollowingUser(
-                    userId: otherUserId,
-                    displayName: displayName,
-                    username: username,
-                    hashcode: hashcode,
-                    profileImage: profileImage,
-                    followingStatus: .following
-                )
-                users.append(newNoti)
+                if let user = userData {
+                    let displayName = user.displayname ?? ""
+                    let username = user.username ?? ""
+                    let hashcode = user.hashcode ?? ""
+                    var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+                    if let photoUrl = user.photoUrl {
+                        profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+                    }
+                    
+                    let followingUser = FollowingUser(
+                        userId: otherUserId,
+                        displayName: displayName,
+                        username: username,
+                        hashcode: hashcode,
+                        profileImage: profileImage,
+                        followingStatus: .following
+                    )
+                    users.append(followingUser)
+                }
             }
             
             return users
@@ -194,24 +195,26 @@ final class UserManager {
             var users: [FollowerUser] = []
             for result in results.documents {
                 let otherUserId = result["user_id"] as? String ?? ""
-                let user = try await UserManager.shared.getUser(userId: otherUserId)
+                let userData = try await UserManager.shared.getUser(userId: otherUserId)
                 
-                let displayName = user.displayname ?? ""
-                let username = user.username ?? ""
-                let hashcode = user.hashcode ?? ""
-                var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-                if let photoUrl = user.photoUrl {
-                    profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+                if let user = userData {
+                    let displayName = user.displayname ?? ""
+                    let username = user.username ?? ""
+                    let hashcode = user.hashcode ?? ""
+                    var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+                    if let photoUrl = user.photoUrl {
+                        profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+                    }
+                    
+                    let followUser = FollowerUser(
+                        userId: otherUserId,
+                        displayName: displayName,
+                        username: username,
+                        hashcode: hashcode,
+                        profileImage: profileImage
+                    )
+                    users.append(followUser)
                 }
-                
-                let followUser = FollowerUser(
-                    userId: otherUserId,
-                    displayName: displayName,
-                    username: username,
-                    hashcode: hashcode,
-                    profileImage: profileImage
-                )
-                users.append(followUser)
             }
             return users
         } catch {

@@ -35,10 +35,13 @@ final class Helpers {
         guard let url = URL(string: someURL) else {
             throw URLError(.badURL)
         }
-        let (data, response) = try await URLSession.shared.data(from: url, delegate: nil)
         
-        
-        return (data, response)
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url, delegate: nil)
+            return (data, response)
+        } catch {
+            throw APIError.invalidData
+        }
     }
     
     func convertDataToUIImage(data: Data?, response: URLResponse?) -> UIImage? {

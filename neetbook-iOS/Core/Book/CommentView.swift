@@ -17,14 +17,11 @@ struct CommentView: View {
     let comment: BookComment
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             Image(uiImage: comment.profilePicture)
                 .resizable()
                 .frame(width: 50, height: 50)
                 .clipShape(Circle())
-                .alignmentGuide(VerticalAlignment.center) {   // << here !!
-                      $0[VerticalAlignment.top]
-                  }
             
             VStack(alignment: .leading) {
                 Text(comment.displayName)
@@ -65,10 +62,8 @@ struct CommentView: View {
                 .type(.toast)
                 .dragToDismiss(true)
         }
-        .alignmentGuide(VerticalAlignment.center) {   // << here !!
-              $0[VerticalAlignment.top]
-          }
         .padding(.top, 20)
+//        .frame(maxWidth: .infinity, alignment: .top)
     }
 }
 

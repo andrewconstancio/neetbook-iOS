@@ -32,7 +32,7 @@ final class UserInteractions {
     
     func searchForUser(searchText: String, currentUserId: String) async throws -> [UserSearchResult] {
         let query = userCollection
-                .whereField("username", isEqualTo: searchText)
+            .whereField("username", isEqualTo: searchText.lowercased())
                 .whereField("user_id", isNotEqualTo: currentUserId)
         
         let data = try await query.getDocuments()
@@ -206,25 +206,27 @@ final class UserInteractions {
             var notiResults: [Notification] = []
             for result in results.documents {
                 let requestFollowUserId = result["current_user_id"] as? String ?? ""
-                let user = try await UserManager.shared.getUser(userId: requestFollowUserId)
+                let userData = try await UserManager.shared.getUser(userId: requestFollowUserId)
                 
-                let displayName = user.displayname ?? ""
-                let username = user.username ?? ""
-                let hashcode = user.hashcode ?? ""
-                var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-                if let photoUrl = user.photoUrl {
-                    profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+                if let user = userData {
+                    let displayName = user.displayname ?? ""
+                    let username = user.username ?? ""
+                    let hashcode = user.hashcode ?? ""
+                    var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+                    if let photoUrl = user.photoUrl {
+                        profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+                    }
+                    
+                    let newNoti = Notification(
+                        userId: requestFollowUserId,
+                        displayName: displayName,
+                        username: username,
+                        hashcode: hashcode,
+                        profileImage: profileImage,
+                        action: .follewRequest
+                    )
+                    notiResults.append(newNoti)
                 }
-                
-                let newNoti = Notification(
-                    userId: requestFollowUserId,
-                    displayName: displayName,
-                    username: username,
-                    hashcode: hashcode,
-                    profileImage: profileImage,
-                    action: .follewRequest
-                )
-                notiResults.append(newNoti)
             }
             
             return notiResults

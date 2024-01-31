@@ -20,20 +20,24 @@ class CurrentUserViewModel: ObservableObject {
             let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
             let dbUser = try await UserManager.shared.getUser(userId: userId)
             
-            if let displayname =  dbUser.displayname {
+            guard let user = dbUser else {
+                throw APIError.invalidData
+            }
+            
+            if let displayname =  user.displayname {
                 self.displayName = displayname
             }
             
-            if let username =  dbUser.username {
+            if let username =  user.username {
                 self.username = username
             }
             
-            if let photoURL =  dbUser.photoUrl {
+            
+            if let photoURL = user.photoUrl {
                 let (data, response) = try await Helpers.shared.getDownloadAndResponseDataFromURL(someURL: photoURL)
                 let image = Helpers.shared.convertDataToUIImage(data: data, response: response)
                 self.profilePicture = image
             }
-    
         } catch {
             throw error
         }

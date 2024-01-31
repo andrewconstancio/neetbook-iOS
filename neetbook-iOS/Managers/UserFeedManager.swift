@@ -57,9 +57,14 @@ final class UserFeedManager {
                             let action = data["action"] as? String ?? ""
                             let bookId = data["book_id"] as? String ?? ""
                             let dateCreated = (data["date_created"] as? Timestamp)?.dateValue() ?? Date()
-                            let user = try await UserManager.shared.getUser(userId: userId)
                             let bookData = try await BookDataService.shared.fetchBookInfo(bookId: bookId)
                             var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+                            let userData = try await UserManager.shared.getUser(userId: userId)
+                            
+                            guard let user = userData else {
+                                return nil
+                            }
+                            
                             if let photoUrl = user.photoUrl {
                                 profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
                             }
@@ -121,9 +126,14 @@ final class UserFeedManager {
                         let action = data["action"] as? String ?? ""
                         let bookId = data["book_id"] as? String ?? ""
                         let dateCreated = (data["date_created"] as? Timestamp)?.dateValue() ?? Date()
-                        let user = try await UserManager.shared.getUser(userId: userId)
                         let bookData = try await BookDataService.shared.fetchBookInfo(bookId: bookId)
                         var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+                        let userData = try await UserManager.shared.getUser(userId: userId)
+                        
+                        guard let user = userData else {
+                            return nil
+                        }
+                        
                         if let photoUrl = user.photoUrl {
                             profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
                         }

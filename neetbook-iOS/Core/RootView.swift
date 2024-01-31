@@ -19,7 +19,7 @@ struct RootView: View {
                 NavigationStack {
                     ContentView(showSignInView: $showSignInView)
                         .environmentObject(currentUserViewModel)
-                   	     .onAppear {
+                        .onAppear {
                             Task {
                                 try? await currentUserViewModel.loadCurrentUser()
                             }
@@ -42,9 +42,11 @@ struct RootView: View {
         .onAppear {
             Task {
                 viewModel.isLoading = true
-                let result = try await viewModel.checkIfInvalidUser()
+                self.showSignInView = try await viewModel.checkIfInvalidUser()
+                if !self.showSignInView {
+                    self.showProfileSetUpView = try await viewModel.checkIfUserAccountMade()
+                }
                 viewModel.isLoading = false
-                self.showSignInView = result
             }
         }
     }

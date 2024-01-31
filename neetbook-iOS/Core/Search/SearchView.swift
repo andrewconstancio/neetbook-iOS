@@ -145,7 +145,7 @@ extension SearchView {
     private var noSearchResultsFound: some View {
         VStack() {
             Text("No results found!")
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(.black.opacity(0.7))
                 .fontWeight(.bold)
         }
         .padding()

@@ -18,7 +18,7 @@ struct AuthDataResultModel {
     let uid: String
     let email: String?
     let photoUrl: String?
-    
+     
     init(user: User) {
         self.uid = user.uid
         self.email = user.email
@@ -42,7 +42,6 @@ final class AuthenticationManager {
         guard let user = Auth.auth().currentUser else {
             throw URLError(.badServerResponse)
         }
-        
         return AuthDataResultModel(user: user)
     }
     
@@ -53,8 +52,6 @@ final class AuthenticationManager {
         
         return userId
     }
-    
-    // google.com
     
     func getProviders() throws -> [AuthProviderOption] {
         guard let providerData = Auth.auth().currentUser?.providerData else {
@@ -84,19 +81,15 @@ final class AuthenticationManager {
         }
         do {
             try await user.delete()
-            try await deleteUserProfile()
+            try await deleteUserProfile(userId: user.uid)
         } catch {
             throw AuthErrors.couldNotDeleteAccountSignOut
         }
     }
     
-    func deleteUserProfile() async throws {
-        guard let user = Auth.auth().currentUser else {
-            throw URLError(.badServerResponse)
-        }
-        
+    func deleteUserProfile(userId: String) async throws {
         do {
-            let document = userCollection.document(user.uid)
+            let document = userCollection.document(userId)
             try await document.delete()
         } catch {
             throw AuthErrors.couldNotDeleteAccountSignOut

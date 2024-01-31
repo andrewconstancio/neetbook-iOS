@@ -50,15 +50,19 @@ final class BookUserCommentManager {
             .addDocument(data: docData)
         
         let ref = try await doc.getDocument()
-        let data = ref.data()
         var displayName = ""
         let userData = try await UserManager.shared.getUser(userId: userId)
-        if let name = userData.displayname {
+        
+        guard let user = userData else {
+            throw APIError.invalidData
+        }
+        
+        if let name = user.displayname {
             displayName = name
         }
         
         var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-        if let photoUrl = userData.photoUrl {
+        if let photoUrl = user.photoUrl {
             profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
         }
         
@@ -89,25 +93,36 @@ final class BookUserCommentManager {
                     var displayName = ""
                     let userId = comment["user_id"] as? String ?? ""
                     let userData = try await UserManager.shared.getUser(userId: userId)
-                    if let name = userData.displayname {
-                        displayName = name
+                    if let user = userData {
+                        if let name = user.displayname {
+                            displayName = name
+                        }
+                        
+                        var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+                        if let photoUrl = user.photoUrl {
+                            profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+                        }
+                        
+                        let bookComment = BookComment(
+                            documentId: document.documentID,
+                            userId: userId,
+                            displayName: displayName,
+                            profilePicture: profileImage,
+                            comment: comment["comment"] as? String,
+                            dateCreated: (comment["date_created"] as? Timestamp)?.dateValue() ?? Date()
+                        )
+                        
+                        return bookComment
                     }
                     
-                    var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-                    if let photoUrl = userData.photoUrl {
-                        profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
-                    }
-                    
-                    let bookComment = BookComment(
+                    return BookComment(
                         documentId: document.documentID,
-                        userId: userId,
-                        displayName: displayName,
-                        profilePicture: profileImage,
+                        userId: "1234",
+                        displayName: "Delete User",
+                        profilePicture: UIImage(imageLiteralResourceName: "circle-user-regular"),
                         comment: comment["comment"] as? String,
                         dateCreated: (comment["date_created"] as? Timestamp)?.dateValue() ?? Date()
                     )
-                    
-                    return bookComment
                 }
             }
             

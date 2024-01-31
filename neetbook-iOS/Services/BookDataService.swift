@@ -37,12 +37,14 @@ final class BookDataService {
         guard let bookJSON = json?["book"] as? [String : Any],
               let title = bookJSON["title"] as? String,
               let authors = bookJSON["authors"] as? [String],
-              let smallThumbnail = bookJSON["image"] as? String else {
+              let smallThumbnail = bookJSON["image"] as? String,
+              let publishedDate = bookJSON["date_published"] as? String else {
             return nil
         }
 
-        let description = json?["synopsis"] as? String ?? ""
+        let description = bookJSON["synopsis"] as? String ?? ""
         let author = authors.first ?? ""
+        let publishedYear = String(publishedDate.prefix(4))
 
         let image: UIImage?
         if let coverURL = URL(string: smallThumbnail) {
@@ -58,6 +60,7 @@ final class BookDataService {
             author: author,
             coverURL: smallThumbnail,
             description: description,
+            publishedYear: publishedYear,
             coverPhoto: image
         )
     }
@@ -84,12 +87,14 @@ final class BookDataService {
                         guard let bookId = item["isbn10"] as? String,
                               let title = item["title"] as? String,
                               let authors = item["authors"] as? [String],
-                              let smallThumbnail = item["image"] as? String else {
+                              let smallThumbnail = item["image"] as? String,
+                              let publishedDate = item["date_published"] as? String else {
                             return nil
                         }
 
                         let description = item["synopsis"] as? String ?? ""
                         let author = authors.first ?? ""
+                        let publishedYear = String(publishedDate.prefix(4))
 
                         let image: UIImage?
                         if let coverURL = URL(string: smallThumbnail) {
@@ -105,6 +110,7 @@ final class BookDataService {
                             author: author,
                             coverURL: smallThumbnail,
                             description: description,
+                            publishedYear: publishedYear,
                             coverPhoto: image
                         )
                     }

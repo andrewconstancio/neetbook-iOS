@@ -62,6 +62,7 @@ struct UserNameSetupView: View {
                         }
                         .disableAutocorrection(true)
                         .autocapitalization(.none)
+                        .textInputAutocapitalization(.never)
                         .frame(height: 55)
                         .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 6))
                         .frame(maxWidth: .infinity)

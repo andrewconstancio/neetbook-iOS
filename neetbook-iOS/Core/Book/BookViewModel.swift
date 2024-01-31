@@ -10,6 +10,7 @@ import SwiftUI
 @MainActor
 final class BookViewModel: ObservableObject {
     private(set) var currentUserId: String = ""
+    private(set) var currentUser: DBUser? = nil
     @Published var bookInfoIsLoading: Bool = false
     @Published var userActions: ReadingActions? = nil
     @Published var userNewComment: String = ""
@@ -22,19 +23,18 @@ final class BookViewModel: ObservableObject {
     
     func getBookMainInformation(bookId: String) async throws {
         bookInfoIsLoading = true
+        currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
         try await getUserBookAction(bookId: bookId)
         try await checkIfUserAddedBookToFavoritesList(bookId: bookId)
         try await getBookStats(bookId: bookId)
+        self.currentUser = try await UserManager.shared.getUser(userId: currentUserId)
         bookInfoIsLoading = false
     }
         
     func getUserBookAction(bookId: String) async throws {
         do {
-            let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            let action = try await BookUserActionManager.shared.getUserBookAction(bookId: bookId, userId: userId)
+            let action = try await BookUserActionManager.shared.getUserBookAction(bookId: bookId, userId: currentUserId)
             
-            currentUserId = userId
-        
             DispatchQueue.main.async {
                 switch action {
                 case "Reading":
@@ -57,7 +57,6 @@ final class BookViewModel: ObservableObject {
     
     func saveUserBookAction(bookId: String, action: ReadingActions, pageCount: Int = 0) async throws {
         do {
-            let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
             var actionUser = ""
             switch(action) {
             case .reading:
@@ -74,13 +73,13 @@ final class BookViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.userActions = nil
                 }
-                try? await BookUserActionManager.shared.removeUserBookAction(bookId: bookId, userId: userId)
+                try await BookUserActionManager.shared.removeUserBookAction(bookId: bookId, userId: currentUserId)
                 self.savedActionToDB = false
             } else {
                 DispatchQueue.main.async {
                     self.userActions = action
                 }
-                try? BookUserActionManager.shared.setUserBookAction(bookId: bookId, userId: userId, action: actionUser)
+                try BookUserActionManager.shared.setUserBookAction(bookId: bookId, userId: currentUserId, action: actionUser)
                 self.savedActionToDB = true
             }
             
@@ -90,8 +89,7 @@ final class BookViewModel: ObservableObject {
     }
     
     func addUserBookComment(bookId: String) async throws {
-        let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-        let newComment = try? await BookUserCommentManager.shared.addUserBookComment(bookId: bookId, userId: userId, comment: userNewComment)
+        let newComment = try? await BookUserCommentManager.shared.addUserBookComment(bookId: bookId, userId: currentUserId, comment: userNewComment)
         
         if let comment = newComment {
             self.bookComments.insert(comment, at: 0)
@@ -112,8 +110,7 @@ final class BookViewModel: ObservableObject {
     }
     
     func checkIfUserAddedBookToFavoritesList(bookId: String) async throws {
-        let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-        savedToFavorites = try await BookUserManager.shared.checkIfBookAddedToFavorites(userId: userId, bookId: bookId)
+        savedToFavorites = try await BookUserManager.shared.checkIfBookAddedToFavorites(userId: currentUserId, bookId: bookId)
     }
     
     func getBookStats(bookId: String) async throws {
