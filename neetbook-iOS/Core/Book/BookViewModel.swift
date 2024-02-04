@@ -116,4 +116,9 @@ final class BookViewModel: ObservableObject {
     func getBookStats(bookId: String) async throws {
         bookStats = try await BookUserActionManager.shared.getBookActionStats(bookId: bookId)
     }
+    
+    func reportComment(bookId: String, commentDocID: String, comment: String) async throws {
+        try await BookUserCommentManager.shared.reportComment(bookId: bookId,
+                                                              commentDocID: commentDocID, comment: comment)
+    }
 }

@@ -84,7 +84,7 @@ class EditProfileViewModel: ObservableObject {
     func checkUsername(username: String) async throws {
         
         let fourDigitHash = Helpers.shared.generateRandomFourDigitNumberString()
-        let usernameExist = try await UserManager.shared.checkUserUsernameHashSet(username: username, hash: fourDigitHash)
+        let usernameExist = try await UserManager.shared.checkUserUsernameHashSet(username: username.lowercased(), hash: fourDigitHash)
         
         if usernameExist {
             try await checkUsername(username: username)
@@ -106,7 +106,7 @@ class EditProfileViewModel: ObservableObject {
         }
         
         if initalUsername != username {
-            try await UserManager.shared.updateUserName(username: username, hashcode: hashCode)
+            try await UserManager.shared.updateUserName(username: username.lowercased(), hashcode: hashCode)
         }
     }
 }

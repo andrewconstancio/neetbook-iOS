@@ -31,8 +31,9 @@ final class UserInteractions {
     private let userFollowingListCollection = Firestore.firestore().collection("UserFollowList")
     
     func searchForUser(searchText: String, currentUserId: String) async throws -> [UserSearchResult] {
+        print("searchText: \(searchText)")
         let query = userCollection
-            .whereField("username", isEqualTo: searchText.lowercased())
+            .whereField("username", isEqualTo: searchText)
                 .whereField("user_id", isNotEqualTo: currentUserId)
         
         let data = try await query.getDocuments()

@@ -10,7 +10,8 @@ import PopupView
 
 struct CommentView: View {
     @ObservedObject var bookViewModel: BookViewModel
-    @State private var showSheet: Bool = false
+    @State private var showSheetDelete: Bool = false
+    @State private var showSheetReport: Bool = false
     
     let bookId: String
     let currentUserId: String
@@ -35,7 +36,15 @@ struct CommentView: View {
             Spacer()
             if currentUserId == comment.userId {
                 Button {
-                    showSheet = true
+                    showSheetDelete = true
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .foregroundColor(.black.opacity(0.7))
+                        .rotationEffect(.degrees(90))
+                }
+            } else {
+                Button {
+                    showSheetReport = true
                 } label: {
                     Image(systemName: "ellipsis")
                         .foregroundColor(.black.opacity(0.7))
@@ -43,12 +52,29 @@ struct CommentView: View {
                 }
             }
         }
-        .popup(isPresented: $showSheet) {
+        .popup(isPresented: $showSheetDelete) {
             VStack(spacing: 20) {
                 if self.currentUserId == comment.userId {
                     deleteCommentButton
                 }
-                closeButton
+                closeButtonDelete
+            }
+            .foregroundColor(.white)
+            .frame(height: 250)
+            .frame(maxWidth: .infinity)
+            .background(Color.black)
+            .cornerRadius(30, corners: [.topLeft, .topRight])
+
+        } customize: {
+            $0
+                .isOpaque(true)
+                .type(.toast)
+                .dragToDismiss(true)
+        }
+        .popup(isPresented: $showSheetReport) {
+            VStack(spacing: 20) {
+                reportCommentButton
+                closeButtonReport
             }
             .foregroundColor(.white)
             .frame(height: 250)
@@ -72,7 +98,7 @@ extension CommentView {
         Button {
             Task {
                 try? await bookViewModel.deleteBookComment(bookId: bookId, documentId: comment.documentId)
-                showSheet = false
+                showSheetDelete = false
             }
         } label: {
             HStack {
@@ -94,9 +120,37 @@ extension CommentView {
         }
     }
     
-    private var closeButton: some View {
+    private var reportCommentButton: some View {
         Button {
-            showSheet = false
+            Task {
+                try? await bookViewModel.reportComment(bookId: bookId,
+                                                       commentDocID: comment.documentId,
+                                                       comment: comment.comment ?? "")
+                showSheetReport = false
+            }
+        } label: {
+            HStack {
+                Text("Report")
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+            }
+            .frame(width: 300, height: 55)
+            .font(.system(size: 14))
+            .foregroundColor(.white)
+            .padding(10)
+            .background(Color.appColorOrange)
+            .cornerRadius(30)
+            .overlay(
+                RoundedRectangle(cornerRadius: 30)
+                    .stroke(Color.clear, lineWidth: 1)
+            )
+
+        }
+    }
+    
+    private var closeButtonDelete: some View {
+        Button {
+            showSheetDelete = false
         } label: {
             HStack {
                 Text("Close")
@@ -113,7 +167,28 @@ extension CommentView {
                 RoundedRectangle(cornerRadius: 30)
                     .stroke(Color.clear, lineWidth: 1)
             )
-
+        }
+    }
+    
+    private var closeButtonReport: some View {
+        Button {
+            showSheetReport = false
+        } label: {
+            HStack {
+                Text("Close")
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
+            }
+            .frame(width: 300, height: 55)
+            .font(.system(size: 14))
+            .foregroundColor(.white)
+            .padding(10)
+            .background(Color.white)
+            .cornerRadius(30)
+            .overlay(
+                RoundedRectangle(cornerRadius: 30)
+                    .stroke(Color.clear, lineWidth: 1)
+            )
         }
     }
 }

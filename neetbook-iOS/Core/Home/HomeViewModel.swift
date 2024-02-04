@@ -6,16 +6,20 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 @MainActor
 class HomeViewModel: ObservableObject {
     @Published var photoURL: String = ""
     @Published var post: [PostFeedInstance] = []
     @Published var isLoadingFeed: Bool = false
+    var lastDocument: DocumentSnapshot? = nil
     
     init() {
         Task {
+            self.isLoadingFeed = true
             try? await self.getHomeFeed()
+            self.isLoadingFeed = false
         }
     }
     
@@ -31,10 +35,10 @@ class HomeViewModel: ObservableObject {
     
     func getHomeFeed() async throws {
         do {
-            isLoadingFeed = true
             let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            self.post = try await UserFeedManager.shared.getUserHomeFeed(userId: userId)
-            isLoadingFeed = false
+            let (post, lastDocument) = try await UserFeedManager.shared.getUserHomeFeed(userId: userId, lastDocument: lastDocument)
+            self.post.append(contentsOf: post)
+            self.lastDocument = lastDocument
         } catch {
             throw error
         }

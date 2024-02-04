@@ -13,6 +13,7 @@ import FirebaseFirestoreSwift
 
 struct PostFeedInstance {
     let action: String
+    let documentID: String
     let user: DBUser
     let profilePicture: UIImage
     let book: Book
@@ -30,7 +31,7 @@ final class UserFeedManager {
     private let followingListCollection = Firestore.firestore().collection("UserFollowList")
     private let actionCollection = Firestore.firestore().collection("BookActions")
     
-    func getUserHomeFeed(userId: String) async throws -> [PostFeedInstance] {
+    func getUserHomeFeed(userId: String, lastDocument: DocumentSnapshot?) async throws -> ([PostFeedInstance], DocumentSnapshot?) {
         do {
             let followQ = followingListCollection
                             .document(userId)
@@ -40,14 +41,25 @@ final class UserFeedManager {
             let userIdList = results.documents.compactMap { $0["user_id"] as? String }
         
             var postList: [PostFeedInstance] = []
+            var lastDocumentSnapshot: DocumentSnapshot? = nil
             
             if userIdList.count > 0 {
-                let actionQ = actionCollection
-                    .whereField("user_id", in: userIdList)
-                    .limit(to: 10)
-                    .order(by: "date_created", descending: true)
+                var actionQ: Query
+                if let lastDocument {
+                    actionQ = actionCollection
+                        .order(by: "date_created", descending: true)
+                        .whereField("user_id", in: userIdList)
+                        .limit(to: 8)
+                        .start(afterDocument: lastDocument)
+                } else {
+                    actionQ = actionCollection
+                        .order(by: "date_created", descending: true)
+                        .whereField("user_id", in: userIdList)
+                        .limit(to: 8)
+                }
                 
                 let actionResults = try await actionQ.getDocuments()
+                lastDocumentSnapshot = actionResults.documents.last
             
                 try await withThrowingTaskGroup(of: PostFeedInstance?.self) { group in
                     for result in actionResults.documents {
@@ -83,6 +95,7 @@ final class UserFeedManager {
     
                             return PostFeedInstance(
                                 action: actionText,
+                                documentID: result.documentID,
                                 user: user,
                                 profilePicture: profileImage,
                                 book: book,
@@ -101,7 +114,7 @@ final class UserFeedManager {
                 }
             }
             
-            return postList
+            return (postList, lastDocumentSnapshot)
         } catch {
             throw error
         }
@@ -152,6 +165,7 @@ final class UserFeedManager {
 
                         return PostFeedInstance(
                             action: actionText,
+                            documentID: result.documentID,
                             user: user,
                             profilePicture: profileImage,
                             book: book,
@@ -175,3 +189,15 @@ final class UserFeedManager {
         }
     }
 }
+
+//extension Query {
+//    func getGetDocumentsWithSnapshot() async throws -> ([T], DocumentSnapshot?) {
+//        let snapshot = try await self.getDocuments()
+//        
+//        let docs = try snapshot.documents.map { document in
+//            try document.data(as: T.self)
+//        }
+//        
+//        return (docs, snapshot.documents.last)
+//    }
+//}

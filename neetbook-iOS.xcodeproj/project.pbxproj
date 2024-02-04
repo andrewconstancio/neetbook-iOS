@@ -51,8 +51,8 @@
 		1CB1B3CC2A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C62A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift */; };
 		1CB1B3CD2A5B9DDB009F6914 /* AppNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C72A5B9DDB009F6914 /* AppNavBarView.swift */; };
 		1CB1B3CE2A5B9DDB009F6914 /* CustomNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C82A5B9DDB009F6914 /* CustomNavBarView.swift */; };
-		1CB41D2C2B5C22EC0013FAFA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1CB41D2B2B5C22EC0013FAFA /* GoogleService-Info.plist */; };
 		1CB41D2E2B5DF78F0013FAFA /* AdaptsToKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D2D2B5DF78F0013FAFA /* AdaptsToKeyboard.swift */; };
+		1CB41D302B6F0A6B0013FAFA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1CB41D2F2B6F0A6B0013FAFA /* GoogleService-Info.plist */; };
 		1CC81F2B2A5A20C1001D56E1 /* neetbook_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F2A2A5A20C1001D56E1 /* neetbook_iOSApp.swift */; };
 		1CC81F2D2A5A20C1001D56E1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F2C2A5A20C1001D56E1 /* ContentView.swift */; };
 		1CC81F2F2A5A20C2001D56E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CC81F2E2A5A20C2001D56E1 /* Assets.xcassets */; };
@@ -92,7 +92,6 @@
 		1CE3A2A32AB6A192003BAD2A /* BookUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3A2A22AB6A192003BAD2A /* BookUserManager.swift */; };
 		1CE3A2A62ABA7CC0003BAD2A /* SnapToScroll in Frameworks */ = {isa = PBXBuildFile; productRef = 1CE3A2A52ABA7CC0003BAD2A /* SnapToScroll */; };
 		1CE3A2A92ABA828F003BAD2A /* VisibilityTrackingScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = 1CE3A2A82ABA828F003BAD2A /* VisibilityTrackingScrollView */; };
-		1CE3A2AB2ABA8A47003BAD2A /* LibraryReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3A2AA2ABA8A47003BAD2A /* LibraryReadingView.swift */; };
 		1CE3A2AD2ABBB11E003BAD2A /* SwipeTestingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3A2AC2ABBB11E003BAD2A /* SwipeTestingView.swift */; };
 		1CE3A2B12AC0763D003BAD2A /* LibraryWantToReadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3A2B02AC0763D003BAD2A /* LibraryWantToReadView.swift */; };
 		1CE3A2B32ACCE773003BAD2A /* RefreshableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE3A2B22ACCE773003BAD2A /* RefreshableScrollView.swift */; };
@@ -181,8 +180,8 @@
 		1CB1B3C62A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomBarPreferenceKeys.swift; sourceTree = "<group>"; };
 		1CB1B3C72A5B9DDB009F6914 /* AppNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNavBarView.swift; sourceTree = "<group>"; };
 		1CB1B3C82A5B9DDB009F6914 /* CustomNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBarView.swift; sourceTree = "<group>"; };
-		1CB41D2B2B5C22EC0013FAFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../SupportingFiles/Firebase/Debug/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1CB41D2D2B5DF78F0013FAFA /* AdaptsToKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptsToKeyboard.swift; sourceTree = "<group>"; };
+		1CB41D2F2B6F0A6B0013FAFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1CC81F272A5A20C1001D56E1 /* neetbook-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "neetbook-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CC81F2A2A5A20C1001D56E1 /* neetbook_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = neetbook_iOSApp.swift; sourceTree = "<group>"; };
 		1CC81F2C2A5A20C1001D56E1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -217,7 +216,6 @@
 		1CE3A29E2AB65667003BAD2A /* BookUserCommentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookUserCommentManager.swift; sourceTree = "<group>"; };
 		1CE3A2A02AB6A069003BAD2A /* LibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModel.swift; sourceTree = "<group>"; };
 		1CE3A2A22AB6A192003BAD2A /* BookUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookUserManager.swift; sourceTree = "<group>"; };
-		1CE3A2AA2ABA8A47003BAD2A /* LibraryReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryReadingView.swift; sourceTree = "<group>"; };
 		1CE3A2AC2ABBB11E003BAD2A /* SwipeTestingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTestingView.swift; sourceTree = "<group>"; };
 		1CE3A2B02AC0763D003BAD2A /* LibraryWantToReadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryWantToReadView.swift; sourceTree = "<group>"; };
 		1CE3A2B22ACCE773003BAD2A /* RefreshableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshableScrollView.swift; sourceTree = "<group>"; };
@@ -383,9 +381,9 @@
 		1CC81F292A5A20C1001D56E1 /* neetbook-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				1CB41D2F2B6F0A6B0013FAFA /* GoogleService-Info.plist */,
 				1CC81F2C2A5A20C1001D56E1 /* ContentView.swift */,
 				1CC81F2A2A5A20C1001D56E1 /* neetbook_iOSApp.swift */,
-				1CB41D2B2B5C22EC0013FAFA /* GoogleService-Info.plist */,
 				1CEDE23B2AA50959005DEDBA /* Animiations */,
 				1CEDE2132A8B2A01005DEDBA /* Models */,
 				1CB1B3C22A5B9DBE009F6914 /* CustomNavBar */,
@@ -459,7 +457,6 @@
 			children = (
 				1CC81F822A5A22A1001D56E1 /* LibraryView.swift */,
 				1CE3A2A02AB6A069003BAD2A /* LibraryViewModel.swift */,
-				1CE3A2AA2ABA8A47003BAD2A /* LibraryReadingView.swift */,
 				1CE3A2AC2ABBB11E003BAD2A /* SwipeTestingView.swift */,
 				1CE3A2B02AC0763D003BAD2A /* LibraryWantToReadView.swift */,
 				1CE3A2B42ACCFE13003BAD2A /* LibraryBookListView.swift */,
@@ -742,7 +739,7 @@
 			files = (
 				1CC81F332A5A20C2001D56E1 /* Preview Assets.xcassets in Resources */,
 				1CC81F2F2A5A20C2001D56E1 /* Assets.xcassets in Resources */,
-				1CB41D2C2B5C22EC0013FAFA /* GoogleService-Info.plist in Resources */,
+				1CB41D302B6F0A6B0013FAFA /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -775,7 +772,6 @@
 				1CC81F7F2A5A2275001D56E1 /* TabBarItemsPreferenceKey.swift in Sources */,
 				1C6A84F32AFF044300266135 /* HomeViewModel.swift in Sources */,
 				1CC81F752A5A2244001D56E1 /* SettingsView.swift in Sources */,
-				1CE3A2AB2ABA8A47003BAD2A /* LibraryReadingView.swift in Sources */,
 				1C6A85122B0C4BD800266135 /* OtherFollowListView.swift in Sources */,
 				1CC81F852A5A22A8001D56E1 /* HomeView.swift in Sources */,
 				1CC81F912A5A2F32001D56E1 /* Utilities.swift in Sources */,
@@ -1013,7 +1009,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "neetbook-iOS/neetbook_iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.2.1;
+				CURRENT_PROJECT_VERSION = 1.2.2;
 				DEVELOPMENT_ASSET_PATHS = "\"neetbook-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = GAQT8HYM7F;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1033,7 +1029,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kuma.neetbook-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1054,7 +1050,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "neetbook-iOS/neetbook_iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.2.1;
+				CURRENT_PROJECT_VERSION = 1.2.2;
 				DEVELOPMENT_ASSET_PATHS = "\"neetbook-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = GAQT8HYM7F;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1074,7 +1070,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kuma.neetbook-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

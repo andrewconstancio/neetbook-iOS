@@ -89,7 +89,7 @@ final class ProfileSetupViewRootViewModel: ObservableObject {
     
     func checkUsernameFormComplete() {
         if displayname != "" && validUsername {
-            user?.username = username
+            user?.username = username.lowercased()
             user?.displayname = displayname
             user?.hashcode = hashcode
             
@@ -133,7 +133,6 @@ final class ProfileSetupViewRootViewModel: ObservableObject {
     
     func saveUser() async throws {
         guard let newUser = user else { return }
-        
         try UserManager.shared.createNewUser(user: newUser)
     }
 }

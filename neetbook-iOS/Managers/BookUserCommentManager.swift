@@ -24,6 +24,7 @@ final class BookUserCommentManager {
     static var shared = BookUserCommentManager()
     
     private let collection = Firestore.firestore().collection("BookComments")
+    private let reportCommentcollection = Firestore.firestore().collection("BookCommentReports")
     
     private var encoder: Firestore.Encoder {
         let encoder = Firestore.Encoder()
@@ -143,5 +144,22 @@ final class BookUserCommentManager {
                 .document(documentId)
         
         try await document.delete()
+    }
+    
+    func reportComment(bookId: String, commentDocID: String, comment: String) async throws {
+        do {
+            let docData: [String : Any] = [
+                "book_id" : bookId,
+                "comment_doc_id" : commentDocID,
+                "comment" : comment,
+                "date_created" : Timestamp(date: Date())
+            ]
+            
+            try await reportCommentcollection.document(bookId)
+                .collection("Reports")
+                .addDocument(data: docData)
+        } catch {
+            throw error
+        }
     }
 }

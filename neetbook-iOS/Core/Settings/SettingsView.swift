@@ -17,30 +17,105 @@ struct SettingsView: View {
     
     var body: some View {
         VStack {
-            List {
-                Button("Log out") {
-                    Task {
-                        do {
-                            try viewModel.signOut()
-                            showSignInView = true
-                        } catch {
-                            print(error)
-                        }
+            Button {
+                Task {
+                    do {
+                        try viewModel.signOut()
+                        showSignInView = true
+                    } catch {
+                        print(error)
                     }
                 }
-                 
-                Button(role: .destructive) {
-                    showingDeleteAccountPopup = true
-                } label: {
-                    Text("Delete Account")
+            } label: {
+                HStack {
+                    Text("Log Out")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
                 }
-
-                if viewModel.authProviders.contains(.email) {
-                    emailSection
-                }
+                .frame(height: 45)
+                .frame(width: 300)
+                .font(.system(size: 14))
+                .foregroundColor(.white)
+                .padding(10)
+                .background(Color.black)
+                .cornerRadius(30)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 30)
+                        .stroke(Color.clear, lineWidth: 1)
+                )
             }
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
+            .padding(.top, 30)
+            Button {
+                Task {
+                    do {
+                        try viewModel.signOut()
+                        showSignInView = true
+                    } catch {
+                        print(error)
+                    }
+                }
+            } label: {
+                HStack {
+                    Text("Delete Account")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                }
+                .frame(height: 45)
+                .frame(width: 300)
+                .font(.system(size: 14))
+                .foregroundColor(.white)
+                .padding(10)
+                .background(Color.appColorRed)
+                .cornerRadius(30)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 30)
+                        .stroke(Color.clear, lineWidth: 1)
+                )
+            }
+            Spacer()
+            Link(destination: URL(string: "https://sites.google.com/view/neetbookios/privacy-policy?authuser=0")!, label: {
+                Text("Privacy Policy")
+                    .frame(height: 45)
+                    .frame(width: 300)
+                    .font(.system(size: 14))
+                    .foregroundColor(.white)
+                    .padding(10)
+                    .background(Color.black)
+                    .cornerRadius(30)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 30)
+                            .stroke(Color.clear, lineWidth: 1)
+                    )
+            })
+            Link(destination: URL(string: "https://sites.google.com/view/neetbookios/terms-of-service?authuser=0")!, label: {
+                Text("Terms Of Service")
+                    .frame(height: 45)
+                    .frame(width: 300)
+                    .font(.system(size: 14))
+                    .foregroundColor(.white)
+                    .padding(10)
+                    .background(Color.black)
+                    .cornerRadius(30)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 30)
+                            .stroke(Color.clear, lineWidth: 1)
+                    )
+            })
+            Link(destination: URL(string: "https://sites.google.com/view/neetbookios/guidelines?authuser=0")!, label: {
+                Text("Guidelines")
+                    .frame(height: 45)
+                    .frame(width: 300)
+                    .font(.system(size: 14))
+                    .foregroundColor(.white)
+                    .padding(10)
+                    .background(Color.black)
+                    .cornerRadius(30)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 30)
+                            .stroke(Color.clear, lineWidth: 1)
+                    )
+            })
+            
         }
         .blur(radius: showingDeleteAccountPopup ? 2 : 0)
         .popup(isPresented: $showingDeleteAccountPopup) {
@@ -57,9 +132,10 @@ struct SettingsView: View {
         .onAppear {
             viewModel.loadAuthProviders()
         }
-//        .navigationBarBackButtonHidden(true)
-//        .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
-        .navigationTitle("Settings")
+        .frame(maxWidth: .infinity)
+        .background(Color.white.ignoresSafeArea())
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
     }
 }
 

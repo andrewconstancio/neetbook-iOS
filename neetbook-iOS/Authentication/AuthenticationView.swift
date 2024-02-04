@@ -46,6 +46,11 @@ struct AuthenticationView: View {
                 // Apple sign in button
                 appleSignInButton
                 
+                Text("By Signing in you agree to our [Terms Of Service](https://sites.google.com/view/neetbookios/terms-of-service?authuser=0)\n and the [Guidelines](https://sites.google.com/view/neetbookios/guidelines?authuser=0)")
+                    .foregroundColor(.white)
+                    .padding(.top, 10)
+                    .font(.system(size: 12))
+                    
             }
             .padding()
         }

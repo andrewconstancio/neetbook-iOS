@@ -17,8 +17,7 @@ struct FollowListView: View {
     @Namespace private var namespace2
     
     var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
+        NavigationStack {
             VStack {
                 HStack {
                     ForEach(0..<categories.count, id: \.self) { index in
@@ -73,6 +72,7 @@ struct FollowListView: View {
                     }
                 }
             }
+            .background(Color.white.ignoresSafeArea())
             .gesture(
                 DragGesture()
                     .onEnded { value in
@@ -100,87 +100,94 @@ struct FollowListView: View {
 extension FollowListView {
     private var following: some View {
         VStack {
-            ForEach(0..<viewModel.following.count, id: \.self) { index in
-                HStack {
-                    if let image = viewModel.following[index].profileImage {
-                        NavigationLink {
-                            OtherUserProfileView(userId: viewModel.following[index].userId)
-                        } label: {
-                            Image(uiImage: image)
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                                .shadow(radius: 10)
-                        }
-                    }
-                    VStack(alignment: .leading) {
-                        Text("\( viewModel.following[index].displayName)")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                        Text("\( viewModel.following[index].username)")
-                            .font(.subheadline)
-                            .foregroundColor(.black)
-                    }
-                    Spacer()
-                    if  viewModel.following[index].followingStatus == .following {
-                        Button {
-                            viewModel.following[index].setFollowStatus(value: .notFollowing)
-                            Task {
-                                let userId = viewModel.following[index].userId
-                                try await viewModel.unfollowUser(userId: userId)
+            if viewModel.following.count > 0 {
+                ForEach(0..<viewModel.following.count, id: \.self) { index in
+                    HStack {
+                        if let image = viewModel.following[index].profileImage {
+                            NavigationLink {
+                                OtherUserProfileView(userId: viewModel.following[index].userId)
+                            } label: {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .shadow(radius: 10)
                             }
-                        } label: {
-                            Text("Unfollow")
-                                .font(.system(size: 14))
+                        }
+                        VStack(alignment: .leading) {
+                            Text("\( viewModel.following[index].displayName)")
+                                .font(.headline)
                                 .foregroundColor(.black)
-                                .padding(7)
-                                .background(Color.white)
-                                .cornerRadius(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.clear, lineWidth: 2)
-                                )
-                        }
-                    } else if viewModel.following[index].followingStatus == .requestedToFollow {
-                        Button {
-                            viewModel.following[index].setFollowStatus(value: .notFollowing)
-                            Task {
-                                let userId = viewModel.following[index].userId
-                                try await viewModel.deleteFollowRequest(userId: userId)
-                            }
-                        } label: {
-                            Text("Requested")
-                                .font(.system(size: 14))
+                            Text("\( viewModel.following[index].username)")
+                                .font(.subheadline)
                                 .foregroundColor(.black)
-                                .padding(7)
-                                .background(Color.white)
-                                .cornerRadius(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.clear, lineWidth: 2)
-                                )
                         }
-                    } else {
-                        Button {
-                            viewModel.following[index].setFollowStatus(value: .requestedToFollow)
-                            Task {
-                                let userId = viewModel.following[index].userId
-                                try await viewModel.requestToFollow(userId: userId)
+                        Spacer()
+                        if  viewModel.following[index].followingStatus == .following {
+                            Button {
+                                viewModel.following[index].setFollowStatus(value: .notFollowing)
+                                Task {
+                                    let userId = viewModel.following[index].userId
+                                    try await viewModel.unfollowUser(userId: userId)
+                                }
+                            } label: {
+                                Text("Unfollow")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.black)
+                                    .padding(7)
+                                    .background(Color.white)
+                                    .cornerRadius(5)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .stroke(Color.clear, lineWidth: 2)
+                                    )
                             }
-                        } label: {
-                            Text("Follow")
-                                .font(.system(size: 14))
-                                .foregroundColor(.white)
-                                .padding(7)
-                                .background(Color.appColorPurple)
-                                .cornerRadius(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.clear, lineWidth: 2)
-                                )
+                        } else if viewModel.following[index].followingStatus == .requestedToFollow {
+                            Button {
+                                viewModel.following[index].setFollowStatus(value: .notFollowing)
+                                Task {
+                                    let userId = viewModel.following[index].userId
+                                    try await viewModel.deleteFollowRequest(userId: userId)
+                                }
+                            } label: {
+                                Text("Requested")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.black)
+                                    .padding(7)
+                                    .background(Color.white)
+                                    .cornerRadius(5)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .stroke(Color.clear, lineWidth: 2)
+                                    )
+                            }
+                        } else {
+                            Button {
+                                viewModel.following[index].setFollowStatus(value: .requestedToFollow)
+                                Task {
+                                    let userId = viewModel.following[index].userId
+                                    try await viewModel.requestToFollow(userId: userId)
+                                }
+                            } label: {
+                                Text("Follow")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.white)
+                                    .padding(7)
+                                    .background(Color.appColorPurple)
+                                    .cornerRadius(5)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .stroke(Color.clear, lineWidth: 2)
+                                    )
+                            }
                         }
                     }
                 }
+            } else {
+                Text("No one to see here!")
+                    .font(.subheadline)
+                    .bold()
+                    .foregroundColor(.black)
             }
             Spacer()
         }
@@ -189,48 +196,55 @@ extension FollowListView {
     
     private var followers: some View {
         VStack {
-            ForEach(0..<viewModel.followers.count, id: \.self) { index in
-                HStack {
-                    if let image = viewModel.followers[index].profileImage {
-                        NavigationLink {
-                            OtherUserProfileView(userId: viewModel.followers[index].userId)
+            if viewModel.followers.count > 0 {
+                ForEach(0..<viewModel.followers.count, id: \.self) { index in
+                    HStack {
+                        if let image = viewModel.followers[index].profileImage {
+                            NavigationLink {
+                                OtherUserProfileView(userId: viewModel.followers[index].userId)
+                            } label: {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .shadow(radius: 10)
+                            }
+                        }
+                        VStack(alignment: .leading) {
+                            Text("\(viewModel.followers[index].displayName)")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            Text("\(viewModel.followers[index].username)")
+                                .font(.subheadline)
+                                .foregroundColor(.black)
+                        }
+                        Spacer()
+                        Button {
+                            Task {
+                                let userId = viewModel.followers[index].userId
+                                let instanceId = viewModel.followers[index].id
+                                try await viewModel.removeFollower(userId: userId, instanceId: instanceId)
+                            }
                         } label: {
-                            Image(uiImage: image)
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                                .shadow(radius: 10)
+                            Text("Remove")
+                                .font(.system(size: 14))
+                                .foregroundColor(.black)
+                                .padding(7)
+                                .background(Color.white)
+                                .cornerRadius(5)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .stroke(Color.clear, lineWidth: 2)
+                                )
                         }
+                        .offset(x: -23)
                     }
-                    VStack(alignment: .leading) {
-                        Text("\(viewModel.followers[index].displayName)")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                        Text("\(viewModel.followers[index].username)")
-                            .font(.subheadline)
-                            .foregroundColor(.black)
-                    }
-                    Spacer()
-                    Button {
-                        Task {
-                            let userId = viewModel.followers[index].userId
-                            let instanceId = viewModel.followers[index].id
-                            try await viewModel.removeFollower(userId: userId, instanceId: instanceId)
-                        }
-                    } label: {
-                        Text("Remove")
-                            .font(.system(size: 14))
-                            .foregroundColor(.black)
-                            .padding(7)
-                            .background(Color.white)
-                            .cornerRadius(5)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(Color.clear, lineWidth: 2)
-                            )
-                    }
-                    .offset(x: -23)
                 }
+            } else {
+                Text("No one to see here!")
+                    .font(.subheadline)
+                    .bold()
+                    .foregroundColor(.black)
             }
             Spacer()
         }

@@ -68,7 +68,7 @@ final class SearchViewModel: ObservableObject {
     func searchUsersTextAction(searchText: String) async throws {
         self.loadingUsers = true
         let currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-        searchUsersResults = try await UserInteractions.shared.searchForUser(searchText: searchText, currentUserId: currentUserId)
+        searchUsersResults = try await UserInteractions.shared.searchForUser(searchText: searchText.lowercased(), currentUserId: currentUserId)
         recentlySearchedUserText = searchText
         loadingUsers = false
     }
