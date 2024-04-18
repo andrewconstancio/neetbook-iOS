@@ -218,7 +218,7 @@ struct OtherUserProfileView: View {
                                                                     .fontWeight(.bold)
                                                                     .foregroundColor(.black)
                                                                 
-                                                                Text(viewModel.activity[index].action)
+                                                                Text(viewModel.activity[index].title)
                                                                     .foregroundColor(.black)
                                                             }
                                                             
@@ -318,7 +318,7 @@ struct OtherUserProfileView: View {
         .frame(maxWidth: .infinity)
         .background(Color.white)
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
+        .navigationBarItems(leading: NavBackButtonView(color: .primary, dismiss: self.dismiss))
         .sheet(isPresented: $showFollowListView) {
             if let userId = viewModel.user?.userId {
                 OtherFollowListView(userId: userId)

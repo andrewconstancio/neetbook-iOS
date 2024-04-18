@@ -9,7 +9,7 @@ import SwiftUI
 import AuthenticationServices
 
 enum AuthSignInMethods {
-    case google, email, apple, testUser
+    case google, apple
 }
 
 @MainActor
@@ -53,21 +53,11 @@ final class AuthenticationViewModel: ObservableObject {
             authDataResults = try await signInGoogle()
         case .apple:
             authDataResults = try await signInApple()
-        case .testUser:
-            authDataResults = try await signInDevTestUser()
-        default:
-            return false
         }
 
         let userAcountCreated = try await checkUserAccountCreated(userId: authDataResults.uid)
           
-        if !userAcountCreated {
-            profileSetup = false
-        } else {
-            profileSetup = true
-        }
-        
-        return profileSetup
+        return userAcountCreated
     }
 }
  

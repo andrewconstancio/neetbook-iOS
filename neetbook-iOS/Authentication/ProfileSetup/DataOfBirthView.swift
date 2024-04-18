@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct DataOfBirthView: View {
-    @ObservedObject var viewModel: ProfileSetupViewRootViewModel
-    @Environment(\.colorScheme) var colorScheme
-    @Binding var showProfileSetUpView: Bool
+    @EnvironmentObject var userStateViewModel: UserStateViewModel
     
+    @ObservedObject var viewModel: ProfileSetupViewRootViewModel
+    
+    @Environment(\.colorScheme) var colorScheme
+
     var dateClosedRange: ClosedRange<Date> {
         let min = Calendar.current.date(byAdding: .year, value: -100, to: Date())!
         let max = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
@@ -47,7 +49,7 @@ struct DataOfBirthView: View {
                 Task {
                     try? await viewModel.saveUserProfileImage()
                     try? await viewModel.saveUser()
-                    showProfileSetUpView = false
+                    try? await userStateViewModel.fetchUser()
                 }
             } label: {
                 Text("Done")

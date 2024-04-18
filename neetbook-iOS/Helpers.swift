@@ -55,4 +55,10 @@ final class Helpers {
         
         return image
     }
+    
+    func convertURLToImage(someURL: String) async throws -> UIImage? {
+        let (data, response) = try await getDownloadAndResponseDataFromURL(someURL: someURL)
+        let image = convertDataToUIImage(data: data, response: response)
+        return image
+    }
 }

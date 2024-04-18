@@ -10,60 +10,6 @@ import SwiftfulLoadingIndicators
 import Combine
 
 
-struct ResizableTF: UIViewRepresentable {
-    @Binding var text: String
-    @Binding var height: CGFloat
-    
-    func makeCoordinator() -> Coordinator {
-        return ResizableTF.Coordinator(parent1: self)
-    }
-    
-    func makeUIView(context: Context) -> some UITextView {
-        let view = UITextView()
-        view.isEditable = true
-        view.isScrollEnabled = true
-        view.text = "Enter Comment"
-        view.textColor = .gray
-        view.backgroundColor = .white
-        view.delegate = context.coordinator
-        view.font = UIFont(name: "SF Pro", size: 26)
-        return view
-    }
-    
-    func updateUIView(_ uiView: UIViewType, context: Context) {
-        DispatchQueue.main.async {
-            self.height = uiView.contentSize.height < 30.0 ? 30.0 : uiView.contentSize.height
-        }
-    }
-    
-    class Coordinator : NSObject, UITextViewDelegate {
-        var parent: ResizableTF
-        
-        init(parent1: ResizableTF) {
-            self.parent = parent1
-        }
-        
-        func textViewDidBeginEditing(_ textView: UITextView) {
-            textView.text = ""
-            textView.textColor = .black
-        }
-        
-        func textViewDidChange(_ textView: UITextView) {
-            DispatchQueue.main.async {
-                self.parent.height = textView.contentSize.height
-                self.parent.text = textView.text
-            }
-        }
-        
-        func textViewDidEndEditing(_ textView: UITextView) {
-            if self.parent.text == "" {
-                textView.text = ""
-                textView.textColor = .black
-            }
-        }
-    }
-}
-
 struct BookCommentSectionView: View {
     @ObservedObject var viewModel: BookViewModel
     @Environment(\.dismiss) private var dismiss
@@ -78,31 +24,13 @@ struct BookCommentSectionView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        LoadingIndicator(animation: .threeBallsRotation, color: .black, speed: .fast)
+                        LoadingIndicator(animation: .circleTrim, color: .primary, speed: .fast)
                         Spacer()
                     }
                     Spacer()
                 }
             } else {
                 VStack(alignment: .leading) {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(book.title)
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .foregroundColor(.black)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                            
-                            Text("(\(book.publishedYear))")
-                                .font(.system(size: 15))
-                                .foregroundColor(.secondary)
-                        }
-                        Text("\(book.author)")
-                            .foregroundColor(.black.opacity(0.7))
-                    }
-                
-
                     if(viewModel.bookComments.count > 0) {
                         ScrollView {
                             ForEach(0..<viewModel.bookComments.count, id: \.self) { index in
@@ -113,6 +41,14 @@ struct BookCommentSectionView: View {
                     }
                     Spacer()
                     HStack {
+//                        if let profilePhoto = viewModel.currentUser?.profilePhoto {
+//                            Image(uiImage: profilePhoto)
+//                                .resizable()
+//                                .frame(width: 40, height: 40)
+//                                .shadow(radius: 10)
+//                                .cornerRadius(10)
+//                                .clipShape(Circle())
+//                        }
                         if let photoURL = viewModel.currentUser?.photoUrl {
                             AsyncImage(url: URL(string: photoURL)) { image in
                                 image
@@ -139,9 +75,10 @@ struct BookCommentSectionView: View {
                                 hideKeyboard()
                             }
                         } label: {
-                            Text("Post")
+                            Image(systemName: "paperplane.fill")
                                 .foregroundColor(Color.appColorPurple)
-                                .bold()
+                                .frame(width: 10, height: 10)
+                                .padding(5)
                         }
                     }
                 }
@@ -161,12 +98,11 @@ struct BookCommentSectionView: View {
 //            }
 //        }
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
         .padding(10)
         .task {
             try? await viewModel.getAllBookComments(bookId: book.bookId)
         }
-        .background(Color.white.ignoresSafeArea(.all))
+        .background(Color("Background"))
     }
 }
 

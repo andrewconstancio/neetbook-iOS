@@ -12,9 +12,11 @@ typealias BarView<V> = Group<V> where V:View
 typealias MainContent<V> = Group<V> where V:View
 
 struct ProfileSetupRootView: View {
-    @Binding var showProfileSetUpView: Bool
+    
+    @EnvironmentObject var userStateViewModel: UserStateViewModel
     
     @StateObject private var viewModel = ProfileSetupViewRootViewModel()
+    
     @State private var showBackButton: Bool = false
     
     var body: some View {
@@ -41,7 +43,8 @@ struct ProfileSetupRootView: View {
                     }
                     .frame(height: 55)
                     Spacer()
-                    ContentSetupView(viewModel: viewModel, showProfileSetUpView: $showProfileSetUpView)
+                    ContentSetupView(viewModel: viewModel)
+                        .environmentObject(userStateViewModel)
                 }
             }
         }
@@ -49,8 +52,10 @@ struct ProfileSetupRootView: View {
 }
 
 struct ContentSetupView: View {
+    
+    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    
     @ObservedObject var viewModel: ProfileSetupViewRootViewModel
-    @Binding var showProfileSetUpView: Bool
 
     var body: some View {
         ZStack {
@@ -71,7 +76,8 @@ struct ContentSetupView: View {
                                     .frame(width: UIScreen.main.bounds.width)
                                     .id(2)
                             
-                                DataOfBirthView(viewModel: viewModel, showProfileSetUpView: $showProfileSetUpView)
+                                DataOfBirthView(viewModel: viewModel)
+                                    .environmentObject(userStateViewModel)
                                     .frame(width: UIScreen.main.bounds.width)
                                     .id(3)
                             
@@ -135,7 +141,7 @@ struct SetupProfileProgressView: View {
 
 struct CreateUsernameView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileSetupRootView(showProfileSetUpView: .constant(true))
+        ProfileSetupRootView()
     }
 }
 

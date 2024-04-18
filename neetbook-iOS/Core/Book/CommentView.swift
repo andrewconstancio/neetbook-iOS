@@ -27,11 +27,11 @@ struct CommentView: View {
             VStack(alignment: .leading) {
                 Text(comment.displayName)
                     .font(.headline)
-                    .foregroundColor(.black.opacity(0.7))
+                    .foregroundColor(.primary.opacity(0.7))
                 
                 Text(comment.comment ?? "")
                     .font(.subheadline)
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
             }
             Spacer()
             if currentUserId == comment.userId {
@@ -39,7 +39,7 @@ struct CommentView: View {
                     showSheetDelete = true
                 } label: {
                     Image(systemName: "ellipsis")
-                        .foregroundColor(.black.opacity(0.7))
+                        .foregroundColor(.primary.opacity(0.7))
                         .rotationEffect(.degrees(90))
                 }
             } else {
@@ -47,7 +47,7 @@ struct CommentView: View {
                     showSheetReport = true
                 } label: {
                     Image(systemName: "ellipsis")
-                        .foregroundColor(.black.opacity(0.7))
+                        .foregroundColor(.primary.opacity(0.7))
                         .rotationEffect(.degrees(90))
                 }
             }

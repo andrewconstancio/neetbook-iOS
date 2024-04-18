@@ -7,11 +7,7 @@
 
 import SwiftUI
 
-enum FollowingStatus {
-    case notFollowing
-    case requestedToFollow
-    case following
-}
+
 
 @MainActor
 class OtherUserProfileViewModel: ObservableObject {

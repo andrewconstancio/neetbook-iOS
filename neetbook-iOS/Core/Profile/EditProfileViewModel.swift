@@ -10,10 +10,11 @@ import Combine
 
 @MainActor
 class EditProfileViewModel: ObservableObject {
+    @Published var user: DBUser? = nil
     @Published var profileImage: UIImage? = nil
     @Published var displayName: String = ""
     @Published var username: String = ""
-    @Published var hashCode: String = ""
+    @Published var hashcode: String = ""
     
     private var disposeBag = Set<AnyCancellable>()
     private var finalUsername: String = ""
@@ -29,10 +30,25 @@ class EditProfileViewModel: ObservableObject {
         self.debounceTextChanges()
     }
     
+//    func fetchUser() async throws {
+//        let userId = try? AuthenticationManager.shared.getAuthenticatedUserUserId()
+//        let user = try? await UserManager.shared.getUser(userId: userId ?? "")
+//        
+//        guard var user = user, let photoURL = user.photoUrl else {
+//            throw APIError.invalidData
+//        }
+//        
+//        let image = try await UserManager.shared.getURLImageAsUIImage(path: photoURL)
+//        profileImage = image
+//        displayName = user.displayname ?? ""
+//        username = user.username ?? ""
+//        hashcode = user.hashcode ?? ""
+//    }
+    
     func setEditProperties(user: DBUser) {
         self.displayName = user.displayname ?? ""
         self.username = user.username ?? ""
-        self.hashCode = user.hashcode ?? ""
+        self.hashcode = user.hashcode ?? ""
         
         self.initalDisplayName = user.displayname ?? ""
         self.initalUsername = user.username ?? ""
@@ -90,7 +106,7 @@ class EditProfileViewModel: ObservableObject {
             try await checkUsername(username: username)
         }
         
-        hashCode = fourDigitHash
+        hashcode = fourDigitHash
     }
     
     
@@ -106,7 +122,8 @@ class EditProfileViewModel: ObservableObject {
         }
         
         if initalUsername != username {
-            try await UserManager.shared.updateUserName(username: username.lowercased(), hashcode: hashCode)
+            try await UserManager.shared.updateUserName(username: username.lowercased(), hashcode: hashcode)
         }
+        
     }
 }

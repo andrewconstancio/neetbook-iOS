@@ -46,11 +46,15 @@ final class BookUserCommentManager {
             "date_created" : Timestamp(date: Date())
         ]
         
-        let doc = try await collection.document(bookId)
+        let doc = try await collection
+            .document(bookId)
             .collection("comments")
             .addDocument(data: docData)
         
         let ref = try await doc.getDocument()
+        
+        UserPostManager.shared.addUserPost(userId: userId, collection: "BookComments", bookId: bookId, documentID: ref.documentID)
+        
         var displayName = ""
         let userData = try await UserManager.shared.getUser(userId: userId)
         
@@ -142,6 +146,12 @@ final class BookUserCommentManager {
                 .document(bookId)
                 .collection("comments")
                 .document(documentId)
+        
+        let data = try await document.getDocument().data()
+        
+        let user_id = data?["user_id"] as? String ?? ""
+        
+        try await UserPostManager.shared.deleteUserPost(documentID: document.documentID)
         
         try await document.delete()
     }

@@ -26,7 +26,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            parent.image = info[.originalImage] as? UIImage
+            parent.image = info[.editedImage] as? UIImage
             picker.dismiss(animated: true)
         }
         
@@ -38,6 +38,7 @@ struct ImagePicker: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> some UIViewController {
         controller.delegate = context.coordinator
+        controller.allowsEditing = true
         return controller
     }
     

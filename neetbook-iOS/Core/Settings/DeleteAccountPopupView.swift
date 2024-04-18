@@ -9,9 +9,13 @@ import SwiftUI
 import PopupView
 
 struct DeleteAccountPopupView: View {
+    
+    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    
     @ObservedObject var viewModel: SettingsViewModel
-    @Binding var showSignInView: Bool
+    
     @Binding var showCouldNotDeleteAccountPopup: Bool
+    
     @Binding var showingDeleteAccountPopup: Bool
     
     var body: some View {
@@ -33,7 +37,6 @@ struct DeleteAccountPopupView: View {
                             Task {
                                 do {
                                     try await viewModel.deleteAccount()
-                                    showSignInView = true
                                 } catch {
                                     showCouldNotDeleteAccountPopup = true
                                     showingDeleteAccountPopup = false

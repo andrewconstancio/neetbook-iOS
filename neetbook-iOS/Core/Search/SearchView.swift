@@ -12,12 +12,13 @@ struct SearchView: View {
     @StateObject private var viewModel = SearchViewModel()
     @State private var isEditing = false
     @State private var isHide = false
+    var searchFunction: () async throws -> Void
     
     var body: some View {
             ScrollView {
                 VStack {
                     VStack(alignment: .leading, spacing: 5) {
-                        SearchBarView(searchText: $viewModel.searchText, isEditing: $isEditing)
+                        SearchBarView(searchText: $viewModel.searchText, isEditing: $isEditing, searchFunction: self.searchFunction)
                         HStack {
                             Button {
                                 withAnimation(.easeInOut(duration: 0.2)) {
@@ -54,7 +55,7 @@ struct SearchView: View {
                     if viewModel.loadingBooks || viewModel.loadingUsers {
                         Spacer()
                         Spacer()
-                        LoadingIndicator(animation: .circleTrim, color: .black, speed: .fast)
+                        LoadingIndicator(animation: .circleTrim, color: .primary, speed: .fast)
                         Spacer()
                     } else {
                         if viewModel.searchType == "books" {
@@ -74,12 +75,12 @@ struct SearchView: View {
                                             VStack(alignment: .leading) {
                                                 Text(viewModel.searchBookResults[value].title)
                                                     .font(.headline)
-                                                    .foregroundColor(.black)
+                                                    .foregroundColor(.primary)
                                                     .multilineTextAlignment(.leading)
                                                 
                                                 Text(viewModel.searchBookResults[value].author)
                                                     .font(.subheadline)
-                                                    .foregroundColor(.black.opacity(0.5))
+                                                    .foregroundColor(.primary.opacity(0.5))
                                                     .multilineTextAlignment(.leading)
                                             }
                                             Spacer()
@@ -101,7 +102,7 @@ struct SearchView: View {
                             if viewModel.searchUsersResults.count > 0 {
                                     ForEach(viewModel.searchUsersResults, id: \.self) { user in
                                         NavigationLink {
-                                            OtherUserProfileView(userId: user.id)
+                                            TwitterProfileView(userId: user.id)
                                         } label: {
                                             HStack {
                                                 Image(uiImage: user.profilePicture)
@@ -112,11 +113,11 @@ struct SearchView: View {
                                                 VStack(alignment: .leading) {
                                                     Text(user.displayName)
                                                         .font(.headline)
-                                                        .foregroundColor(.black)
+                                                        .foregroundColor(.primary)
                                                     
                                                     Text("\(user.username)#\(user.hashcode)")
                                                         .font(.subheadline)
-                                                        .foregroundColor(.black.opacity(0.5))
+                                                        .foregroundColor(.primary.opacity(0.5))
                                                 }
                                                 Spacer()
                                             }
@@ -136,7 +137,7 @@ struct SearchView: View {
                 }
                 .padding(.bottom, 120)
             }
-            .background(Color.white)
+            .background(Color("Background"))
             .scrollDismissesKeyboard(.immediately)
         }
 }
@@ -145,15 +146,15 @@ extension SearchView {
     private var noSearchResultsFound: some View {
         VStack() {
             Text("No results found!")
-                .foregroundColor(.black.opacity(0.7))
+                .foregroundColor(.primary.opacity(0.7))
                 .fontWeight(.bold)
         }
         .padding()
     }
 }
 
-struct SearchView_Previews: PreviewProvider {
-    static var previews: some View {
-        SearchView()
-    }
-}
+//struct SearchView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SearchView()
+//    }
+//}

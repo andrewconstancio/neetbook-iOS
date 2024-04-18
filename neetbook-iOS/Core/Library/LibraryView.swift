@@ -6,116 +6,112 @@
 //
 
 import SwiftUI
+import PopupView
 import SnapToScroll
 import SwiftfulLoadingIndicators
 
+enum BookListType {
+    case reading, wantToRead, read
+}
+
 struct LibraryView: View {
+    
+    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    
     @StateObject private var viewModel = LibraryViewModel()
-    @State private var searchText: String = ""
-    @State private var isEditing: Bool = false
     
-    @State var backgroundOffset: CGFloat = 0
-    @State var currentIndex = 0
-    
-    let categories: [String] = ["Reading", "Want To Read", "Read"]
-    @State private var selected: String = "Reading"
-    @Namespace private var namespace2
+    @State var showNewBookshelfPopup: Bool = false
     
     var body: some View {
         VStack {
-            HStack(spacing: 40) {
-                ForEach(0..<categories.count, id: \.self) { index in
-                    ZStack(alignment: .bottom) {
-                        if currentIndex == index {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.black)
-                                .matchedGeometryEffect(id: "category_background", in: namespace2)
-                                .frame(width: 55, height: 2)
-                                .offset(y: 10)
-                        }
-                        Text(categories[index])
-                            .fontWeight(.bold)
-                            .foregroundColor(currentIndex == index ? .black : .black.opacity(0.5))
-                            
-                    }
-                    .frame(height: 55)
-                    .onTapGesture {
-                        withAnimation(.spring()) {
-                            self.currentIndex = index
-                            self.backgroundOffset = CGFloat(index)
-                        }
-                    }
+            HStack {
+                Text("Bookshelves")
+                    .font(.title3)
+                    .foregroundStyle(.primary)
+                    .bold()
+                
+                Text(" (\(viewModel.shelves.count) shelves)")
+                    .font(.caption)
+                    .foregroundStyle(.primary)
+                
+                Spacer()
+                Button {
+                    showNewBookshelfPopup = true
+                } label: {
+                    Image(systemName: "plus")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                        .bold()
+                        .foregroundColor(.primary)
+                        .offset(x: -10, y: 0)
                 }
             }
             .padding()
-            
-            if viewModel.isLoading {
-                Spacer()
-                VStack {
-                    Spacer()
-                    LoadingIndicator(animation: .circleTrim, color: .black, speed: .fast)
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity)
-            } else {
-                GeometryReader { geo in
-                    VStack {
-                        Spacer()
-                        VStack {
-                            HStack {
-                                LibraryBookListView(bookList: viewModel.booksReading)
-                                    .frame(width: geo.size.width)
+            List {
+                ForEach(viewModel.shelves)  { shelf in
+                    HStack {
+                        if shelf.imageUrl == "" {
+                            NoPhotoBookshelfView(width: 20, height: 20)
+                                .shadow(radius: 10)
+                        } else {
+                            AsyncImage(url: URL(string: shelf.imageUrl)) { image in
+                                image
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .scaledToFit()
+                                    .clipShape(Circle())
                                 
-                                LibraryBookListView(bookList: viewModel.booksWantToRead)
-                                    .frame(width: geo.size.width)
-                                
-                                LibraryBookListView(bookList: viewModel.booksRead)
-                                    .frame(width: geo.size.width)
+                            } placeholder: {
+                            }
+                        }
 
-                            }
-                            .offset(x: -(self.backgroundOffset * geo.size.width))
-                            .animation(.default)
+                        NavigationLink {
+                            BookshelfView(bookshelf: shelf)
+                        } label: {
+                            Text(shelf.name)
+                                .bold()
+                                .foregroundStyle(.primary)
+                                .offset(x: 10, y: 0)
                         }
+                        
+                        Spacer()
                     }
+                    .listRowInsets(EdgeInsets())
+                    .onAppear {
+                        print(shelf.dateCreated)
+                    }
+                    .padding()
+                    .frame(height: 85)
+                    .background(Color("Background"))
                 }
             }
+            .frame(maxWidth: .infinity)
+            .edgesIgnoringSafeArea(.all)
+            .listStyle(PlainListStyle())
+            .scrollContentBackground(.hidden)
         }
-        .background(Color.white.ignoresSafeArea())
-        .task {
-            try? await viewModel.getUserBooks()
+        .overlay(Color.black.opacity(showNewBookshelfPopup ? 0.3 : 0.0))
+        .blur(radius: showNewBookshelfPopup ? 2 : 0)
+        .popup(isPresented: $showNewBookshelfPopup) {
+            AddBookshelfView(showNewBookshelfPopup: $showNewBookshelfPopup, bookshelf: nil)
+                .environmentObject(viewModel)
+        } customize: {
+            $0
+                .dragToDismiss(true)
+                .closeOnTap(false)
         }
-        .refreshable {
-            do {
-                try await viewModel.getUserBooks()
-            } catch let error {
-                print(error)
+        .background(Color("Background"))
+        .onAppear {
+            Task {
+                try? await viewModel.getBookshelves()
             }
         }
-        .gesture(
-            DragGesture()
-                .onEnded { value in
-                    if value.translation.width > 10 {
-                        if self.backgroundOffset > 0 {
-                            withAnimation(.spring()) {
-                                self.currentIndex -= 1
-                            }
-                            self.backgroundOffset -= 1
-                        }
-                    } else if value.translation.width < -10 {
-                        if self.backgroundOffset < 2 {
-                            withAnimation(.spring()) {
-                                self.currentIndex += 1
-                            }
-                            self.backgroundOffset += 1
-                        }
-                    }
-                }
-        )
     }
 }
 
 struct LibraryView_Previews: PreviewProvider {
     static var previews: some View {
         LibraryView()
+            .environmentObject(UserStateViewModel())
     }
 }

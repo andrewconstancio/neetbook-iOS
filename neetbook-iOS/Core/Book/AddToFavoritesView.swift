@@ -90,7 +90,7 @@ struct AddToFavoritesView: View {
         }
         .background(Color.white)
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: NavBackButtonView(color: .black, dismiss: self.dismiss))
+        .navigationBarItems(leading: NavBackButtonView(color: .primary, dismiss: self.dismiss))
         .onAppear {
             Task {
                 try? await viewModel.getFavoriteBooks(toSaveBook: book)

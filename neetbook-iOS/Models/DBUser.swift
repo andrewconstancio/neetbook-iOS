@@ -6,6 +6,37 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseFirestoreSwift
+
+struct Bookshelf: Identifiable, Codable {
+    var id: String
+    var name: String
+    var imageUrl: String
+    var dateCreated: Date
+    
+    init(name: String, imageUrl: String) {
+        self.id = UUID().uuidString
+        self.name = name
+        self.imageUrl = imageUrl
+        self.dateCreated = Date()
+    }
+    
+    mutating func setName(name: String) {
+        self.name = name
+    }
+    
+    mutating func setImageUrl(url: String) {
+        self.imageUrl = url
+    }
+}
+
+struct BookshelfAddedTo: Codable {
+    let bookId: String
+    let bookshelfId: String
+    let dateCreated: Date
+    let userId: String
+}
 
 struct DBUser: Codable {
     let userId: String
@@ -19,6 +50,8 @@ struct DBUser: Codable {
     let dateCreated: Date?
     var selectedGenres: [String]?
     
+    @CodableImage var profilePhoto: UIImage?
+    
     init(
         userId: String,
         hashcode: String? = nil,
@@ -29,7 +62,8 @@ struct DBUser: Codable {
         publicAccount: Bool = true,
         dateOfBirth: Date? = nil,
         dateCreated: Date? = nil,
-        selectedGenres: [String]? = nil
+        selectedGenres: [String]? = nil,
+        profilePhoto: UIImage? = nil
     ) {
         self.userId = userId
         self.username = username
@@ -41,6 +75,7 @@ struct DBUser: Codable {
         self.dateOfBirth = dateOfBirth
         self.dateCreated = dateCreated
         self.selectedGenres = selectedGenres
+        self.profilePhoto = profilePhoto
     }
     
     init(auth: AuthDataResultModel) {
@@ -55,5 +90,12 @@ struct DBUser: Codable {
         self.dateCreated = Date()
         self.selectedGenres = []
     }
-
+    
+    var isCurrentUser: Bool {
+        return Auth.auth().currentUser?.uid == userId
+    }
+    
+    mutating func setUserProfilePic(image: UIImage) {
+        self.profilePhoto = image
+    }
 }

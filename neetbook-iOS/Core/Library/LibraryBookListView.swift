@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LibraryBookListView: View {
+    let listType: BookListType
     let bookList: [Book]
     
     var body: some View {
@@ -37,9 +38,20 @@ struct LibraryBookListView: View {
                         Spacer()
                         HStack {
                             Spacer()
-                            Text("No books added yet!")
-                                .foregroundColor(.black.opacity(0.7))
-                                .fontWeight(.bold)
+                            switch (listType) {
+                            case .reading:
+                                Text("Add the book that you are reading!")
+                                    .foregroundColor(.primary.opacity(0.7))
+                                    .fontWeight(.bold)
+                            case .wantToRead:
+                                Text("Have any books that you want to save for later?")
+                                    .foregroundColor(.primary.opacity(0.7))
+                                    .fontWeight(.bold)
+                            case .read:
+                                Text("Finshed book go here!")
+                                    .foregroundColor(.primary.opacity(0.7))
+                                    .fontWeight(.bold)
+                            }
                             Spacer()
                         }
                         Spacer()

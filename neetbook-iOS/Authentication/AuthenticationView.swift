@@ -11,9 +11,9 @@ import Firebase
 import AuthenticationServices
 
 struct AuthenticationView: View {
+    
     @State private var showingSheet = false
-    @Binding var showSignInView: Bool
-    @Binding var showProfileSetUpView: Bool
+    
     @StateObject private var viewModel = AuthenticationViewModel()
     
     var body: some View {
@@ -34,12 +34,6 @@ struct AuthenticationView: View {
                     .scaledToFit()
                     .padding(.bottom, 100)
                 
-                // Email sign in button
-                // emailSignInButton
-                
-//                devSignInButton
-//                devSignInSetupButton
-                
                 // Google sign in button
                 googleSignInButton
                 
@@ -58,105 +52,13 @@ struct AuthenticationView: View {
 }
 
 extension AuthenticationView {
-    
-    private var devSignInButton: some View {
-        Button(action: {
-            Task {
-                do {
-                    let userAcountSetup = try await viewModel.signInUserFlow(signInMethod: .testUser)
-                    showProfileSetUpView = false
-                    showSignInView = false
-                } catch {
-                    print(error)
-                }
-            }
-        }, label: {
-            HStack {
-                Text("SIGN IN DEV")
-                    .foregroundColor(.white)
-                    .font(.title3)
-                    .kerning(1.1)
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .foregroundColor(.white)
-            .background(Color.black)
-            .cornerRadius(20)
-        })
-        .sheet(isPresented: $showingSheet) {
-            SignInEmailView(showSignInView: $showSignInView)
-        }
-    }
-    
-    private var devSignInSetupButton: some View {
-        Button(action: {
-            Task {
-                do {
-                    let userAcountSetup = try await viewModel.signInUserFlow(signInMethod: .testUser)
-                    showProfileSetUpView = true
-                    showSignInView = false
-                } catch {
-                    print(error)
-                }
-            }
-        }, label: {
-            HStack {
-                Text("SIGN IN SET UP ACCOUNT DEV")
-                    .foregroundColor(.white)
-                    .font(.title3)
-                    .kerning(1.1)
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .foregroundColor(.white)
-            .background(Color.black)
-            .cornerRadius(20)
-        })
-        .sheet(isPresented: $showingSheet) {
-            SignInEmailView(showSignInView: $showSignInView)
-        }
-    }
-    
-    /// email sign in button view
-    private var emailSignInButton: some View {
-        
-        Button(action: {
-            showingSheet.toggle()
-        }, label: {
-            HStack {
-                Image("envelope-solid")
-                    .resizable()
-                    .renderingMode(.template)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 28, height: 28)
-                    .foregroundColor(Color.white)
-                    .padding(.trailing, 8)
-                
-                Text("Sign in with Email")
-                    .foregroundColor(.white)
-                    .font(.title3)
-                    .kerning(1.1)
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color.blue)
-            .cornerRadius(20)
-        })
-        .sheet(isPresented: $showingSheet) {
-            SignInEmailView(showSignInView: $showSignInView)
-        }
-    }
-    
     /// Google sign in button view
     private var googleSignInButton: some View {
         Button(action: {
             Task {
                 do {
-                    let userAcountSetup = try await viewModel.signInUserFlow(signInMethod: .google)
-                    if !userAcountSetup {
-                        showProfileSetUpView = true
-                    }
-                    showSignInView = false
+                    let accountMade = try await viewModel.signInUserFlow(signInMethod: .google)
+                    print(accountMade)
                 } catch {
                     print(error)
                 }
@@ -186,13 +88,8 @@ extension AuthenticationView {
         Button{
             Task {
                 do {
-                    let userAcountSetup = try await viewModel.signInUserFlow(signInMethod: .apple)
-                    
-                    if !userAcountSetup {
-                        showProfileSetUpView = true
-                    }
-                    
-                    showSignInView = false
+                    let accountMade = try await viewModel.signInUserFlow(signInMethod: .apple)
+                    print(accountMade)
                 } catch {
                     print("error: ", error)
                 }

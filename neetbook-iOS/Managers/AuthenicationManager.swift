@@ -71,7 +71,28 @@ final class AuthenticationManager {
         return providers
     }
     
+    func checkNotSignIn() -> Bool {
+        if Auth.auth().currentUser != nil {
+          return false
+        } else {
+          return true
+        }
+    }
+    
+    func checkAccountMade() async throws -> Bool {
+        guard let userAuth = Auth.auth().currentUser else {
+            throw URLError(.badServerResponse)
+        }
+        
+        
+        let user = try? await UserManager.shared.getUser(userId: userAuth.uid)
+        return user != nil
+    }
+    
     func signOut() throws {
+        guard let _ = Auth.auth().currentUser else {
+            throw URLError(.badServerResponse)
+        }
         try Auth.auth().signOut()
     }
     
@@ -109,6 +130,7 @@ extension AuthenticationManager {
         let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
         return AuthDataResultModel(user: authDataResult.user)
     }
+    
     
     func signInDevTestingUser() async throws -> AuthDataResultModel {
         let authDataResult = try await Auth.auth().signIn(withEmail: "andrewconstancio7@gmail.com", password: "8Time!Cool8")

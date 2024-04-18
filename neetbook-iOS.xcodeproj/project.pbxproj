@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C03204F2BBD984200B19038 /* GenreContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C03204E2BBD984200B19038 /* GenreContentView.swift */; };
+		1C0320512BBD992E00B19038 /* GenreContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320502BBD992E00B19038 /* GenreContentViewModel.swift */; };
+		1C0320542BC325C200B19038 /* NotificationComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320532BC325C200B19038 /* NotificationComponentView.swift */; };
+		1C0320562BC3339400B19038 /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320552BC3339400B19038 /* FeedViewModel.swift */; };
+		1C03205A2BC3442400B19038 /* PostInstanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320592BC3442400B19038 /* PostInstanceView.swift */; };
+		1C03205C2BC3696200B19038 /* BookshelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C03205B2BC3696200B19038 /* BookshelfView.swift */; };
+		1C03205E2BC4D5F700B19038 /* AddBookshelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C03205D2BC4D5F700B19038 /* AddBookshelfView.swift */; };
+		1C0320602BC4D7B400B19038 /* AddBookshelfViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C03205F2BC4D7B400B19038 /* AddBookshelfViewModel.swift */; };
+		1C0320622BCA1B5E00B19038 /* ApplicationSwitchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320612BCA1B5E00B19038 /* ApplicationSwitchViewModel.swift */; };
+		1C0320642BCB8F3A00B19038 /* NoPhotoBookshelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320632BCB8F3A00B19038 /* NoPhotoBookshelfView.swift */; };
+		1C0320662BCC607E00B19038 /* BookshelfViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320652BCC607E00B19038 /* BookshelfViewModel.swift */; };
+		1C0320682BCC69F500B19038 /* BookshelfBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320672BCC69F500B19038 /* BookshelfBookView.swift */; };
+		1C03206A2BCC9C0E00B19038 /* EditBookSelectionPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320692BCC9C0E00B19038 /* EditBookSelectionPopupView.swift */; };
+		1C03206C2BCC9DBC00B19038 /* EditBookshelfViewPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C03206B2BCC9DBC00B19038 /* EditBookshelfViewPopupView.swift */; };
+		1C03206E2BCE0EA600B19038 /* PostInstanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C03206D2BCE0EA600B19038 /* PostInstanceViewModel.swift */; };
+		1C0320702BCF6CE000B19038 /* BookSingleInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C03206F2BCF6CE000B19038 /* BookSingleInfoView.swift */; };
+		1C0320722BD0C38900B19038 /* BookInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320712BD0C38900B19038 /* BookInfoView.swift */; };
 		1C2D4C7E2B19702100828D16 /* FittedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C7D2B19702100828D16 /* FittedScrollView.swift */; };
 		1C2D4C812B1AC9ED00828D16 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 1C2D4C802B1AC9ED00828D16 /* PopupView */; };
 		1C2D4C832B1AD3E000828D16 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C822B1AD3E000828D16 /* CommentView.swift */; };
@@ -14,8 +31,14 @@
 		1C4ACFFC2B4777B4009C10E8 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4ACFFB2B4777B4009C10E8 /* PageTitleView.swift */; };
 		1C4ACFFE2B47B2CF009C10E8 /* DeleteAccountPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4ACFFD2B47B2CF009C10E8 /* DeleteAccountPopupView.swift */; };
 		1C4AD0002B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4ACFFF2B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift */; };
+		1C4B22262B7C4FF1006A55D4 /* UserStateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B22252B7C4FF1006A55D4 /* UserStateViewModel.swift */; };
+		1C4B22282B7C520B006A55D4 /* ApplicationSwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B22272B7C520B006A55D4 /* ApplicationSwitcherView.swift */; };
+		1C4B222A2B809268006A55D4 /* UserPostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B22292B809268006A55D4 /* UserPostManager.swift */; };
+		1C4B222D2B8276F4006A55D4 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B222C2B8276F4006A55D4 /* PostView.swift */; };
+		1C4B222F2B8278FA006A55D4 /* PreviewProvider-Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B222E2B8278FA006A55D4 /* PreviewProvider-Ext.swift */; };
+		1C4B22312B828387006A55D4 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B22302B828387006A55D4 /* PostViewModel.swift */; };
+		1C4B22332B829160006A55D4 /* PostCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B22322B829160006A55D4 /* PostCommentView.swift */; };
 		1C6A84F12AF1A7E800266135 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F02AF1A7E800266135 /* EditProfileViewModel.swift */; };
-		1C6A84F32AFF044300266135 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F22AFF044300266135 /* HomeViewModel.swift */; };
 		1C6A84F52AFF4D9900266135 /* UserInteractions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F42AFF4D9900266135 /* UserInteractions.swift */; };
 		1C6A84F82AFFD9BE00266135 /* OtherUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84F72AFFD9BE00266135 /* OtherUserProfileView.swift */; };
 		1C6A84FB2AFFED6000266135 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6A84FA2AFFED6000266135 /* NotificationsView.swift */; };
@@ -53,6 +76,18 @@
 		1CB1B3CE2A5B9DDB009F6914 /* CustomNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C82A5B9DDB009F6914 /* CustomNavBarView.swift */; };
 		1CB41D2E2B5DF78F0013FAFA /* AdaptsToKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D2D2B5DF78F0013FAFA /* AdaptsToKeyboard.swift */; };
 		1CB41D302B6F0A6B0013FAFA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1CB41D2F2B6F0A6B0013FAFA /* GoogleService-Info.plist */; };
+		1CB41D5E2B7068100013FAFA /* IsScrolling in Frameworks */ = {isa = PBXBuildFile; productRef = 1CB41D5D2B7068100013FAFA /* IsScrolling */; };
+		1CB41D602B71D2640013FAFA /* NotificationCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D5F2B71D2640013FAFA /* NotificationCountView.swift */; };
+		1CB41D622B71D5700013FAFA /* PendingFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D612B71D5700013FAFA /* PendingFriendsView.swift */; };
+		1CB41D642B71DA4C0013FAFA /* PendingFriendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D632B71DA4C0013FAFA /* PendingFriendsViewModel.swift */; };
+		1CB41D662B732F750013FAFA /* Date-Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D652B732F750013FAFA /* Date-Ext.swift */; };
+		1CB41D682B7333C00013FAFA /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D672B7333C00013FAFA /* ContentViewModel.swift */; };
+		1CB41D6C2B73409D0013FAFA /* TestProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D6B2B73409D0013FAFA /* TestProfileView.swift */; };
+		1CB41D6E2B7454E80013FAFA /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D6D2B7454E80013FAFA /* ProfileHeaderView.swift */; };
+		1CB41D702B7458140013FAFA /* ProfileActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D6F2B7458140013FAFA /* ProfileActivityView.swift */; };
+		1CB41D722B7469930013FAFA /* TwitterProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D712B7469930013FAFA /* TwitterProfileView.swift */; };
+		1CB41D742B746F4E0013FAFA /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D732B746F4E0013FAFA /* BlurView.swift */; };
+		1CB41D762B75C6840013FAFA /* ProfileFavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D752B75C6840013FAFA /* ProfileFavoritesView.swift */; };
 		1CC81F2B2A5A20C1001D56E1 /* neetbook_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F2A2A5A20C1001D56E1 /* neetbook_iOSApp.swift */; };
 		1CC81F2D2A5A20C1001D56E1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F2C2A5A20C1001D56E1 /* ContentView.swift */; };
 		1CC81F2F2A5A20C2001D56E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CC81F2E2A5A20C2001D56E1 /* Assets.xcassets */; };
@@ -76,7 +111,7 @@
 		1CC81F7E2A5A2275001D56E1 /* CustomTabBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F7A2A5A2275001D56E1 /* CustomTabBarContainerView.swift */; };
 		1CC81F7F2A5A2275001D56E1 /* TabBarItemsPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F7B2A5A2275001D56E1 /* TabBarItemsPreferenceKey.swift */; };
 		1CC81F832A5A22A1001D56E1 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F822A5A22A1001D56E1 /* LibraryView.swift */; };
-		1CC81F852A5A22A8001D56E1 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F842A5A22A8001D56E1 /* HomeView.swift */; };
+		1CC81F852A5A22A8001D56E1 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F842A5A22A8001D56E1 /* FeedView.swift */; };
 		1CC81F882A5A24B5001D56E1 /* Color-Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F872A5A24B5001D56E1 /* Color-Ext.swift */; };
 		1CC81F8B2A5A2A6F001D56E1 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1CC81F8A2A5A2A6F001D56E1 /* GoogleSignIn */; };
 		1CC81F8D2A5A2A6F001D56E1 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1CC81F8C2A5A2A6F001D56E1 /* GoogleSignInSwift */; };
@@ -119,6 +154,10 @@
 		1CEDE2382AA505BD005DEDBA /* Binding-Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEDE2372AA505BD005DEDBA /* Binding-Ext.swift */; };
 		1CEDE23A2AA50712005DEDBA /* SpinnerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEDE2392AA50712005DEDBA /* SpinnerCircle.swift */; };
 		1CEDE23D2AA658F0005DEDBA /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEDE23C2AA658F0005DEDBA /* RootViewModel.swift */; };
+		1CF9100B2BBA2A9C005ABE78 /* ResizableTF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF9100A2BBA2A9C005ABE78 /* ResizableTF.swift */; };
+		1CF9100D2BBA5116005ABE78 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF9100C2BBA5116005ABE78 /* HomeView.swift */; };
+		1CF9100F2BBA52A1005ABE78 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF9100E2BBA52A1005ABE78 /* HomeViewModel.swift */; };
+		1CF910112BBA5F8D005ABE78 /* HomeContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF910102BBA5F8D005ABE78 /* HomeContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,14 +178,37 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1C03204E2BBD984200B19038 /* GenreContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreContentView.swift; sourceTree = "<group>"; };
+		1C0320502BBD992E00B19038 /* GenreContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreContentViewModel.swift; sourceTree = "<group>"; };
+		1C0320532BC325C200B19038 /* NotificationComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationComponentView.swift; sourceTree = "<group>"; };
+		1C0320552BC3339400B19038 /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
+		1C0320592BC3442400B19038 /* PostInstanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostInstanceView.swift; sourceTree = "<group>"; };
+		1C03205B2BC3696200B19038 /* BookshelfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfView.swift; sourceTree = "<group>"; };
+		1C03205D2BC4D5F700B19038 /* AddBookshelfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookshelfView.swift; sourceTree = "<group>"; };
+		1C03205F2BC4D7B400B19038 /* AddBookshelfViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookshelfViewModel.swift; sourceTree = "<group>"; };
+		1C0320612BCA1B5E00B19038 /* ApplicationSwitchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationSwitchViewModel.swift; sourceTree = "<group>"; };
+		1C0320632BCB8F3A00B19038 /* NoPhotoBookshelfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoPhotoBookshelfView.swift; sourceTree = "<group>"; };
+		1C0320652BCC607E00B19038 /* BookshelfViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfViewModel.swift; sourceTree = "<group>"; };
+		1C0320672BCC69F500B19038 /* BookshelfBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfBookView.swift; sourceTree = "<group>"; };
+		1C0320692BCC9C0E00B19038 /* EditBookSelectionPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookSelectionPopupView.swift; sourceTree = "<group>"; };
+		1C03206B2BCC9DBC00B19038 /* EditBookshelfViewPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookshelfViewPopupView.swift; sourceTree = "<group>"; };
+		1C03206D2BCE0EA600B19038 /* PostInstanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostInstanceViewModel.swift; sourceTree = "<group>"; };
+		1C03206F2BCF6CE000B19038 /* BookSingleInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSingleInfoView.swift; sourceTree = "<group>"; };
+		1C0320712BD0C38900B19038 /* BookInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookInfoView.swift; sourceTree = "<group>"; };
 		1C2D4C7D2B19702100828D16 /* FittedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittedScrollView.swift; sourceTree = "<group>"; };
 		1C2D4C822B1AD3E000828D16 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		1C2D4C842B1C000300828D16 /* NavBackButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBackButtonView.swift; sourceTree = "<group>"; };
 		1C4ACFFB2B4777B4009C10E8 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
 		1C4ACFFD2B47B2CF009C10E8 /* DeleteAccountPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountPopupView.swift; sourceTree = "<group>"; };
 		1C4ACFFF2B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouldNoDeleteAccountPopupView.swift; sourceTree = "<group>"; };
+		1C4B22252B7C4FF1006A55D4 /* UserStateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStateViewModel.swift; sourceTree = "<group>"; };
+		1C4B22272B7C520B006A55D4 /* ApplicationSwitcherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationSwitcherView.swift; sourceTree = "<group>"; };
+		1C4B22292B809268006A55D4 /* UserPostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostManager.swift; sourceTree = "<group>"; };
+		1C4B222C2B8276F4006A55D4 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
+		1C4B222E2B8278FA006A55D4 /* PreviewProvider-Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewProvider-Ext.swift"; sourceTree = "<group>"; };
+		1C4B22302B828387006A55D4 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
+		1C4B22322B829160006A55D4 /* PostCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentView.swift; sourceTree = "<group>"; };
 		1C6A84F02AF1A7E800266135 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
-		1C6A84F22AFF044300266135 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		1C6A84F42AFF4D9900266135 /* UserInteractions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInteractions.swift; sourceTree = "<group>"; };
 		1C6A84F72AFFD9BE00266135 /* OtherUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileView.swift; sourceTree = "<group>"; };
 		1C6A84FA2AFFED6000266135 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
@@ -182,6 +244,17 @@
 		1CB1B3C82A5B9DDB009F6914 /* CustomNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBarView.swift; sourceTree = "<group>"; };
 		1CB41D2D2B5DF78F0013FAFA /* AdaptsToKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptsToKeyboard.swift; sourceTree = "<group>"; };
 		1CB41D2F2B6F0A6B0013FAFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1CB41D5F2B71D2640013FAFA /* NotificationCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCountView.swift; sourceTree = "<group>"; };
+		1CB41D612B71D5700013FAFA /* PendingFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingFriendsView.swift; sourceTree = "<group>"; };
+		1CB41D632B71DA4C0013FAFA /* PendingFriendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingFriendsViewModel.swift; sourceTree = "<group>"; };
+		1CB41D652B732F750013FAFA /* Date-Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date-Ext.swift"; sourceTree = "<group>"; };
+		1CB41D672B7333C00013FAFA /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
+		1CB41D6B2B73409D0013FAFA /* TestProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestProfileView.swift; sourceTree = "<group>"; };
+		1CB41D6D2B7454E80013FAFA /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		1CB41D6F2B7458140013FAFA /* ProfileActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActivityView.swift; sourceTree = "<group>"; };
+		1CB41D712B7469930013FAFA /* TwitterProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterProfileView.swift; sourceTree = "<group>"; };
+		1CB41D732B746F4E0013FAFA /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		1CB41D752B75C6840013FAFA /* ProfileFavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFavoritesView.swift; sourceTree = "<group>"; };
 		1CC81F272A5A20C1001D56E1 /* neetbook-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "neetbook-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CC81F2A2A5A20C1001D56E1 /* neetbook_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = neetbook_iOSApp.swift; sourceTree = "<group>"; };
 		1CC81F2C2A5A20C1001D56E1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -203,7 +276,7 @@
 		1CC81F7A2A5A2275001D56E1 /* CustomTabBarContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarContainerView.swift; sourceTree = "<group>"; };
 		1CC81F7B2A5A2275001D56E1 /* TabBarItemsPreferenceKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarItemsPreferenceKey.swift; sourceTree = "<group>"; };
 		1CC81F822A5A22A1001D56E1 /* LibraryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
-		1CC81F842A5A22A8001D56E1 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		1CC81F842A5A22A8001D56E1 /* FeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		1CC81F872A5A24B5001D56E1 /* Color-Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color-Ext.swift"; sourceTree = "<group>"; };
 		1CC81F8E2A5A2AD2001D56E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		1CC81F902A5A2F32001D56E1 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -242,6 +315,10 @@
 		1CEDE2372AA505BD005DEDBA /* Binding-Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding-Ext.swift"; sourceTree = "<group>"; };
 		1CEDE2392AA50712005DEDBA /* SpinnerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerCircle.swift; sourceTree = "<group>"; };
 		1CEDE23C2AA658F0005DEDBA /* RootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
+		1CF9100A2BBA2A9C005ABE78 /* ResizableTF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizableTF.swift; sourceTree = "<group>"; };
+		1CF9100C2BBA5116005ABE78 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		1CF9100E2BBA52A1005ABE78 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		1CF910102BBA5F8D005ABE78 /* HomeContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +330,7 @@
 				1C6A85042B01CBAA00266135 /* SwiftfulLoadingIndicators in Frameworks */,
 				1CE3A2A92ABA828F003BAD2A /* VisibilityTrackingScrollView in Frameworks */,
 				1CC81F5B2A5A2127001D56E1 /* FirebaseAnalyticsSwift in Frameworks */,
+				1CB41D5E2B7068100013FAFA /* IsScrolling in Frameworks */,
 				1CC81F8B2A5A2A6F001D56E1 /* GoogleSignIn in Frameworks */,
 				1CEDE22E2A95ADAE005DEDBA /* FirebaseStorage in Frameworks */,
 				1CC81F5D2A5A2127001D56E1 /* FirebaseAuth in Frameworks */,
@@ -283,6 +361,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1C0320522BC31A7E00B19038 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				1CC81F842A5A22A8001D56E1 /* FeedView.swift */,
+				1C0320552BC3339400B19038 /* FeedViewModel.swift */,
+			);
+			name = Feed;
+			sourceTree = "<group>";
+		};
+		1C4B222B2B8276E0006A55D4 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				1C4B222C2B8276F4006A55D4 /* PostView.swift */,
+				1C4B22302B828387006A55D4 /* PostViewModel.swift */,
+				1C4B22322B829160006A55D4 /* PostCommentView.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
 		1C6A84F62AFFD99100266135 /* OtherUserProfile */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,6 +396,9 @@
 			children = (
 				1C6A84FA2AFFED6000266135 /* NotificationsView.swift */,
 				1C6A85092B0A651100266135 /* NotificationsViewModel.swift */,
+				1CB41D612B71D5700013FAFA /* PendingFriendsView.swift */,
+				1CB41D632B71DA4C0013FAFA /* PendingFriendsViewModel.swift */,
+				1C0320532BC325C200B19038 /* NotificationComponentView.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -317,6 +417,9 @@
 			children = (
 				1CA4C4E62AA6750E007C1AD3 /* SearchBarView.swift */,
 				1C4ACFFB2B4777B4009C10E8 /* PageTitleView.swift */,
+				1C0320592BC3442400B19038 /* PostInstanceView.swift */,
+				1C0320632BCB8F3A00B19038 /* NoPhotoBookshelfView.swift */,
+				1C03206D2BCE0EA600B19038 /* PostInstanceViewModel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -340,6 +443,8 @@
 				1CE3A2B82AD4F0E4003BAD2A /* AddToFavoritesViewModel.swift */,
 				1C6A85072B098E3300266135 /* TestView.swift */,
 				1C2D4C822B1AD3E000828D16 /* CommentView.swift */,
+				1C03206F2BCF6CE000B19038 /* BookSingleInfoView.swift */,
+				1C0320712BD0C38900B19038 /* BookInfoView.swift */,
 			);
 			path = Book;
 			sourceTree = "<group>";
@@ -383,7 +488,10 @@
 			children = (
 				1CB41D2F2B6F0A6B0013FAFA /* GoogleService-Info.plist */,
 				1CC81F2C2A5A20C1001D56E1 /* ContentView.swift */,
+				1CB41D672B7333C00013FAFA /* ContentViewModel.swift */,
+				1C4B22272B7C520B006A55D4 /* ApplicationSwitcherView.swift */,
 				1CC81F2A2A5A20C1001D56E1 /* neetbook_iOSApp.swift */,
+				1C4B22252B7C4FF1006A55D4 /* UserStateViewModel.swift */,
 				1CEDE23B2AA50959005DEDBA /* Animiations */,
 				1CEDE2132A8B2A01005DEDBA /* Models */,
 				1CB1B3C22A5B9DBE009F6914 /* CustomNavBar */,
@@ -398,6 +506,7 @@
 				1CC81F2E2A5A20C2001D56E1 /* Assets.xcassets */,
 				1CC81F302A5A20C2001D56E1 /* neetbook_iOS.entitlements */,
 				1CC81F312A5A20C2001D56E1 /* Preview Content */,
+				1C0320612BCA1B5E00B19038 /* ApplicationSwitchViewModel.swift */,
 			);
 			path = "neetbook-iOS";
 			sourceTree = "<group>";
@@ -460,6 +569,13 @@
 				1CE3A2AC2ABBB11E003BAD2A /* SwipeTestingView.swift */,
 				1CE3A2B02AC0763D003BAD2A /* LibraryWantToReadView.swift */,
 				1CE3A2B42ACCFE13003BAD2A /* LibraryBookListView.swift */,
+				1C03205B2BC3696200B19038 /* BookshelfView.swift */,
+				1C03205D2BC4D5F700B19038 /* AddBookshelfView.swift */,
+				1C03205F2BC4D7B400B19038 /* AddBookshelfViewModel.swift */,
+				1C0320652BCC607E00B19038 /* BookshelfViewModel.swift */,
+				1C0320672BCC69F500B19038 /* BookshelfBookView.swift */,
+				1C0320692BCC9C0E00B19038 /* EditBookSelectionPopupView.swift */,
+				1C03206B2BCC9DBC00B19038 /* EditBookshelfViewPopupView.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -467,8 +583,11 @@
 		1CC81F812A5A2291001D56E1 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				1CC81F842A5A22A8001D56E1 /* HomeView.swift */,
-				1C6A84F22AFF044300266135 /* HomeViewModel.swift */,
+				1CF9100C2BBA5116005ABE78 /* HomeView.swift */,
+				1CF9100E2BBA52A1005ABE78 /* HomeViewModel.swift */,
+				1CF910102BBA5F8D005ABE78 /* HomeContentView.swift */,
+				1C03204E2BBD984200B19038 /* GenreContentView.swift */,
+				1C0320502BBD992E00B19038 /* GenreContentViewModel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -487,6 +606,10 @@
 				1C2D4C7D2B19702100828D16 /* FittedScrollView.swift */,
 				1C2D4C842B1C000300828D16 /* NavBackButtonView.swift */,
 				1CB41D2D2B5DF78F0013FAFA /* AdaptsToKeyboard.swift */,
+				1CB41D5F2B71D2640013FAFA /* NotificationCountView.swift */,
+				1CB41D652B732F750013FAFA /* Date-Ext.swift */,
+				1C4B222E2B8278FA006A55D4 /* PreviewProvider-Ext.swift */,
+				1CF9100A2BBA2A9C005ABE78 /* ResizableTF.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -511,11 +634,13 @@
 				1CEDE23C2AA658F0005DEDBA /* RootViewModel.swift */,
 				1C6A84FE2AFFFE6D00266135 /* CurrentUserViewModel.swift */,
 				1CA4C4E52AA674FC007C1AD3 /* Components */,
+				1C0320522BC31A7E00B19038 /* Feed */,
 				1CA4C4EF2AA6C0E0007C1AD3 /* Book */,
 				1CA4C4E22AA667AF007C1AD3 /* Search */,
 				1CC81F802A5A2288001D56E1 /* Library */,
 				1C6A84F92AFFED4400266135 /* Notifications */,
 				1CC81F812A5A2291001D56E1 /* Home */,
+				1C4B222B2B8276E0006A55D4 /* Post */,
 				1CC81F9C2A5B4137001D56E1 /* Profile */,
 				1C6A84F62AFFD99100266135 /* OtherUserProfile */,
 				1CC81F952A5B4076001D56E1 /* Settings */,
@@ -551,6 +676,12 @@
 				1C6A84F02AF1A7E800266135 /* EditProfileViewModel.swift */,
 				1C6A850B2B0AF07300266135 /* FollowListView.swift */,
 				1C6A850D2B0AF64100266135 /* FollowListViewModel.swift */,
+				1CB41D6B2B73409D0013FAFA /* TestProfileView.swift */,
+				1CB41D6D2B7454E80013FAFA /* ProfileHeaderView.swift */,
+				1CB41D6F2B7458140013FAFA /* ProfileActivityView.swift */,
+				1CB41D712B7469930013FAFA /* TwitterProfileView.swift */,
+				1CB41D732B746F4E0013FAFA /* BlurView.swift */,
+				1CB41D752B75C6840013FAFA /* ProfileFavoritesView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -565,6 +696,7 @@
 				1CE3A29E2AB65667003BAD2A /* BookUserCommentManager.swift */,
 				1C6A84F42AFF4D9900266135 /* UserInteractions.swift */,
 				1C6A85152B0D9A5E00266135 /* UserFeedManager.swift */,
+				1C4B22292B809268006A55D4 /* UserPostManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -639,6 +771,7 @@
 				1CE3A2A82ABA828F003BAD2A /* VisibilityTrackingScrollView */,
 				1C6A85032B01CBAA00266135 /* SwiftfulLoadingIndicators */,
 				1C2D4C802B1AC9ED00828D16 /* PopupView */,
+				1CB41D5D2B7068100013FAFA /* IsScrolling */,
 			);
 			productName = "neetbook-iOS";
 			productReference = 1CC81F272A5A20C1001D56E1 /* neetbook-iOS.app */;
@@ -720,6 +853,7 @@
 				1C6A85022B01CBAA00266135 /* XCRemoteSwiftPackageReference "SwiftfulLoadingIndicators" */,
 				1C2D4C7F2B1AC9ED00828D16 /* XCRemoteSwiftPackageReference "PopupView" */,
 				1C2D4C862B1D7BFE00828D16 /* XCRemoteSwiftPackageReference "Pow" */,
+				1CB41D5C2B7068100013FAFA /* XCRemoteSwiftPackageReference "IsScrolling" */,
 			);
 			productRefGroup = 1CC81F282A5A20C1001D56E1 /* Products */;
 			projectDirPath = "";
@@ -770,36 +904,53 @@
 				1CA4C4F52AA74D29007C1AD3 /* TagCloudView.swift in Sources */,
 				1CEDE2262A945F0D005DEDBA /* DataOfBirthView.swift in Sources */,
 				1CC81F7F2A5A2275001D56E1 /* TabBarItemsPreferenceKey.swift in Sources */,
-				1C6A84F32AFF044300266135 /* HomeViewModel.swift in Sources */,
+				1C0320512BBD992E00B19038 /* GenreContentViewModel.swift in Sources */,
+				1C4B22262B7C4FF1006A55D4 /* UserStateViewModel.swift in Sources */,
 				1CC81F752A5A2244001D56E1 /* SettingsView.swift in Sources */,
 				1C6A85122B0C4BD800266135 /* OtherFollowListView.swift in Sources */,
-				1CC81F852A5A22A8001D56E1 /* HomeView.swift in Sources */,
+				1CC81F852A5A22A8001D56E1 /* FeedView.swift in Sources */,
+				1C4B222D2B8276F4006A55D4 /* PostView.swift in Sources */,
+				1C4B22332B829160006A55D4 /* PostCommentView.swift in Sources */,
 				1CC81F912A5A2F32001D56E1 /* Utilities.swift in Sources */,
 				1CE3A2B12AC0763D003BAD2A /* LibraryWantToReadView.swift in Sources */,
 				1CA4C4E72AA6750E007C1AD3 /* SearchBarView.swift in Sources */,
+				1C0320662BCC607E00B19038 /* BookshelfViewModel.swift in Sources */,
+				1CB41D6E2B7454E80013FAFA /* ProfileHeaderView.swift in Sources */,
 				1CEDE2382AA505BD005DEDBA /* Binding-Ext.swift in Sources */,
 				1C6A84FB2AFFED6000266135 /* NotificationsView.swift in Sources */,
 				1CEDE2362A9D9661005DEDBA /* ImageManipulation.swift in Sources */,
+				1C4B222F2B8278FA006A55D4 /* PreviewProvider-Ext.swift in Sources */,
+				1CB41D702B7458140013FAFA /* ProfileActivityView.swift in Sources */,
 				1CEDE22C2A95A78F005DEDBA /* ImagePicker.swift in Sources */,
 				1CA4C4E12AA65CB5007C1AD3 /* LogoView.swift in Sources */,
+				1C0320642BCB8F3A00B19038 /* NoPhotoBookshelfView.swift in Sources */,
 				1CEDE1BF2A89D0B8005DEDBA /* SignInAppleHelper.swift in Sources */,
 				1CC81F2D2A5A20C1001D56E1 /* ContentView.swift in Sources */,
+				1C03205E2BC4D5F700B19038 /* AddBookshelfView.swift in Sources */,
 				1C6A84F52AFF4D9900266135 /* UserInteractions.swift in Sources */,
 				1CEDE22A2A95A33C005DEDBA /* ProfilePictureView.swift in Sources */,
 				1CB41D2E2B5DF78F0013FAFA /* AdaptsToKeyboard.swift in Sources */,
+				1C0320562BC3339400B19038 /* FeedViewModel.swift in Sources */,
+				1C03204F2BBD984200B19038 /* GenreContentView.swift in Sources */,
+				1CB41D642B71DA4C0013FAFA /* PendingFriendsViewModel.swift in Sources */,
 				1C6A850E2B0AF64100266135 /* FollowListViewModel.swift in Sources */,
 				1CEDE2282A9461B0005DEDBA /* NextButtonViewModifers.swift in Sources */,
 				1CB1B3CB2A5B9DDB009F6914 /* CustomNavBarContainerView.swift in Sources */,
 				1CC81F742A5A2244001D56E1 /* SignInEmailView.swift in Sources */,
+				1CB41D6C2B73409D0013FAFA /* TestProfileView.swift in Sources */,
 				1CA4C4F12AA6C0F3007C1AD3 /* BookView.swift in Sources */,
 				1CA4C4F32AA74BBE007C1AD3 /* TagCloudButtonView.swift in Sources */,
 				1CE3A29D2AB649DE003BAD2A /* BookCommentSectionView.swift in Sources */,
+				1C0320702BCF6CE000B19038 /* BookSingleInfoView.swift in Sources */,
 				1C6A84F12AF1A7E800266135 /* EditProfileViewModel.swift in Sources */,
+				1CF910112BBA5F8D005ABE78 /* HomeContentView.swift in Sources */,
 				1CA4C4EE2AA6835F007C1AD3 /* Book.swift in Sources */,
 				1CA4C4E92AA6792C007C1AD3 /* SearchViewModel.swift in Sources */,
 				1C2D4C7E2B19702100828D16 /* FittedScrollView.swift in Sources */,
 				1CEDE2152A8B2A15005DEDBA /* DBUser.swift in Sources */,
+				1CF9100D2BBA5116005ABE78 /* HomeView.swift in Sources */,
 				1C2D4C852B1C000300828D16 /* NavBackButtonView.swift in Sources */,
+				1C03205A2BC3442400B19038 /* PostInstanceView.swift in Sources */,
 				1CEDE2302A9A5615005DEDBA /* SetupSelectedGenresView.swift in Sources */,
 				1CA4C4F92AA8050A007C1AD3 /* AdaptiveSheet.swift in Sources */,
 				1CB1B3CA2A5B9DDB009F6914 /* CustomNavView.swift in Sources */,
@@ -807,8 +958,10 @@
 				1C6A85062B0471DA00266135 /* OtherUserProfileViewModel.swift in Sources */,
 				1C6A85082B098E3300266135 /* TestView.swift in Sources */,
 				1C6A84FF2AFFFE6D00266135 /* CurrentUserViewModel.swift in Sources */,
+				1CB41D742B746F4E0013FAFA /* BlurView.swift in Sources */,
 				1C4ACFFC2B4777B4009C10E8 /* PageTitleView.swift in Sources */,
 				1CE3A2BB2ADCA87A003BAD2A /* String-Ext.swift in Sources */,
+				1C03206A2BCC9C0E00B19038 /* EditBookSelectionPopupView.swift in Sources */,
 				1C2D4C832B1AD3E000828D16 /* CommentView.swift in Sources */,
 				1CC81F9A2A5B40E0001D56E1 /* AuthenticationViewModel.swift in Sources */,
 				1CB1B3CC2A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift in Sources */,
@@ -820,37 +973,56 @@
 				1CEDE2342A9D95F6005DEDBA /* ImageMoveAndScaleSheet.swift in Sources */,
 				1CB1B3CE2A5B9DDB009F6914 /* CustomNavBarView.swift in Sources */,
 				1C6A850C2B0AF07300266135 /* FollowListView.swift in Sources */,
+				1C0320722BD0C38900B19038 /* BookInfoView.swift in Sources */,
+				1C4B222A2B809268006A55D4 /* UserPostManager.swift in Sources */,
+				1C0320622BCA1B5E00B19038 /* ApplicationSwitchViewModel.swift in Sources */,
+				1CB41D722B7469930013FAFA /* TwitterProfileView.swift in Sources */,
 				1CC81F832A5A22A1001D56E1 /* LibraryView.swift in Sources */,
 				1CE3A2B92AD4F0E4003BAD2A /* AddToFavoritesViewModel.swift in Sources */,
 				1CEDE2242A945ED6005DEDBA /* PrivateAccountSetupView.swift in Sources */,
 				1C6A85012B01ACF800266135 /* CodableImage.swift in Sources */,
 				1CA4C4EC2AA67CAC007C1AD3 /* BookDataService.swift in Sources */,
+				1CF9100B2BBA2A9C005ABE78 /* ResizableTF.swift in Sources */,
 				1CC81F7D2A5A2275001D56E1 /* TabBarItem.swift in Sources */,
 				1CB1B3CD2A5B9DDB009F6914 /* AppNavBarView.swift in Sources */,
+				1C0320682BCC69F500B19038 /* BookshelfBookView.swift in Sources */,
+				1C4B22312B828387006A55D4 /* PostViewModel.swift in Sources */,
 				1CEDE23D2AA658F0005DEDBA /* RootViewModel.swift in Sources */,
 				1CE3A2A32AB6A192003BAD2A /* BookUserManager.swift in Sources */,
 				1CC81F932A5B2A9A001D56E1 /* SignInGoogleHelper.swift in Sources */,
+				1CF9100F2BBA52A1005ABE78 /* HomeViewModel.swift in Sources */,
 				1CE3A2A12AB6A069003BAD2A /* LibraryViewModel.swift in Sources */,
 				1CE3A2B52ACCFE13003BAD2A /* LibraryBookListView.swift in Sources */,
+				1C03206E2BCE0EA600B19038 /* PostInstanceViewModel.swift in Sources */,
+				1CB41D662B732F750013FAFA /* Date-Ext.swift in Sources */,
 				1C6A850A2B0A651100266135 /* NotificationsViewModel.swift in Sources */,
 				1CC81F882A5A24B5001D56E1 /* Color-Ext.swift in Sources */,
 				1CB1B3C12A5B52E3009F6914 /* ProfileSetupRootView.swift in Sources */,
 				1CC81F7C2A5A2275001D56E1 /* CustomTabBarView.swift in Sources */,
+				1CB41D622B71D5700013FAFA /* PendingFriendsView.swift in Sources */,
 				1C6A85162B0D9A5E00266135 /* UserFeedManager.swift in Sources */,
+				1CB41D602B71D2640013FAFA /* NotificationCountView.swift in Sources */,
+				1CB41D762B75C6840013FAFA /* ProfileFavoritesView.swift in Sources */,
 				1CE3A2AD2ABBB11E003BAD2A /* SwipeTestingView.swift in Sources */,
 				1C6A84F82AFFD9BE00266135 /* OtherUserProfileView.swift in Sources */,
 				1CA4C4E42AA667CD007C1AD3 /* SearchView.swift in Sources */,
+				1CB41D682B7333C00013FAFA /* ContentViewModel.swift in Sources */,
 				1CC81F2B2A5A20C1001D56E1 /* neetbook_iOSApp.swift in Sources */,
 				1CC81F732A5A2244001D56E1 /* AuthenicationManager.swift in Sources */,
 				1CC81F722A5A2244001D56E1 /* AuthenticationView.swift in Sources */,
+				1C03206C2BCC9DBC00B19038 /* EditBookshelfViewPopupView.swift in Sources */,
 				1CE3A2BF2AE8AB45003BAD2A /* EditProfileView.swift in Sources */,
 				1C6A85142B0C4BE400266135 /* OtherFollowListViewModel.swift in Sources */,
+				1C03205C2BC3696200B19038 /* BookshelfView.swift in Sources */,
 				1CE3A29F2AB65667003BAD2A /* BookUserCommentManager.swift in Sources */,
 				1CEDE2122A8B298E005DEDBA /* View-Ext.swift in Sources */,
+				1C0320602BC4D7B400B19038 /* AddBookshelfViewModel.swift in Sources */,
 				1CEDE21C2A8F369E005DEDBA /* Helpers.swift in Sources */,
 				1CC81F9E2A5B4147001D56E1 /* ProfileView.swift in Sources */,
+				1C4B22282B7C520B006A55D4 /* ApplicationSwitcherView.swift in Sources */,
 				1CA4C4FF2AAC021C007C1AD3 /* BookViewModel.swift in Sources */,
 				1CC81F712A5A2244001D56E1 /* RootView.swift in Sources */,
+				1C0320542BC325C200B19038 /* NotificationComponentView.swift in Sources */,
 				1CA4C4F72AA75CA1007C1AD3 /* BookActionView.swift in Sources */,
 				1CC81FA12A5B48FB001D56E1 /* UserManager.swift in Sources */,
 				1CE3A2B72ACD0231003BAD2A /* AddToFavoritesView.swift in Sources */,
@@ -1016,6 +1188,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "neetbook-iOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Neetbook;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1057,6 +1230,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "neetbook-iOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Neetbook;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1239,6 +1413,14 @@
 				minimumVersion = 0.0.4;
 			};
 		};
+		1CB41D5C2B7068100013FAFA /* XCRemoteSwiftPackageReference "IsScrolling" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fatbobman/IsScrolling.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.2;
+			};
+		};
 		1CC81F572A5A2127001D56E1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -1288,6 +1470,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1CC81F572A5A2127001D56E1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		1CB41D5D2B7068100013FAFA /* IsScrolling */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1CB41D5C2B7068100013FAFA /* XCRemoteSwiftPackageReference "IsScrolling" */;
+			productName = IsScrolling;
 		};
 		1CC81F582A5A2127001D56E1 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

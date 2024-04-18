@@ -9,45 +9,45 @@ import SwiftUI
 
 struct EditProfileView: View {
     let user: DBUser
+    
+    @Binding var userUpdated: Bool
+    
     @Binding var showProfileEditView: Bool
     
+    @Environment(\.dismiss) private var dismiss
+    
     @StateObject private var viewModel = EditProfileViewModel()
-    @EnvironmentObject var currentUserViewModel: CurrentUserViewModel
+    
     @State private var shouldShowImagePicker = false
+    
     @State var lastScaleValue: CGFloat = 1.0
+    
     @State var scale: CGFloat = 1.0
     
     var body: some View {
         VStack {
             // TOP BUTTONS
             HStack {
-                // cancel button
-                Button {
-                    showProfileEditView = false
-                } label: {
-                    Text("Cancel")
-                }
                 Spacer()
-                
                 // edit profile text
                 Text("Edit Profile")
+                    .foregroundColor(.primary)
                     .fontWeight(.bold)
+                    .offset(x: 20, y: 0)
                 Spacer()
-                
                 // save button
                 Button {
                     viewModel.validate()
                     if viewModel.formInvalid == false {
                         Task {
                             try? await viewModel.saveProfileChanges()
-                            if let profileImage = viewModel.profileImage {
-                                currentUserViewModel.setCurrentUserPhoto(image: profileImage)
-                            }
+                            userUpdated = true
                             showProfileEditView = false
                         }
                     }
                 } label: {
                     Text("Save")
+                        .bold()
                 }
             }
             .padding()
@@ -114,7 +114,7 @@ struct EditProfileView: View {
                                 .disableAutocorrection(true)
                                 .autocapitalization(.none)
                             
-                            Text("#\(viewModel.hashCode)")
+                            Text("#\(viewModel.hashcode)")
                                 .foregroundColor(.green)
                                 .fontWeight(.bold)
                         }
@@ -122,6 +122,7 @@ struct EditProfileView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
         .task {
             try? await viewModel.getProfilePicImage(path: user.photoUrl ?? "")
         }
@@ -130,6 +131,28 @@ struct EditProfileView: View {
         }
         .fullScreenCover(isPresented: $shouldShowImagePicker) {
             ImageMoveAndScaleSheet(croppedImage: $viewModel.profileImage)
+        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("Edit Profile")
+                    .foregroundColor(.black)
+                    .fontWeight(.bold)
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    viewModel.validate()
+                    if viewModel.formInvalid == false {
+                        Task {
+                            try? await viewModel.saveProfileChanges()
+                            showProfileEditView = false
+                        }
+                    }
+                } label: {
+                    Text("Save")
+                        .bold()
+                }
+            }
         }
     }
 }

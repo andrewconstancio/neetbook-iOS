@@ -8,6 +8,7 @@
 import SwiftUI
 import Firebase
 import GoogleSignIn
+import FirebaseAuth
 
 @main
 struct neetbook_iOSApp: App {
@@ -16,13 +17,7 @@ struct neetbook_iOSApp: App {
     
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .onAppear {
-                                  UINavigationBar.appearance().backIndicatorImage = UIImage(systemName: "arrow.backward")
-
-                                  UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward")
-
-                              }
+            ApplicationSwitcherView()
         }
     }
 }

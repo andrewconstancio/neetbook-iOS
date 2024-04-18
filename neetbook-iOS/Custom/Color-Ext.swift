@@ -54,11 +54,15 @@ extension Color {
     }
     
     public static var appColorPurple: Color {
-        return Color(hex: "1b1545")
+        return Color.indigo
     }
     
     public static var appColorOrange: Color {
         return Color(hex: "faa639")
+    }
+    
+    public static var backgroundColor: Color {
+        return Color(UIColor(named: "customControlColor")!)
     }
     
     public static var appGradientOne: LinearGradient {

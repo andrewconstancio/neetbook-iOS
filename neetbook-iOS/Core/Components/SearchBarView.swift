@@ -10,6 +10,7 @@ import SwiftUI
 struct SearchBarView: View {
     @Binding var searchText: String
     @Binding var isEditing: Bool
+    var searchFunction: () async throws -> Void
     
     var body: some View {
         HStack {
@@ -28,8 +29,13 @@ struct SearchBarView: View {
                 Text("Search...")
                     .foregroundColor(.gray)
             }
+            .onSubmit {
+                Task {
+                    try? await self.searchFunction()
+                }
+            }
+            .submitLabel(.search)
             .disableAutocorrection(true)
-            .autocapitalization(.none)
             .overlay (
                 Image(systemName: "xmark.circle.fill")
                     .padding()
@@ -51,6 +57,6 @@ struct SearchBarView: View {
                 .fill(Color.white)
                 .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 0)
         )
-        .padding()
+//        .padding()
     }
 }

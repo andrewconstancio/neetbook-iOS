@@ -39,11 +39,27 @@ final class ProfileSetupViewRootViewModel: ObservableObject {
         do {
             let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
             self.user = DBUser(auth: authUser)
+            
+//            createDefaultBookShelves()
         } catch {
             throw error
         }
     }
     
+//    private func createDefaultBookShelves() {
+//        var defaultShelves: [Bookshelf] = []
+//        
+//        let reading = Bookshelf(name: "Reading", imageUrl: "")
+//        let wantToRead = Bookshelf(name: "Want To Read", imageUrl: "")
+//        let finished = Bookshelf(name: "Finished", imageUrl: "")
+//        
+//        defaultShelves.append(reading)
+//        defaultShelves.append(wantToRead)
+//        defaultShelves.append(finished)
+//        
+//        user?.bookShelves = defaultShelves
+//    }
+//    
     private func debounceTextChanges() {
         $username
             // 1 second debounce
@@ -134,5 +150,6 @@ final class ProfileSetupViewRootViewModel: ObservableObject {
     func saveUser() async throws {
         guard let newUser = user else { return }
         try UserManager.shared.createNewUser(user: newUser)
+        try await UserManager.shared.createDefaultBookshelves()
     }
 }

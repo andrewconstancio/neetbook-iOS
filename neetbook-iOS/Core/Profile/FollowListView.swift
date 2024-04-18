@@ -17,83 +17,79 @@ struct FollowListView: View {
     @Namespace private var namespace2
     
     var body: some View {
-        NavigationStack {
-            VStack {
-                HStack {
-                    ForEach(0..<categories.count, id: \.self) { index in
-                        ZStack(alignment: .bottom) {
-                            if currentIndex == index {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.black)
-                                    .matchedGeometryEffect(id: "category_background", in: namespace2)
-                                    .frame(width: 35, height: 2)
-                                    .offset(y: 10)
-                            }
-                            Text(categories[index])
-                                .foregroundColor(currentIndex == index ? .black : .black.opacity(0.5))
+        VStack {
+            HStack {
+                ForEach(0..<categories.count, id: \.self) { index in
+                    ZStack(alignment: .bottom) {
+                        if currentIndex == index {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.black)
+                                .matchedGeometryEffect(id: "category_background", in: namespace2)
+                                .frame(width: 35, height: 2)
+                                .offset(y: 10)
                         }
-                        .frame(width: UIScreen.main.bounds.width / 3, height: 55)
-                        .onTapGesture {
-                            withAnimation(.spring()) {
-                                self.currentIndex = index
-                                self.backgroundOffset = CGFloat(index)
-                            }
-                        }
+                        Text(categories[index])
+                            .foregroundColor(currentIndex == index ? .black : .black.opacity(0.5))
                     }
-                }
-                .frame(maxWidth: .infinity)
-                .onAppear {
-                    Task {
-                        try await viewModel.getAllFollowData(userId: userId)
-                    }
-                }
-  
-                if viewModel.isLoadingFollowers {
-                    VStack {
-                        Spacer()
-                        LoadingIndicator(animation: .threeBalls, color: .black, speed: .fast)
-                        Spacer()
-                    }
-                } else {
-                    GeometryReader { geo in
-                        VStack {
-                            VStack {
-                                HStack {
-                                    following
-                                        .frame(width: geo.size.width)
-                                    followers
-                                        .frame(width: geo.size.width)
-                                }
-                                .offset(x: -(self.backgroundOffset * geo.size.width))
-                                .animation(.default)
-                            }
-                            Spacer()
+                    .frame(width: UIScreen.main.bounds.width / 3, height: 55)
+                    .onTapGesture {
+                        withAnimation(.spring()) {
+                            self.currentIndex = index
+                            self.backgroundOffset = CGFloat(index)
                         }
                     }
                 }
             }
-            .background(Color.white.ignoresSafeArea())
-            .gesture(
-                DragGesture()
-                    .onEnded { value in
-                        if value.translation.width > 10 {
-                            if self.backgroundOffset > 0 {
-                                withAnimation(.spring()) {
-                                    self.currentIndex -= 1
-                                }
-                                self.backgroundOffset -= 1
+            .frame(maxWidth: .infinity)
+
+            if viewModel.isLoadingFollowers {
+                VStack {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
+                }
+            } else {
+                GeometryReader { geo in
+                    VStack {
+                        VStack {
+                            HStack {
+                                following
+                                    .frame(width: geo.size.width)
+                                followers
+                                    .frame(width: geo.size.width)
                             }
-                        } else if value.translation.width < -10 {
-                            if self.backgroundOffset < 1 {
-                                withAnimation(.spring()) {
-                                    self.currentIndex += 1
-                                }
-                                self.backgroundOffset += 1
+                            .offset(x: -(self.backgroundOffset * geo.size.width))
+                            .animation(.default)
+                        }
+                        Spacer()
+                    }
+                }
+            }
+        }
+        .task {
+            try? await viewModel.getAllFollowData(userId: userId)
+        }
+        .background(Color("Background"))
+        .gesture(
+            DragGesture()
+                .onEnded { value in
+                    if value.translation.width > 10 {
+                        if self.backgroundOffset > 0 {
+                            withAnimation(.spring()) {
+                                self.currentIndex -= 1
                             }
+                            self.backgroundOffset -= 1
+                        }
+                    } else if value.translation.width < -10 {
+                        if self.backgroundOffset < 1 {
+                            withAnimation(.spring()) {
+                                self.currentIndex += 1
+                            }
+                            self.backgroundOffset += 1
                         }
                     }
-            )
-        }
+                }
+        )
     }
 }
 
@@ -105,7 +101,7 @@ extension FollowListView {
                     HStack {
                         if let image = viewModel.following[index].profileImage {
                             NavigationLink {
-                                OtherUserProfileView(userId: viewModel.following[index].userId)
+                                TwitterProfileView(userId: viewModel.following[index].userId)
                             } label: {
                                 Image(uiImage: image)
                                     .resizable()
@@ -187,7 +183,7 @@ extension FollowListView {
                 Text("No one to see here!")
                     .font(.subheadline)
                     .bold()
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
             }
             Spacer()
         }
@@ -201,7 +197,7 @@ extension FollowListView {
                     HStack {
                         if let image = viewModel.followers[index].profileImage {
                             NavigationLink {
-                                OtherUserProfileView(userId: viewModel.followers[index].userId)
+                                TwitterProfileView(userId: viewModel.following[index].userId)
                             } label: {
                                 Image(uiImage: image)
                                     .resizable()
@@ -213,10 +209,10 @@ extension FollowListView {
                         VStack(alignment: .leading) {
                             Text("\(viewModel.followers[index].displayName)")
                                 .font(.headline)
-                                .foregroundColor(.black)
+                                .foregroundColor(.primary)
                             Text("\(viewModel.followers[index].username)")
                                 .font(.subheadline)
-                                .foregroundColor(.black)
+                                .foregroundColor(.primary)
                         }
                         Spacer()
                         Button {

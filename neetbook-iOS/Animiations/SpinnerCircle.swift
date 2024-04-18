@@ -10,7 +10,7 @@ import SwiftUI
 struct Spinner: View {
 
     let rotationTime: Double = 0.50
-    let animationTime: Double = 1.9 // Sum of all animation times
+    let animationTime: Double = 0.9 // Sum of all animation times
     let fullRotation: Angle = .degrees(360)
     static let initialDegree: Angle = .degrees(270)
 

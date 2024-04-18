@@ -14,17 +14,10 @@ struct Book: Identifiable, Codable {
     let author: String
     let coverURL: String
     let description: String
+    var pages: Int
     let publishedYear: String
-    var userAction: String?
-    var userActionDate: Date?
+    let language: String
+    let publisher: String
     
     @CodableImage var coverPhoto: UIImage?
-    
-    mutating func setUserAction(action: String) {
-        self.userAction = action
-    }
-    
-    mutating func setUserActionDate(date: Date) {
-        self.userActionDate = date
-    }
 }

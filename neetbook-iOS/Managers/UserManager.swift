@@ -10,6 +10,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseStorage
+import SwiftUI
 
 enum UserError: Error {
     case failedDeleteUserData
@@ -23,6 +24,8 @@ final class UserManager {
     
     private let userCollection = Firestore.firestore().collection("users")
     private let userFollowingListCollection = Firestore.firestore().collection("UserFollowList")
+    private let userBookshelvesCollection = Firestore.firestore().collection("userBookshelves")
+    private let bookshelvesAddedToCollection = Firestore.firestore().collection("userBookshelvesAddedTo")
     private let storage = Storage.storage()
 
     
@@ -46,11 +49,34 @@ final class UserManager {
         try userDocument(userId: user.userId).setData(from: user, merge: false, encoder: encoder)
     }
     
+    func createDefaultBookshelves() async throws {
+        
+        try await saveUserBookshelf(name: "Reading", coverPhoto: nil)
+        try await saveUserBookshelf(name: "Want To Read", coverPhoto: nil)
+        try await saveUserBookshelf(name: "Finished", coverPhoto: nil)
+    }
+    
     func getUser(userId: String) async throws -> DBUser? {
         do {
             return try await userDocument(userId: userId).getDocument(as: DBUser.self, decoder: decoder)
+        } catch let DecodingError.dataCorrupted(context) {
+            print(context)
+            throw APIError.invalidData
+        } catch let DecodingError.keyNotFound(key, context) {
+            print("Key '\(key)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+            throw APIError.invalidData
+        } catch let DecodingError.valueNotFound(value, context) {
+            print("Value '\(value)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+            throw APIError.invalidData
+        } catch let DecodingError.typeMismatch(type, context)  {
+            print("Type '\(type)' mismatch:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+            throw APIError.invalidData
         } catch {
-            return nil
+            print("error: ", error)
+            throw APIError.invalidData
         }
     }
 
@@ -219,6 +245,97 @@ final class UserManager {
             return users
         } catch {
             throw URLError(.badServerResponse)
+        }
+    }
+    
+    func getUserBookShelves(userId: String) async throws -> [Bookshelf] {
+        let docs = try await userBookshelvesCollection
+            .document(userId)
+            .collection("bookshelves")
+            .order(by: "date_created", descending: false)
+            .getDocuments()
+        
+        var bookshelves: [Bookshelf] = []
+        for doc in docs.documents {
+            let bookshelf = try decoder.decode(Bookshelf.self, from: doc.data())
+            bookshelves.append(bookshelf)
+        }
+        
+        return bookshelves
+    }
+    
+    func saveUserBookshelf(name: String, coverPhoto: UIImage?) async throws {
+        guard let userId = Firebase.Auth.auth().currentUser?.uid else { return }
+        
+        var coverPhotoUrl = ""
+        
+        if let coverPhoto = coverPhoto {
+            guard let imageData = coverPhoto.jpegData(compressionQuality: 0.5) else { return }
+            
+            let storageRef = storage.reference(withPath: "bookshelf_images/\(userId)/\(name)")
+            let _ = try await storageRef.putDataAsync(imageData)
+            
+            coverPhotoUrl = try await storageRef.downloadURL().absoluteString
+        }
+        
+        let bookshelf = Bookshelf(name: name, imageUrl: coverPhotoUrl)
+        let data = try encoder.encode(bookshelf)
+        
+        try await userBookshelvesCollection
+            .document(userId)
+            .collection("bookshelves")
+            .document(bookshelf.id)
+            .setData(data, merge: true)
+    }
+    
+    func editUserBookshelf(bookshelf: Bookshelf, name: String, coverPhoto: UIImage?) async throws {
+        guard let userId = Firebase.Auth.auth().currentUser?.uid else { return }
+        
+        var bookshelf = bookshelf
+        var coverPhotoUrl = ""
+        
+        if let coverPhoto = coverPhoto {
+            guard let imageData = coverPhoto.jpegData(compressionQuality: 0.5) else { return }
+            
+            let storageRef = storage.reference(withPath: "bookshelf_images/\(userId)/\(name)")
+            let _ = try await storageRef.putDataAsync(imageData)
+            
+            coverPhotoUrl = try await storageRef.downloadURL().absoluteString
+        }
+        
+        
+        bookshelf.setName(name: name)
+        bookshelf.setImageUrl(url: coverPhotoUrl)
+        
+        let data = try encoder.encode(bookshelf)
+        
+        try await userBookshelvesCollection
+            .document(userId)
+            .collection("bookshelves")
+            .document(bookshelf.id)
+            .setData(data, merge: true)
+    }
+    
+    func deleteUserBookshelf(bookshelf: Bookshelf) async throws {
+        guard let userId = Firebase.Auth.auth().currentUser?.uid else { return }
+        
+        let bookshelfDocs = try await userBookshelvesCollection
+            .document(userId)
+            .collection("bookshelves")
+            .whereField("id", isEqualTo: bookshelf.id)
+            .getDocuments()
+        
+        let bookshelfAddedToDocs = try await bookshelvesAddedToCollection
+            .whereField("bookshelf_id", isEqualTo: bookshelf.id)
+            .getDocuments()
+        
+        
+        for doc in bookshelfDocs.documents {
+            try await doc.reference.delete()
+        }
+        
+        for doc in bookshelfAddedToDocs.documents {
+            try await doc.reference.delete()
         }
     }
 }
