@@ -41,6 +41,10 @@ struct BookView: View {
     
     @State private var activityHeight: Double = 0.0
     
+    @State private var height: CGFloat = 30
+    
+    @State private var keyboardHeight: CGFloat = 0
+    
     init(book: Book) {
         self.book = book
         self._viewModel = StateObject(wrappedValue: BookViewModel(bookId: book.bookId))
@@ -48,48 +52,17 @@ struct BookView: View {
     
     var body: some View {
         FittedScrollView {
-            VStack(spacing: 10){
-                
-                // Header View...
-//                GeometryReader{ proxy -> AnyView in
-//                    
-//                    // Sticky Header...
-//                    let minY = proxy.frame(in: .global).minY
-//                    
-//                    DispatchQueue.main.async {
-//                        self.offset = minY
-//                    }
-//                    
-//                    return AnyView(
-//                        ZStack{
-//                            BlurView()
-//                                .opacity(blurViewOpacity())
-//                            
-//                            // Title View...
-//                            VStack(spacing: 5){
-//                                Text("")
-//                            }
-//                        }
-//                            .clipped()
-//                            .frame(height: minY > 0 ? 90 + minY : nil)
-//                            .offset(y: minY > 0 ? -minY : -minY < 80 ? 0 : -minY - 80)
-//                    )
-//                }
-//                .frame(height: 80)
-//                .zIndex(1)
-                
+            VStack(spacing: 10) {
                 VStack {
-                    VStack {
-                        if let coverPhoto = book.coverPhoto {
-                            Image(uiImage: coverPhoto)
-                                .resizable()
-                                .frame(width: 90, height: 140)
-                                .cornerRadius(10)
-                                .shadow(radius: 10)
-                                .padding(.bottom, 20)
-                        }
+                    if let coverPhoto = book.coverPhoto {
+                        Image(uiImage: coverPhoto)
+                            .resizable()
+                            .frame(width: 90, height: 140)
+                            .cornerRadius(10)
+                            .shadow(radius: 10)
+                            .padding(.top, 100)
+                            .padding(.bottom, 20)
                     }
-                    
                     
                     VStack(alignment: .leading) {
                         VStack(spacing: 0){
@@ -102,23 +75,9 @@ struct BookView: View {
                                         .frame(width: UIScreen.main.bounds.width / 2)
                                 }
                             })
-                            
+                            .padding(.top, 30)
                             Divider()
                         }
-                        .offset(y: tabBarOffset < 90 ? -tabBarOffset + 90 : 0)
-                        .overlay(
-                            GeometryReader{reader -> Color in
-                                let minY = reader.frame(in: .global).minY
-                                DispatchQueue.main.async {
-                                    self.tabBarOffset = minY
-                                }
-                                return Color.clear
-                            }
-                                .frame(width: 0, height: 0)
-                            
-                            ,alignment: .top
-                        )
-                        .zIndex(1)
                         
                         if currentTab == "Info" {
                             BookSingleInfoView(name: "Title ", info: book.title)
@@ -131,10 +90,10 @@ struct BookView: View {
                         } else {
                             BookCommentSectionView(viewModel: viewModel, book: book)
                         }
+                        Spacer()
                     }
-                    .padding(.top, 20)
                     .padding(.horizontal, 2)
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .edgesIgnoringSafeArea(.all)
                     .background(Color("Background"))
                     .cornerRadius(10, corners: [.topLeft, .topRight])
@@ -143,32 +102,73 @@ struct BookView: View {
                     Image(uiImage: book.coverPhoto!)
                         .resizable()
                         .blur(radius: 20)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 )
             }
-            .onTapGesture {
-                hideKeyboard()
-            }
-            .overlay(Color.black.opacity(showBookActionSheet ? 0.3 : 0.0))
-            .blur(radius: showBookActionSheet ? 2 : 0)
-            .scrollIndicators(.hidden)
-            .ignoresSafeArea()
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: NavBackButtonView(color: .white, dismiss: self.dismiss))
-            .toolbarBackground(.hidden, for: .navigationBar)
-            .sheet(isPresented: $showBookActionSheet) {
-                BookActionView(
-                    viewModel: viewModel,
-                    showBookActionSheet: $showBookActionSheet,
-                    actionSelected: viewModel.userActions,
-                    book: book
-                )
-                .onDisappear {
-                    Task {
-                        try await viewModel.getBookshelvesAddedTo(bookId: book.bookId)
-                    }
+        }
+        .onTapGesture {
+            hideKeyboard()
+        }
+        .overlay(Color.black.opacity(showBookActionSheet ? 0.3 : 0.0))
+        .blur(radius: showBookActionSheet ? 2 : 0)
+        .scrollIndicators(.hidden)
+        .ignoresSafeArea()
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: NavBackButtonView(color: .white, dismiss: self.dismiss))
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .sheet(isPresented: $showBookActionSheet) {
+            BookActionView(
+                viewModel: viewModel,
+                showBookActionSheet: $showBookActionSheet,
+                actionSelected: viewModel.userActions,
+                book: book
+            )
+            .onDisappear {
+                Task {
+                    try await viewModel.getBookshelvesAddedTo(bookId: book.bookId)
                 }
             }
         }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if currentTab == "Comments" {
+                HStack {
+                    if let photoURL = viewModel.currentUser?.photoUrl {
+                        AsyncImage(url: URL(string: photoURL)) { image in
+                            image
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .shadow(radius: 10)
+                                .cornerRadius(10)
+                                .clipShape(Circle())
+                            
+                        } placeholder: {
+                            ProgressView()
+                        }
+                    }
+                    ResizableTF(text: $viewModel.userNewComment, height: $height)
+                        .frame(height: height)
+                        .padding(.horizontal)
+                        .background(.white)
+                        .cornerRadius(15)
+                    
+                    Button {
+                        Task {
+                            try? await viewModel.addUserBookComment(bookId: book.bookId)
+                            hideKeyboard()
+                        }
+                    } label: {
+                        Image(systemName: "paperplane.fill")
+                            .foregroundColor(Color.appColorPurple)
+                            .frame(width: 10, height: 10)
+                            .padding(5)
+                    }
+                }
+                .padding(.top, 5)
+                .padding(4)
+            }
+        }
+        .background(Color("Background"))
+        .ignoresSafeArea()
 //        FittedScrollView {
 //                VStack {
 //                    VStack {
@@ -301,6 +301,7 @@ struct BookView: View {
     }
     
     func blurViewOpacity()->Double{
+    
         
         let progress = -(offset + 80) / 150
         

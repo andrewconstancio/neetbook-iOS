@@ -15,10 +15,10 @@ struct BookSingleInfoView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(name)
-                .font(.system(size: 14))
+                .font(.system(size: 16))
                 .bold()
             Text(info)
-                .font(.system(size: 14))
+                .font(.system(size: 16))
                 .foregroundStyle(.secondary)
         }
         .padding()

@@ -65,7 +65,7 @@ struct TwitterProfileView: View {
                                 DispatchQueue.main.async {
                                     self.offset = minY
                                 }
-            
+
                                 return AnyView(
                                     ZStack{
                                         BlurView()

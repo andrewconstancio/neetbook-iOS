@@ -52,6 +52,7 @@ struct CommentView: View {
                 }
             }
         }
+        .font(.system(size: 14))
         .popup(isPresented: $showSheetDelete) {
             VStack(spacing: 20) {
                 if self.currentUserId == comment.userId {
