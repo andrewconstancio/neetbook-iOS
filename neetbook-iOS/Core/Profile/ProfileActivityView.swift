@@ -57,60 +57,34 @@ struct ProfileActivityView: View {
     var body: some View {
         GeometryReader { geo in
                 if viewModel.activity.count > 0 {
-                VStack(alignment: .leading){
-                    ForEach(0..<viewModel.activity.count, id: \.self) { index in
-                        NavigationLink {
-                            PostView(post: viewModel.activity[index])
-                                .environmentObject(userStateViewModel)
-                        } label: {
-                            VStack {
+                LazyVStack(alignment: .leading) {
+                    ForEach(viewModel.activity) { post in
+                        PostInstanceView(post: post, linkToPost: true)
+                            .environmentObject(userStateViewModel)
+                            .onGeometrySizeChange { childrenSize = $0 }
+                        
+                        Divider()
+                        if let lastDocID = viewModel.activitiesLastDocument?.documentID as String? {
+                            if post.documentID == lastDocID {
                                 HStack {
-                                    VStack(alignment: .leading) {
-                                            
-                                        Text(viewModel.activity[index].title)
-                                            .foregroundColor(.primary)
-                                            .font(.system(size: 14))
-                                        
-                                        Text(viewModel.activity[index].book.title)
-                                            .foregroundColor(.primary)
-                                            .fontWeight(.bold)
-                                            .font(.system(size: 14))
-                                        
-                                        Text("by \(viewModel.activity[index].book.author)")
-                                            .foregroundColor(.primary)
-                                            .font(.system(size: 14))
-                                        
-//                                        Spacer()
-                                        Text(viewModel.activity[index].dateEvent.timeAgoDisplay())
-                                            .fontWeight(.light)
-                                            .fontWeight(.bold)
-                                            .foregroundColor(.primary.opacity(0.5))
-                                            .font(.system(size: 14))
-                                    }
                                     Spacer()
-                                    NavigationLink {
-                                        BookView(book: viewModel.activity[index].book)
-                                    } label: {
-                                        if let image = viewModel.activity[index].book.coverPhoto {
-                                            Image(uiImage: image)
-                                                .resizable()
-                                                .frame(width: 65, height: 100)
-                                                .cornerRadius(10)
+                                    ProgressView()
+                                        .tint(.primary)
+                                        .onAppear {
+                                            Task {
+                                                try await viewModel.getUserActivity(userId: userId)
+                                                activityHeight = (childrenSize.height * Double(viewModel.activity.count)) + 100
+                                            }
                                         }
-                                    }
+                                    Spacer()
                                 }
-                                .padding(5)
                             }
-                            .frame(maxWidth: .infinity)
-                            .background(colorScheme == .dark ? .indigo.opacity(0.4) : .white)
-                            .clipShape(RoundedRectangle(cornerRadius:10))
-                            .shadow(radius: 3)
                         }
                     }
-                    .onGeometrySizeChange { childrenSize = $0 }
                 }
+                .padding(.bottom, 50)
                 .onAppear {
-                    activityHeight = childrenSize.height * Double(viewModel.activity.count)
+                    activityHeight = (childrenSize.height * Double(viewModel.activity.count)) + 100
                 }
                 } else {
                     HStack {
@@ -120,15 +94,7 @@ struct ProfileActivityView: View {
                             .fontWeight(.bold)
                         Spacer()
                     }
-//                    VStack {
-//                        Text("No activity yet!")
-//                            .foregroundColor(.black.opacity(0.7))
-//                            .fontWeight(.bold)
-//                        Spacer()
-//                        Spacer()
-//                        Spacer()
-//                    }
-                }
+            }
         }
     }
 }

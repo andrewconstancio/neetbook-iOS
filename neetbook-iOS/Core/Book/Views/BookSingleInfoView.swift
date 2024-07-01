@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct BookSingleInfoView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     let name: String
     let info: String
     var body: some View {

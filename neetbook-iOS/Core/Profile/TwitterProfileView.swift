@@ -23,7 +23,7 @@ struct TwitterProfileView: View {
     // For Smooth Slide Animation...
     @Namespace var animation
     
-    @ObservedObject var viewModel: ProfileViewModel
+    @StateObject var viewModel: ProfileViewModel
     
     @State var tabBarOffset: CGFloat = 0
     
@@ -37,7 +37,7 @@ struct TwitterProfileView: View {
     
     init(userId: String) {
         self.userId = userId
-        self.viewModel = ProfileViewModel(userId: userId)
+        self._viewModel = StateObject(wrappedValue: ProfileViewModel(userId: userId))
     }
     
     var body: some View {
@@ -112,21 +112,19 @@ struct TwitterProfileView: View {
                                     }
                                 } else {
                                     VStack(spacing: 0){
-                                        
                                         ScrollView(.horizontal, showsIndicators: false, content: {
-                                            
                                             HStack(spacing: 0){
                                                 TabButton(title: "Activity", currentTab: $currentTab, animation: animation)
                                                     .frame(width: UIScreen.main.bounds.width / 2 - 20)
                                                 
-                                                TabButton(title: "Favorites", currentTab: $currentTab, animation: animation)
+                                                TabButton(title: "Last Reads", currentTab: $currentTab, animation: animation)
                                                     .frame(width: UIScreen.main.bounds.width / 2 - 20)
                                             }
                                         })
-                                        
+                                        .padding(.top, 30)
+                                        .background(Color("Background"))
                                         Divider()
                                     }
-                                    .padding(.top,30)
                                     .offset(y: tabBarOffset < 90 ? -tabBarOffset + 90 : 0)
                                     .overlay(
                 
@@ -137,7 +135,6 @@ struct TwitterProfileView: View {
                                             DispatchQueue.main.async {
                                                 self.tabBarOffset = minY
                                             }
-                
                                             return Color.clear
                                         }
                                         .frame(width: 0, height: 0)
@@ -156,13 +153,14 @@ struct TwitterProfileView: View {
                                                     .environmentObject(userStateViewModel)
                                                     .environmentObject(viewModel)
                                                     .frame(height: activityHeight + 300.0)
-
                                             }
                                         }
                                         
-                                        if currentTab == "Favorites" {
-                                            ProfileFavoritesView()
+                                        if currentTab == "Last Reads" {
+                                            LastReadsView()
                                                 .environmentObject(viewModel)
+//                                            ProfileFavoritesView()
+//                                                .environmentObject(viewModel)
                                         }
                                     }
                                     .padding(.top)

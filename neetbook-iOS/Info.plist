@@ -20,7 +20,9 @@
 			<key>CFBundleURLName</key>
 			<string></string>
 			<key>CFBundleURLSchemes</key>
-			<array/>
+			<array>
+				<string>com.kuma.neetbook-iOS</string>
+			</array>
 		</dict>
 	</array>
 	<key>GIDClientID</key>

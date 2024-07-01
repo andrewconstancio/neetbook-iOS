@@ -108,10 +108,10 @@ class OtherUserProfileViewModel: ObservableObject {
     }
     
     func getUserActivity(userId: String) async throws {
-        do {
-            self.activity = try await UserFeedManager.shared.getUserActivty(userId: userId)
-        } catch {
-            throw error
-        }
+//        do {
+//            self.activity = try await UserFeedManager.shared.getUserActivities(userId: userId)
+//        } catch {
+//            throw error
+//        }
     }
 }

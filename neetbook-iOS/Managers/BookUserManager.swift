@@ -30,6 +30,7 @@ final class BookUserManager {
     
     func getFavoriteBooks(userId: String) async throws -> [FavoriteBook] {
         let querySnapshot = try await userCollection.document(userId).getDocument()
+    
         
         var userBooks: [FavoriteBook] = []
         let data = querySnapshot.data()

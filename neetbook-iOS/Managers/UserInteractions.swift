@@ -145,8 +145,8 @@ final class UserInteractions {
         let userProfilePic = userData["photo_url"] as? String ?? ""
         
         let docData: [String : Any] = [
-            "user_id" : currentUserId,
-            "action_user_id" : userId,
+            "user_id" : userId,
+            "action_user_id" : currentUserId,
             "display_name" : name,
             "photo_url" : userProfilePic,
             "type" : type,
@@ -175,8 +175,8 @@ final class UserInteractions {
         let userProfilePic = userData["photo_url"] as? String ?? ""
         
         let docData: [String : Any] = [
-            "user_id" : currentUserId,
-            "action_user_id" : userId,
+            "user_id" : userId,
+            "action_user_id" : currentUserId,
             "display_name" : name,
             "photo_url" : userProfilePic,
             "type" : "Post Comment",
@@ -186,6 +186,8 @@ final class UserInteractions {
             "is_following" : isFollowing,
             "date_created" : Timestamp(date: Date())
         ]
+        
+        print(userId)
         
         try await userNotificationListCollection
             .document(userId)
@@ -199,7 +201,7 @@ final class UserInteractions {
         let isFollowing = try await checkUserFollowing(currentUserId: currentUserId, userId: post.user.userId)
         
         let docData: [String : Any] = [
-            "user_id" : currentUserId,
+            "user_id" : post.user.userId,
             "action_user_id" : currentUserId,
             "display_name" : user?.displayname as String? ?? "",
             "photo_url" : user?.photoUrl as String? ?? "",
@@ -305,79 +307,90 @@ final class UserInteractions {
         let query = try await userNotificationListCollection
                     .document(userId)
                     .collection("notifications")
+                    .limit(to: 20)
                     .order(by: "date_created", descending: true)
                     .getDocuments()
                                 
-        var notis: [UserNotification] = []
-        for data in query.documents {
-            let otherUserId = data["action_user_id"] as? String ?? ""
-            let displayName = data["display_name"] as? String ?? ""
-            let type = data["type"] as? String ?? ""
-            let photoURL = data["photo_url"] as? String ?? ""
-            let comment = data["comment"] as? String ?? ""
-            let postDocumentId = data["post_document_id"] as? String ?? ""
-            let dateCreated = (data["date_created"] as? Timestamp)?.dateValue() ?? Date()
-            let isFollowing = try await checkUserFollowing(currentUserId: userId, userId: otherUserId)
-            let profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoURL)
-            let followRequested = try await checkUserFollowRequest(currentUserId: userId, userId: otherUserId)
-            
-            var followStatus: FollowingStatus = .notFollowing
-            
-            if isFollowing {
-                followStatus = .following
+        var notifications: [UserNotification] = []
+        try await withThrowingTaskGroup(of: UserNotification?.self) { group in
+            for data in query.documents {
+                group.addTask {
+                    let otherUserId = data["action_user_id"] as? String ?? ""
+                    let otherUser = try await UserManager.shared.getUser(userId: otherUserId)
+                    let displayName = otherUser?.displayname ?? "Deleted User"
+                    let type = data["type"] as? String ?? ""
+                    let photoURL = data["photo_url"] as? String ?? ""
+                    let comment = data["comment"] as? String ?? ""
+                    let postDocumentId = data["post_document_id"] as? String ?? ""
+                    let dateCreated = (data["date_created"] as? Timestamp)?.dateValue() ?? Date()
+                    let isFollowing = try await self.checkUserFollowing(currentUserId: userId, userId: otherUserId)
+                    let profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoURL)
+                    let followRequested = try await self.checkUserFollowRequest(currentUserId: userId, userId: otherUserId)
+                    
+                    var followStatus: FollowingStatus = .notFollowing
+                    
+                    if isFollowing {
+                        followStatus = .following
+                    }
+                    
+                    if followRequested {
+                        followStatus = .requestedToFollow
+                    }
+                    
+                    switch(type) {
+                    case "Follow Accepted":
+                        return UserNotification(userId: otherUserId,
+                                                type: .followAccepted,
+                                                displayName: displayName,
+                                                message: " Is now following you!",
+                                                dateCreated: dateCreated,
+                                                followStatus: followStatus,
+                                                profilePicture: profileImage)
+                    case "Post Comment":
+                        let post = try await UserPostManager.shared.getPost(documentID: postDocumentId)
+                        return UserNotification(userId: otherUserId,
+                                                type: .newPostComment,
+                                                displayName: displayName,
+                                                message: " Left a comment on your activity",
+                                                dateCreated: dateCreated,
+                                                followStatus: followStatus,
+                                                comment: comment,
+                                                profilePicture: profileImage,
+                                                post: post)
+                    case "Requested To Follow":
+                        return UserNotification(userId: otherUserId,
+                                                type: .requestedToFollow,
+                                                displayName: displayName,
+                                                message: " Requested to follow you",
+                                                dateCreated: dateCreated,
+                                                followStatus: followStatus,
+                                                profilePicture: profileImage)
+                    case "Like Post":
+                        let post = try await UserPostManager.shared.getPost(documentID: postDocumentId)
+                        return UserNotification(userId: otherUserId,
+                                                    type: .likedActivity,
+                                                    displayName: displayName,
+                                                    message: " Liked your activity",
+                                                    dateCreated: dateCreated,
+                                                    followStatus: followStatus,
+                                                    profilePicture: profileImage,
+                                                    post: post)
+                    default:
+                        return nil
+                    }
+                }
             }
             
-            if followRequested {
-                followStatus = .requestedToFollow
+            for try await notification in group {
+                if let notification = notification {
+                    notifications.append(notification)
+                }
             }
             
-            if type == "Follow Accepted" {
-                let noti = UserNotification(userId: otherUserId,
-                                            type: .followAccepted,
-                                            displayName: displayName,
-                                            message: " Is now following you!",
-                                            dateCreated: dateCreated,
-                                            followStatus: followStatus,
-                                            profilePicture: profileImage)
-                notis.append(noti)
-            } else if type == "Post Comment" {
-                let noti = UserNotification(userId: otherUserId,
-                                            type: .newPostComment,
-                                            displayName: displayName,
-                                            message: " Left a comment on your activity",
-                                            dateCreated: dateCreated,
-                                            followStatus: followStatus,
-                                            comment: comment,
-                                            profilePicture: profileImage)
-                
-                notis.append(noti)
-            } else if type == "Requested To Follow" {
-                let noti = UserNotification(userId: otherUserId,
-                                            type: .requestedToFollow,
-                                            displayName: displayName,
-                                            message: " Requested to follow you",
-                                            dateCreated: dateCreated,
-                                            followStatus: followStatus,
-                                            profilePicture: profileImage)
-                
-                notis.append(noti)
-            } else if type == "Like Post" {
-                
-                
-                
-                let noti = UserNotification(userId: otherUserId,
-                                            type: .likedActivity,
-                                            displayName: displayName,
-                                            message: " Liked your activiy",
-                                            dateCreated: dateCreated,
-                                            followStatus: followStatus,
-                                            profilePicture: profileImage)
-                
-                notis.append(noti)
-            }
+            notifications.sort { $0.dateCreated > $1.dateCreated }
+
         }
-        
-        return notis
+        return notifications
     }
     
     func addUserToFollowingList(currentUserId: String, userId: String) async throws {

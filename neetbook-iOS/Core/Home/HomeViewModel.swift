@@ -12,8 +12,10 @@ import Combine
 class HomeViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var searchBookResults: [Book] = []
-    @Published var popularBookResults: [Book] = []
-    @Published var popularTwoBookResults: [Book] = []
+    @Published var sectionOneBookResults: [Book] = []
+    @Published var sectionTwoBookResults: [Book] = []
+    @Published var sectionThreeBookResults: [Book] = []
+    @Published var sectionFourBookResults: [Book] = []
     @Published var searchUsersResults: [UserSearchResult] = []
     @Published var searchText: String = ""
     @Published var loadingBooks: Bool = false
@@ -21,16 +23,50 @@ class HomeViewModel: ObservableObject {
     @Published var isSearching: Bool = false
     @Published var searchType: String = "books"
     
+    @Published var isLoadingBooksSectionOne: Bool = false
+    @Published var isLoadingBooksSectionTwo: Bool = false
+    @Published var isLoadingBooksSectionThree: Bool = false
+    @Published var isLoadingBooksSectionFour: Bool = false
+    
     private var recentlySearchedUserText: String = ""
     private var recentlySearchedBookText: String = ""
     private var cancellables = Set<AnyCancellable>()
     
+    let sectionOneListName = "mass-market-paperback"
+    let sectionTwoListName = "paperback-nonfiction"
+    let sectionThreeListName = "paperback-advice"
+    let sectionFourListName = "science"
+    
+    let sectionOneFriendlyName = "Best Sellers"
+    let sectionTwoFriendlyName = "Nonfiction"
+    let sectionThreeFriendlyName = "Advice & Misc."
+    let sectionFourFriendlyName = "Science"
+    
     init() {
         addSubscribers()
         Task {
-            isLoading = true
-            try? await getPopularBooks()
-            isLoading = false
+            isLoadingBooksSectionOne = true
+            try await BookDataService.shared.cache.loadFromDisk()
+            sectionOneBookResults = try await getNYTBooks(for: sectionOneListName, limit: 3)
+            isLoadingBooksSectionOne = false
+        }
+        
+        Task {
+            isLoadingBooksSectionTwo = true
+            sectionTwoBookResults = try await getNYTBooks(for: sectionTwoListName, limit: 3)
+            isLoadingBooksSectionTwo = false
+        }
+        
+        Task {
+            isLoadingBooksSectionThree = true
+            sectionThreeBookResults = try await getNYTBooks(for: sectionThreeListName, limit: 3)
+            isLoadingBooksSectionThree = false
+        }
+        
+        Task {
+            isLoadingBooksSectionFour = true
+            sectionFourBookResults = try await getNYTBooks(for: sectionFourListName, limit: 3)
+            isLoadingBooksSectionFour = false
         }
     }
     
@@ -81,17 +117,22 @@ class HomeViewModel: ObservableObject {
         loadingUsers = false
     }
     
-    func getUserBooks() async throws {
-        do {
-            let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-        } catch {
-            throw error
-        }
-    }
+//    func getUserBooks() async throws {
+//        do {
+//            let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+//        } catch {
+//            throw error
+//        }
+//    }
     
-    func getPopularBooks() async throws {
+    func getNYTBooks(for listName: String, limit: Int = 0) async throws -> [Book] {
         do {
-            let isbns = try await BookDataService.shared.fetchPopularBooksISBNs(for: "mass-market-paperback")
+            var isbns = try await BookDataService.shared.fetchPopularBooksISBNs(for: listName)
+            
+            if limit > 0 && limit < isbns.count {
+                isbns = Array(isbns[0..<limit])
+            }
+            
             var books: [Book] = []
             try await withThrowingTaskGroup(of: Book?.self) { group in
                 for isbn in isbns {
@@ -107,7 +148,7 @@ class HomeViewModel: ObservableObject {
                     }
                 }
             }
-            popularBookResults = books
+            return books
         } catch {
             throw error
         }

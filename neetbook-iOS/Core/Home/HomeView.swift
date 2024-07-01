@@ -43,24 +43,6 @@ struct HomeView: View {
                         }
                     }
                     Spacer()
-//                    Text("Neetbook")
-//                         .foregroundColor(.primary)
-//                         .fontWeight(.bold)
-//                    VStack(alignment: .leading) {
-//                        Text("Neetbook")
-//                             .foregroundColor(.primary)
-//                             .fontWeight(.bold)
-//                        
-//                        Text("Hello,")
-//                            .foregroundColor(.secondary)
-//                            .font(.system(size: 20))
-//                        if let displayname = userStateViewModel.user?.displayname {
-//                            Text(displayname)
-//                                .foregroundColor(.primary)
-//                                .bold()
-//                                .font(.system(size: 24))
-//                        }
-//                    }
                     Spacer()
                     NavigationLink {
                         NotificationView()
@@ -143,7 +125,8 @@ struct HomeView: View {
 //                                            .foregroundColor(.white)
 //                                            .bold()
 //                                            .padding(8)
-//                                            .background(Capsule().fill(Color.indigo))
+//                                            .background(Capsule().fill(.black))
+//
 //                                    } else {
 //                                        Text(genresList[index])
 //                                            .foregroundStyle(.primary)
@@ -155,11 +138,40 @@ struct HomeView: View {
 //                    }
 //                    .padding(.bottom, 20)
 //                    .scrollIndicators(.hidden)
-//                    if genresListSelectedIndex == 0 {
-                        HomeContentView(viewModel: viewModel)
-//                    } else {
-//                        GenreContentView(viewModel: genreViewModel)
-//                    }
+                    
+                    if genresListSelectedIndex == 0 {
+                        
+                        Text("Whats popular ✨")
+                            .font(.subheadline)
+                            .bold()
+                        
+                        HomeContentView(name: viewModel.sectionOneFriendlyName,
+                                        listName:viewModel.sectionOneListName,
+                                        books: viewModel.sectionOneBookResults,
+                                        isLoading: $viewModel.isLoadingBooksSectionOne,
+                                        homeViewModel: viewModel)
+                        
+                        HomeContentView(name: viewModel.sectionTwoFriendlyName,
+                                        listName:viewModel.sectionTwoListName,
+                                        books: viewModel.sectionTwoBookResults,
+                                        isLoading: $viewModel.isLoadingBooksSectionTwo,
+                                        homeViewModel: viewModel)
+                        
+                        HomeContentView(name: viewModel.sectionThreeFriendlyName,
+                                        listName:viewModel.sectionThreeListName,
+                                        books: viewModel.sectionThreeBookResults,
+                                        isLoading: $viewModel.isLoadingBooksSectionThree,
+                                        homeViewModel: viewModel)
+                        
+                        HomeContentView(name: viewModel.sectionFourFriendlyName,
+                                        listName:viewModel.sectionFourListName,
+                                        books: viewModel.sectionFourBookResults,
+                                        isLoading: $viewModel.isLoadingBooksSectionFour,
+                                        homeViewModel: viewModel)
+                        
+                    } else {
+                        GenreContentView(genreViewModel: GenreContentViewModel(genre: genresList[genresListSelectedIndex]))                    }
+
                 } else {
                     Text("Search")
                         .foregroundColor(.primary)
@@ -183,9 +195,10 @@ struct HomeView: View {
                                                 if let coverPhoto = viewModel.searchBookResults[value].coverPhoto{
                                                     Image(uiImage: coverPhoto)
                                                         .resizable()
-                                                        .frame(width: 90, height: 120)
+                                                        .frame(width: 80, height: 120)
                                                         .cornerRadius(5)
                                                 }
+                                                
                                                 VStack(alignment: .leading) {
                                                     Text(viewModel.searchBookResults[value].title)
                                                         .font(.headline)
@@ -196,10 +209,32 @@ struct HomeView: View {
                                                         .font(.subheadline)
                                                         .foregroundColor(.primary.opacity(0.5))
                                                         .multilineTextAlignment(.leading)
+                                                    
+                                                    Text(viewModel.searchBookResults[value].publishedYear)
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.primary.opacity(0.5))
+                                                        .multilineTextAlignment(.leading)
+                                                    
+                                                    HStack {
+                                                        if viewModel.searchBookResults[value].pages > 0 {
+                                                            Image(systemName: "doc.plaintext")
+                                                                .frame(width: 10, height: 10)
+                                                                .foregroundStyle(.secondary)
+                                                            
+                                                            Text("\(viewModel.searchBookResults[value].pages)")
+                                                                .font(.subheadline)
+                                                                .foregroundColor(.primary.opacity(0.5))
+                                                                .multilineTextAlignment(.leading)
+                                                        }
+                                                    }
+                                                    .padding(.leading, 4)
+                                                    Spacer()
                                                 }
+                                                .padding(.top, 8)
+                                                
                                                 Spacer()
                                             }
-                                            .padding()
+                                            .padding(.horizontal, 5)
                                             .frame(height: 140)
                                             .frame(maxWidth: .infinity)
                                             .cornerRadius(10)

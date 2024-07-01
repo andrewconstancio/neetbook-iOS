@@ -56,7 +56,6 @@ struct ResizableTF: UIViewRepresentable {
             if self.parent.text == "" {
                 textView.text = "Enter Comment"
                 textView.textColor = .gray
-                textView.textColor = .black
             }
         }
     }

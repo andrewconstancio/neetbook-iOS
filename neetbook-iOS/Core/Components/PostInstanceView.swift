@@ -24,6 +24,7 @@ struct PostInstanceView: View {
             HStack {
                 NavigationLink {
                     TwitterProfileView(userId: post.user.userId)
+                        .environmentObject(userStateViewModel)
                 } label: {
                     Image(uiImage: post.profilePicture)
                         .resizable()
@@ -54,6 +55,7 @@ struct PostInstanceView: View {
                         Text(post.title)
                             .foregroundColor(.primary)
                             .font(.system(size: 14))
+                        
                     }
                 }
                 Spacer()
@@ -66,8 +68,8 @@ struct PostInstanceView: View {
                     if let image = post.book.coverPhoto {
                         Image(uiImage: image)
                             .resizable()
-                            .frame(width: 80, height: 120)
-                            .cornerRadius(5)
+                            .frame(width: 90, height: 140)
+//                            .cornerRadius(5)
                     }
                 }
                 NavigationLink {
@@ -83,6 +85,11 @@ struct PostInstanceView: View {
                         Text(post.book.author)
                             .font(.system(size: 13))
                             .foregroundColor(.secondary)
+                        if post.content != "" {
+                            Text("\"\(post.content)\"")
+                                .foregroundColor(.primary)
+                                .font(.system(size: 14))
+                        }
                         Spacer()
                     }
                 }
@@ -92,14 +99,17 @@ struct PostInstanceView: View {
             // book action stack
             HStack {
                 Button {
+                    if !viewModel.isLikedByUser {
+                        let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                        impactMed.impactOccurred()
+                    }
                     Task {
                         await viewModel.updateLikes(for: post)
                     }
                 } label: {
-                    Image(systemName: viewModel.isLikedByUser ? "heart.fill" : "heart")
-                        .resizable()
-                        .frame(width: 25, height: 20)
-                        .foregroundColor(viewModel.isLikedByUser ? .red : colorScheme == .dark ? .white : .black)
+                    LikeButton(isLiked: $viewModel.isLikedByUser)
+                        .frame(width: 20, height: 20)
+                    
                 }
                 if viewModel.likes > 0 {
                     Text("\(viewModel.likes)")
@@ -112,8 +122,11 @@ struct PostInstanceView: View {
                     .font(.system(size: 14))
                     .foregroundStyle(.primary)
             }
+            .padding(.leading, 4)
             
         }
+        .frame(maxWidth: .infinity)
+        .frame(height: 200)
         .onAppear {
             Task {
                 await viewModel.fetchLikes(for: post.documentID)

@@ -9,6 +9,7 @@ import SwiftUI
 
 @MainActor
 final class BookViewModel: ObservableObject {
+    private(set) var currentBookId: String = ""
     private(set) var currentUserId: String = ""
     private(set) var currentUser: DBUser? = nil
     @Published var bookInfoIsLoading: Bool = false
@@ -20,79 +21,38 @@ final class BookViewModel: ObservableObject {
     @Published var isLoadingComments: Bool = false
     @Published var showCommentSection: Bool = false
     @Published private(set) var userBookshelves: [Bookshelf] = []
-    @Published private(set) var bookStats: BookActionStats? = nil
     @Published var bookshelvesAdded: [String] = []
+    @Published var markSelected: String = ""
     
-    init(bookId: String) {
-        Task {
-            bookInfoIsLoading = true
-            currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            try await getBookShelves()
-            try await getBookshelvesAddedTo(bookId: bookId)
-//            try await getUserBookAction(bookId: bookId)
-            try await checkIfUserAddedBookToFavoritesList(bookId: bookId)
-            try await getBookStats(bookId: bookId)
-            currentUser = try await UserManager.shared.getUser(userId: currentUserId)
-            bookInfoIsLoading = false
-        }
+    var commentValid: Bool {
+        return !userNewComment.isEmpty
     }
-        
-//    func getUserBookAction(bookId: String) async throws {
-//        do {
-//            let action = try await BookUserActionManager.shared.getUserBookAction(bookId: bookId, userId: currentUserId)
-//            
-//            DispatchQueue.main.async {
-//                switch action {
-//                case "Reading":
-//                    self.savedActionToDB = true
-//                    self.userActions = .reading
-//                case "Want To Read":
-//                    self.savedActionToDB = true
-//                    self.userActions = .wantToRead
-//                case "Read":
-//                    self.savedActionToDB = true
-//                    self.userActions = .read
-//                default:
-//                    self.userActions = nil
-//                }
-//            }
-//        } catch {
-//            throw error
+    
+//    init(bookId: String) {
+//        Task {
+//            bookInfoIsLoading = true
+//            currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+//            try await getBookShelves()
+//            try await getBookshelvesAddedTo(bookId: bookId)
+////            try await getUserBookAction(bookId: bookId)
+//            try await checkIfUserAddedBookToFavoritesList(bookId: bookId)
+//            try await getBookStats(bookId: bookId)
+//            currentUser = try await UserManager.shared.getUser(userId: currentUserId)
+//            bookInfoIsLoading = false
 //        }
 //    }
     
-//    func saveUserBookAction(bookId: String, action: ReadingActions, pageCount: Int = 0) async throws {
-//        do {
-//            var actionUser = ""
-//            switch(action) {
-//            case .reading:
-//                actionUser = "Reading"
-//            case .wantToRead:
-//                actionUser = "Want To Read"
-//            case .read:
-//                actionUser = "Read"
-//            case .removeAction:
-//                actionUser = "Remove"
-//            }
-//            
-//            if actionUser == "Remove" {
-//                DispatchQueue.main.async {
-//                    self.userActions = nil
-//                }
-//                try await BookUserActionManager.shared.removeUserBookAction(bookId: bookId, userId: currentUserId)
-//                self.savedActionToDB = false
-//            } else {
-//                DispatchQueue.main.async {
-//                    self.userActions = action
-//                }
-//                try await BookUserActionManager.shared.removeAndSetBookAction(bookId: bookId, userId: currentUserId, action: actionUser)
-//                self.savedActionToDB = true
-//            }
-//            
-//        } catch {
-//            throw error
-//        }
-//    }
+    func initBookDetails(bookId: String) async throws {
+        currentBookId = bookId
+        bookInfoIsLoading = true
+        currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+        try await getMarkedBookTypeForUser()
+        try await getBookShelves()
+        try await getBookshelvesAddedTo(bookId: bookId)
+        try await checkIfUserAddedBookToFavoritesList(bookId: bookId)
+        currentUser = try await UserManager.shared.getUser(userId: currentUserId)
+        bookInfoIsLoading = false
+    }
     
     func addUserBookComment(bookId: String) async throws {
         let newComment = try? await BookUserCommentManager.shared.addUserBookComment(bookId: bookId, userId: currentUserId, comment: userNewComment)
@@ -117,10 +77,6 @@ final class BookViewModel: ObservableObject {
     
     func checkIfUserAddedBookToFavoritesList(bookId: String) async throws {
         savedToFavorites = try await BookUserManager.shared.checkIfBookAddedToFavorites(userId: currentUserId, bookId: bookId)
-    }
-    
-    func getBookStats(bookId: String) async throws {
-        bookStats = try await BookUserActionManager.shared.getBookActionStats(bookId: bookId)
     }
     
     func reportComment(bookId: String, commentDocID: String, comment: String) async throws {
@@ -155,5 +111,20 @@ final class BookViewModel: ObservableObject {
         
         try await BookUserActionManager.shared.addBookToBookshelves(bookId: bookId, userId: currentUserId, bookshelvesIds: addedToBookshelvesIds)
         try await BookUserActionManager.shared.removeBookToBookshelves(bookId: bookId, userId: currentUserId, bookshelvesIds: removedFromBookshelvesIds)
+    }
+    
+    func getMarkedBookTypeForUser() async throws {
+        markSelected = try await BookUserActionManager.shared.getMarkedBookTypeForUser(bookId: currentBookId, userId: currentUserId)
+    }
+    
+    func saveRemoveToMarkedBooks() async throws {
+        if markSelected != "" {
+            try await BookUserActionManager.shared.saveToMarkedBooks(bookId: currentBookId,
+                                                                     userId: currentUserId,
+                                                                     markType: markSelected)
+        } else {
+            try await BookUserActionManager.shared.removeMarkedBook(bookId: currentBookId,
+                                                                    userId: currentUserId)
+        }
     }
 }

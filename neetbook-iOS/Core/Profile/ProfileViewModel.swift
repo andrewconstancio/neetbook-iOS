@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 @MainActor
 final class ProfileViewModel: ObservableObject {
@@ -21,6 +22,12 @@ final class ProfileViewModel: ObservableObject {
     @Published var followerCount = 0
     @Published var userUpdated: Bool = false
     @Published var followingStatus: FollowingStatus = .notFollowing
+    @Published var activityCount: Int = 0
+    @Published var finishedBooks: [MarkedBook] = []
+    
+    var activitiesLastDocument: DocumentSnapshot? = nil
+    
+    private var bookUserActionManager = BookUserActionManager()
     
     init(userId: String) {
         Task {
@@ -71,9 +78,11 @@ final class ProfileViewModel: ObservableObject {
     
     func getUserActivity(userId: String) async throws {
         do {
-            isLoadingActivity = true
-            activity = try await UserFeedManager.shared.getUserActivty(userId: userId)
-            isLoadingActivity = false
+            let (activities, lastDocument) = try await UserFeedManager.shared.getUserActivities(userId: userId, lastDocument: activitiesLastDocument)
+            
+            activity.append(contentsOf: activities)
+//            self.activityCount = self.activity.count
+            activitiesLastDocument = lastDocument
         } catch {
             throw error
         }
@@ -139,6 +148,12 @@ final class ProfileViewModel: ObservableObject {
             followingStatus = .notFollowing
         } catch {
             throw error
+        }
+    }
+    
+    func getFinishedBooks() async throws {
+        if let userId = user?.userId {
+            finishedBooks = try await bookUserActionManager.getMarkedBookTypesForUser(userId: userId, markedType: .finished)
         }
     }
 }

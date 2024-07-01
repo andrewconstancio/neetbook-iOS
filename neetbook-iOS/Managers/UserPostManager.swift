@@ -54,6 +54,11 @@ final class UserPostManager {
         }
     }
     
+    func getPost(documentID: String) async throws -> PostFeedInstance? {
+        let document = try await postCollection.document(documentID).getDocument()
+        return try await UserFeedManager.shared.buildPostInstance(result: document) ?? nil
+    }
+    
     func getPostLikesCount(documentId: String) async throws -> Int {
         let querySnapshot = try await likedPostCollection
             .whereField("post_document_id", isEqualTo: documentId)
@@ -200,7 +205,7 @@ final class UserPostManager {
         )
         
         try await UserInteractions.shared.addToNotificationComment(postDocumentId: documentId,
-                                                                    commentDocumentId: doc.documentID,
+                                                                    commentDocumentId:        doc.documentID,
                                                                     comment: commentData,
                                                                     currentUserId: currentUserId,
                                                                     userId: posterUserId)

@@ -47,7 +47,7 @@ struct LibraryBookListView: View {
                                 Text("Have any books that you want to save for later?")
                                     .foregroundColor(.primary.opacity(0.7))
                                     .fontWeight(.bold)
-                            case .read:
+                            case .finished:
                                 Text("Finshed book go here!")
                                     .foregroundColor(.primary.opacity(0.7))
                                     .fontWeight(.bold)

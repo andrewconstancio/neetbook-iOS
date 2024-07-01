@@ -61,15 +61,18 @@ struct PostView: View {
                     .cornerRadius(15)
             
                 Button {
-                    Task {
-                        try? await viewModel.addComment(posterUserId: post.user.userId, documentId: post.documentID)
-                        hideKeyboard()
+                    if viewModel.commentValid {
+                        Task {
+                            try? await viewModel.addComment(posterUserId: post.user.userId, documentId: post.documentID)
+                            hideKeyboard()
+                        }
                     }
                 } label: {
-                    Image(systemName: "paperplane.fill")
-                        .foregroundColor(Color.appColorPurple)
-                        .frame(width: 10, height: 10)
-                        .padding(5)
+                    Text("Send")
+                        .font(.system(size: 14))
+                        .bold()
+                        .foregroundStyle(viewModel.commentValid ? colorScheme == .dark ? .white : .black : .secondary)
+                        .padding(.horizontal, 3)
                 }
             }
             .padding()

@@ -14,12 +14,16 @@ struct Bookshelf: Identifiable, Codable {
     var name: String
     var imageUrl: String
     var dateCreated: Date
+    var count: Int?
+    var isPublic: Bool?
     
-    init(name: String, imageUrl: String) {
+    init(name: String, imageUrl: String, count: Int = 0, isPublic: Bool = true) {
         self.id = UUID().uuidString
         self.name = name
         self.imageUrl = imageUrl
         self.dateCreated = Date()
+        self.count = count
+        self.isPublic = isPublic
     }
     
     mutating func setName(name: String) {
@@ -28,6 +32,14 @@ struct Bookshelf: Identifiable, Codable {
     
     mutating func setImageUrl(url: String) {
         self.imageUrl = url
+    }
+    
+    mutating func setCount(count: Int) {
+        self.count = count
+    }
+    
+    mutating func setIsPublic(isPublic: Bool) {
+        self.isPublic = isPublic
     }
 }
 

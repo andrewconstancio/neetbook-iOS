@@ -91,12 +91,6 @@ struct AddToFavoritesView: View {
         .background(Color.white)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: NavBackButtonView(color: .primary, dismiss: self.dismiss))
-        .onAppear {
-            Task {
-                try? await viewModel.getFavoriteBooks(toSaveBook: book)
-                try? await viewModel.saveFavoriteBooks()
-            }
-        }
     }
     
     func move(indexSet: IndexSet, newOffset: Int) {

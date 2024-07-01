@@ -15,7 +15,7 @@ func timeAgoDisplay() -> String {
   let day = 24 * hour
   let week = 7 * day
   if secondsAgo < minute {
-      return "\(secondsAgo)s"
+      return "a few seconds ago"
   }
   
   else if secondsAgo < hour {

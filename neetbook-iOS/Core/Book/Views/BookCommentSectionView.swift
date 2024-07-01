@@ -12,7 +12,6 @@ import Combine
 
 struct BookCommentSectionView: View {
     @ObservedObject var viewModel: BookViewModel
-    @Environment(\.dismiss) private var dismiss
     let book: Book
     @State private var height: CGFloat = 30
     @State private var keyboardHeight: CGFloat = 0
@@ -34,6 +33,14 @@ struct BookCommentSectionView: View {
                     if(viewModel.bookComments.count > 0) {
                         ForEach(0..<viewModel.bookComments.count, id: \.self) { index in
                             CommentView(bookViewModel: viewModel, bookId: book.bookId, currentUserId: viewModel.currentUserId, comment: viewModel.bookComments[index])
+                        }
+                    } else {
+                        HStack {
+                            Spacer()
+                            Text("No Comments...yet!")
+                                .bold()
+                                .foregroundStyle(.secondary)
+                            Spacer()
                         }
                     }
                 }

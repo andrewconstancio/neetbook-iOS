@@ -7,10 +7,15 @@
 
 import Foundation
 
+struct BookOnShelf: Identifiable {
+    let id = UUID().uuidString
+    let book: Book
+    let dateAdded: Date
+}
 
 @MainActor
 class BookshelfViewModel: ObservableObject {
-    @Published var books: [Book] = []
+    @Published var books: [BookOnShelf] = []
     @Published var isLoadingBooks: Bool = false
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
@@ -24,10 +29,6 @@ class BookshelfViewModel: ObservableObject {
             try await getBooks()
             isLoadingBooks = false
         }
-    }
-    
-    func getBookshelfInfo(bookshelfId: String) async throws {
-        
     }
     
     func getBooks() async throws {

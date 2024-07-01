@@ -120,6 +120,8 @@ final class BookUserCommentManager {
                         return bookComment
                     }
                     
+                    print("It got here")
+                    
                     return BookComment(
                         documentId: document.documentID,
                         userId: "1234",

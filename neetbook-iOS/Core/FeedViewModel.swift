@@ -29,7 +29,10 @@ class FeedViewModel: ObservableObject {
         do {
             let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
             let (postReturn, lastDocumentReturn) = try await UserFeedManager.shared.getUserHomeFeed(userId: userId, lastDocument: lastDocument)
-            
+            for post in postReturn {
+                print(post.documentID)
+                print(post.dateEvent)
+            }
             DispatchQueue.main.async {
                 self.post.append(contentsOf: postReturn)
                 self.lastDocument = lastDocumentReturn

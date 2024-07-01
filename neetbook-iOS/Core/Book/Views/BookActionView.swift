@@ -22,7 +22,7 @@ struct BookshelfButton: ViewModifier {
                 .frame(maxWidth: .infinity)
                 .padding(8)
                 .background(viewModel.bookshelvesAdded.contains(bookshelfAddedId) ? Color.appColorPurple : .clear)
-                .cornerRadius(50)
+                .cornerRadius(10)
         } else {
             content
                 .bold()
@@ -31,7 +31,7 @@ struct BookshelfButton: ViewModifier {
                 .frame(maxWidth: .infinity)
                 .padding(8)
                 .background(viewModel.bookshelvesAdded.contains(bookshelfAddedId) ? Color.appColorPurple : .white)
-                .cornerRadius(50)
+                .cornerRadius(10)
         }
     }
 }
@@ -131,7 +131,11 @@ extension BookActionView {
             let impactMed = UIImpactFeedbackGenerator(style: .medium)
             impactMed.impactOccurred()
             Task {
-                try? await viewModel.saveToBookshelves(bookId: book.bookId)
+                do {
+                    try await viewModel.saveToBookshelves(bookId: book.bookId)
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
             showBookActionSheet = false
         } label: {
@@ -140,7 +144,7 @@ extension BookActionView {
                 .foregroundColor(.white)
                 .frame(width: 300, height: 60)
                 .background(Color.appColorOrange)
-                .cornerRadius(50)
+                .cornerRadius(10)
         }
     }
 }

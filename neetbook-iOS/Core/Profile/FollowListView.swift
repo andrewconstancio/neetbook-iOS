@@ -10,10 +10,17 @@ import SwiftfulLoadingIndicators
 
 struct FollowListView: View {
     @StateObject private var viewModel = FollowListViewModel()
+    
+    @Environment(\.colorScheme) var colorScheme
+    
     let userId: String
+    
     let categories: [String] = ["Following", "Followers"]
+    
     @State var backgroundOffset: CGFloat = 0
+    
     @State var currentIndex = 0
+    
     @Namespace private var namespace2
     
     var body: some View {
@@ -28,8 +35,16 @@ struct FollowListView: View {
                                 .frame(width: 35, height: 2)
                                 .offset(y: 10)
                         }
-                        Text(categories[index])
-                            .foregroundColor(currentIndex == index ? .black : .black.opacity(0.5))
+                        
+                        if colorScheme == .dark {
+                            Text(categories[index])
+                                .bold()
+                                .foregroundColor(currentIndex == index ? .white : .white.opacity(0.5))
+                        } else {
+                            Text(categories[index])
+                                .bold()
+                                .foregroundColor(currentIndex == index ? .black : .black.opacity(0.5))
+                        }
                     }
                     .frame(width: UIScreen.main.bounds.width / 3, height: 55)
                     .onTapGesture {
@@ -113,10 +128,10 @@ extension FollowListView {
                         VStack(alignment: .leading) {
                             Text("\( viewModel.following[index].displayName)")
                                 .font(.headline)
-                                .foregroundColor(.black)
+                                .foregroundColor(.primary)
                             Text("\( viewModel.following[index].username)")
                                 .font(.subheadline)
-                                .foregroundColor(.black)
+                                .foregroundColor(.primary)
                         }
                         Spacer()
                         if  viewModel.following[index].followingStatus == .following {

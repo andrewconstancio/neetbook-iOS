@@ -27,6 +27,7 @@ class PostInstanceViewModel: ObservableObject {
     
     func updateLikes(for post: PostFeedInstance) async {
         do {
+            print(isLikedByUser )
             if isLikedByUser {
                 isLikedByUser = false
                 likes -= 1
@@ -37,6 +38,7 @@ class PostInstanceViewModel: ObservableObject {
                 likes += 1
                 try await UserPostManager.shared.likePost(documentId: post.documentID)
             }
+            print(likes)
         } catch {
             showError = true
             errorMessage = error.localizedDescription

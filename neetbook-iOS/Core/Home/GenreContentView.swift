@@ -9,12 +9,14 @@ import SwiftUI
 
 struct GenreContentView: View {
     
-    @ObservedObject var viewModel: GenreContentViewModel
+    let genreViewModel: GenreContentViewModel
+    
+//    let genre: String
     
     var body: some View {
         VStack {
-            Text("\(viewModel.genre)")
-                .foregroundColor(.primary)
+//            Text("\(genre)")
+//                .foregroundColor(.primary)
         }
     }
 }

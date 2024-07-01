@@ -9,17 +9,29 @@ import Foundation
 
 @MainActor
 final class LibraryViewModel: ObservableObject {
-    @Published private(set) var booksReading: [Book] = []
-    @Published private(set) var booksWantToRead: [Book] = []
-    @Published private(set) var booksRead: [Book] = []
     @Published private(set) var shelves: [Bookshelf] = []
     @Published var isLoading: Bool = false
+    @Published var readingCount: Int = 0
+    @Published var wantToReadCount: Int = 0
+    @Published var finishedCount: Int = 0
+    
+    private var bookUserActionManager = BookUserActionManager()
     
     
     func getBookshelves() async throws {
         let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
         shelves = try await UserManager.shared.getUserBookShelves(userId: userId)
     }
+    
+    func getMarkedBooksCount() async throws {
+        let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+        readingCount = try await bookUserActionManager.getMarkBooksCounts(userId: userId, markedType: BookListType.reading)
+        
+        wantToReadCount = try await bookUserActionManager.getMarkBooksCounts(userId: userId, markedType: BookListType.wantToRead)
+        
+        finishedCount = try await bookUserActionManager.getMarkBooksCounts(userId: userId, markedType: BookListType.finished)
+    }
+    
     
 //    func getUserBooks() async throws {
 //        do {

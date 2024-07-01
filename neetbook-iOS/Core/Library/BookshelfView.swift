@@ -8,6 +8,7 @@
 import SwiftUI
 import PopupView
 import SwiftfulLoadingIndicators
+import Shimmer
 
 struct BookshelfView: View {
     let bookshelf: Bookshelf
@@ -28,11 +29,44 @@ struct BookshelfView: View {
         VStack(spacing: 20) {
             if viewModel.isLoadingBooks {
                 VStack {
-                    Spacer()
-                    LoadingIndicator(animation: .circleTrim, color: .primary, speed: .fast)
-                    Spacer()
+                    ForEach(0...(bookshelf.count ?? 1), id: \.self) { _ in
+                        HStack {
+                            Rectangle()
+                                .frame(width: 80, height: 120)
+                                .cornerRadius(5)
+                    
+                            VStack(alignment: .leading, spacing: 10) {
+                                
+                                Rectangle()
+                                    .frame(width: 200, height: 20)
+                                    .cornerRadius(5)
+                                
+                                Rectangle()
+                                    .frame(width: 150, height: 20)
+                                    .cornerRadius(5)
+                                
+                                Rectangle()
+                                    .frame(width: 20, height: 20)
+                                    .cornerRadius(5)
+                                
+                                Rectangle()
+                                    .frame(width: 20, height: 20)
+                                    .cornerRadius(5)
+                                
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .frame(height: 140)
+                        .frame(maxWidth: .infinity)
+                        .cornerRadius(10)
+                        
+                    }
                 }
-                .frame(maxWidth: .infinity)
+                .redacted(reason: .placeholder)
+                .shimmering()
+                .opacity(0.5)
+                .padding()
             } else {
                 if viewModel.books.isEmpty {
                     VStack(spacing: 20) {
@@ -49,12 +83,11 @@ struct BookshelfView: View {
                     .frame(maxWidth: .infinity)
                 } else {
                     ScrollView {
-                      LazyVGrid(columns: Array(repeating: GridItem(), count: 3)) {
-                          ForEach(viewModel.books) { book in
-                              BookshelfBookView(book: book)
-                          }
-                      }
+                        ForEach(viewModel.books) { book in
+                            BookshelfBookView(book: book)
+                        }
                     }
+                    .scrollIndicators(.hidden)
                     .padding(.top, 20)
                 }
             }
@@ -71,7 +104,7 @@ struct BookshelfView: View {
         }
         .popup(isPresented: $showEditBookshelfPopup) {
             AddBookshelfView(showNewBookshelfPopup: $showEditBookshelfPopup, bookshelf: bookshelf)
-//                .environmentObject(viewModel)
+                .environmentObject(viewModel)
         } customize: {
             $0
                 .dragToDismiss(true)
@@ -147,8 +180,44 @@ struct BookshelfView: View {
         .background(Color("Background"))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: NavBackButtonView(color: colorScheme == .dark ? .white  : .black, dismiss: self.dismiss))
-        .navigationTitle(bookshelf.name)
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                HStack {
+                    AsyncImage(url: URL(string: bookshelf.imageUrl)) { image in
+                        image
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                            .scaledToFit()
+                            .clipShape(Circle())
+                        
+                    } placeholder: {
+                    }
+                    Text(bookshelf.name)
+                        .bold()
+                        .offset(x: 2)
+                    
+                    if let count = bookshelf.count {
+                        Text("(\(count))")
+                            .foregroundStyle(.secondary)
+                            .offset(x: 2)
+                    } else {
+                        Text("(0)")
+                            .foregroundStyle(.secondary)
+                            .offset(x: 2)
+                    }
+                    
+                    if let privateBookshelf = bookshelf.isPublic {
+                        if privateBookshelf == false {
+                            Image(systemName: "lock")
+                                .foregroundStyle(Color.appColorOrange.opacity(0.7))
+                                .font(.system(size: 16))
+                                .bold()
+                                .offset(x: 2)
+                        }
+                    }
+                }
+            }
+            
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     showEditBookshelf.toggle()
@@ -162,6 +231,6 @@ struct BookshelfView: View {
     }
 }
 
-//#Preview {
-//    BookShelfView()
-//}
+#Preview {
+    BookshelfView(bookshelf: Bookshelf(name: "test", imageUrl: ""))
+}

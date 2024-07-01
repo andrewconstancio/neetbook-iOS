@@ -69,7 +69,6 @@ struct AddBookshelfView: View {
                                     .frame(width: 70, height: 120)
                                     .cornerRadius(3)
                              }
-
                         } else {
                             ZStack {
                                  Image(systemName: "photo")
@@ -86,6 +85,13 @@ struct AddBookshelfView: View {
                         }
                     }
                 }
+                .padding(.bottom, 10)
+                
+                Toggle(isOn: $viewModel.isPublic) {
+                    Text("Public")
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.bottom, 50)
                 
                 Button {
                     let impactMed = UIImpactFeedbackGenerator(style: .medium)

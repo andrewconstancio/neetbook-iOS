@@ -15,6 +15,8 @@ struct ContentView: View {
     
     @State private var tabSelection: TabBarItem = .home
     
+    @State private var selectedTab = 0
+    
     var body: some View {
         ZStack {
             if userStateViewModel.userState == .accountNotMade {
@@ -26,30 +28,37 @@ struct ContentView: View {
 //                Spacer()
             }  else {
                 NavigationStack {
-                    TabView {
+                    TabView(selection: $selectedTab) {
                         HomeView()
                             .environmentObject(userStateViewModel)
                             .tabItem {
                                 Label("", systemImage: "house")
                             }
-                            .badge(userStateViewModel.pendingFriendCount)
+                            .tag(0)
+//                            .badge(userStateViewModel.pendingFriendCount)
                         
                         FeedView()
                             .environmentObject(userStateViewModel)
                             .tabItem {
                                 Label("", systemImage: "person.2")
                             }
+                            .tag(1)
                         
                         LibraryView()
                             .environmentObject(userStateViewModel)
                             .tabItem {
                                 Label("", systemImage: "books.vertical")
                             }
+                            .tag(3)
                     }
                     .onAppear {
                         let tabBarAppearance = UITabBarAppearance()
                         tabBarAppearance.configureWithDefaultBackground()
                         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+                    }
+                    .onChange(of: selectedTab) { newValue in
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
                     }
                 }
             }

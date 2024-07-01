@@ -40,6 +40,8 @@ final class UserFeedManager {
     private let postCollection = Firestore.firestore().collection("UserPost")
     private let followingListCollection = Firestore.firestore().collection("UserFollowList")
     private let actionCollection = Firestore.firestore().collection("BookActions")
+    private let userBookshelvesAddedTo = Firestore.firestore().collection("userBookshelvesAddedTo")
+    private let userMarkedBooks = Firestore.firestore().collection("userMarkedBooks")
     
     
     func buildPostInstance(result: DocumentSnapshot) async throws -> PostFeedInstance? {
@@ -51,8 +53,9 @@ final class UserFeedManager {
         
         let currentUserLikedPost = try await UserPostManager.shared.checkPostLiked(documentId: documentId)
         
-        if collection == "userBookshelvesAddedTo" {
-            let snapshot = self.actionCollection
+        switch(collection) {
+        case "userBookshelvesAddedTo":
+            let snapshot = self.userBookshelvesAddedTo
                         .document(documentId)
             
             let data = try await snapshot.getDocument().data()
@@ -60,7 +63,7 @@ final class UserFeedManager {
             let bookData = try await BookDataService.shared.fetchBookInfo(bookId: bookId)
             var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
             let userData = try await UserManager.shared.getUser(userId: userId)
-
+    
             guard let user = userData else {
                 return nil
             }
@@ -83,10 +86,8 @@ final class UserFeedManager {
                 book: book,
                 dateEvent: dateCreated,
                 currentUserLikedPost: currentUserLikedPost
-            )                      
-        }
-        
-        if collection == "BookComments" {
+            )
+        case "BookComments":
             let snapshot = self.commentsCollecion
                         .document(bookId)
                         .collection("comments")
@@ -112,7 +113,7 @@ final class UserFeedManager {
             guard let book = bookData else {  return nil }
 
             return PostFeedInstance(
-                title: "Left a note",
+                title: "Left a note 📝",
                 content: comment,
                 documentID: result.documentID,
                 user: user,
@@ -121,8 +122,40 @@ final class UserFeedManager {
                 dateEvent: dateCreated,
                 currentUserLikedPost: currentUserLikedPost
             )
+        case "userMarkedBooks":
+            let snapshot = userMarkedBooks.document(documentId)
+            
+            let data = try await snapshot.getDocument().data()
+            
+            let dateCreated = (data?["date_created"] as? Timestamp)?.dateValue() ?? Date()
+            let bookData = try await BookDataService.shared.fetchBookInfo(bookId: bookId)
+            var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
+            let userData = try await UserManager.shared.getUser(userId: userId)
+            let markType = data?["mark_type"] as? String ?? ""
+
+            guard let user = userData else {
+                return nil
+            }
+
+            if let photoUrl = user.photoUrl {
+                profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
+            }
+
+            guard let book = bookData else {  return nil }
+
+            return PostFeedInstance(
+                title: markType.capitalizeFirstLetter() + "!" + " ✅",
+                content: "",
+                documentID: result.documentID,
+                user: user,
+                profilePicture: profileImage,
+                book: book,
+                dateEvent: dateCreated,
+                currentUserLikedPost: currentUserLikedPost
+            )
+        default:
+            return nil
         }
-        return nil
     }
     
     func getUserHomeFeed(userId: String, lastDocument: DocumentSnapshot?) async throws -> ([PostFeedInstance], DocumentSnapshot?) {
@@ -142,19 +175,21 @@ final class UserFeedManager {
                 var actionQ: Query
                 if let lastDocument {
                     actionQ = postCollection
-                        .order(by: "date_created", descending: true)
                         .whereField("user_id", in: userIdList)
                         .limit(to: 8)
+                        .order(by: "date_created", descending: true)
                         .start(afterDocument: lastDocument)
                 } else {
                     actionQ = postCollection
-                        .order(by: "date_created", descending: true)
                         .whereField("user_id", in: userIdList)
+                        .order(by: "date_created", descending: true)
                         .limit(to: 8)
                 }
                 
                 let actionResults = try await actionQ.getDocuments()
                 lastDocumentSnapshot = actionResults.documents.last
+                
+//                print("NIRPRJmPAmURPI7tG52v: \(lastDocumentSnapshot?.documentID)")
             
                 try await withThrowingTaskGroup(of: PostFeedInstance?.self) { group in
                     for result in actionResults.documents {
@@ -225,143 +260,46 @@ final class UserFeedManager {
         return posts
     }
     
-    func getUserActivty(userId: String) async throws -> [PostFeedInstance] {
-//        let userIdList = results.documents.compactMap { $0["user_id"] as? String }
-    
-//        var postList: [PostFeedInstance] = []
-//        var lastDocumentSnapshot: DocumentSnapshot? = nil
-//        
-//        if userIdList.count > 0 {
-//            var actionQ: Query
-//            if let lastDocument {
+    func getUserActivities(userId: String, lastDocument: DocumentSnapshot?) async throws -> ([PostFeedInstance], DocumentSnapshot?) {
+        var lastDocumentSnapshot: DocumentSnapshot? = nil
+        var actionQ: Query
         
-            var postList: [PostFeedInstance] = []
-                let actionQ = postCollection
-                    .order(by: "date_created", descending: true)
-                    .whereField("user_id", isEqualTo: userId)
-                    .limit(to: 8)
-//                    .start(afterDocument: lastDocument)
-//            } else {
-//                actionQ = postCollection
-//                    .order(by: "date_created", descending: true)
-//                    .whereField("user_id", in: userIdList)
-//                    .limit(to: 8)
-//            }
-            
-            let actionResults = try await actionQ.getDocuments()
-//            lastDocumentSnapshot = actionResults.documents.last
+        print("last: \(lastDocument?.documentID)")
         
-            try await withThrowingTaskGroup(of: PostFeedInstance?.self) { group in
-                for result in actionResults.documents {
-                    group.addTask {
-                        let data = result.data()
-                        let collection = data["collection"] as? String ?? ""
-                        let userId = data["user_id"] as? String ?? ""
-                        let bookId = data["book_id"] as? String ?? ""
-                        let documentId = data["document_id"] as? String ?? ""
-                        
-                        if collection == "BookActions" {
-                            let snapshot = self.actionCollection
-                                        .document(documentId)
-
-                            
-                            let data = try await snapshot.getDocument().data()
-                            
-                            
-                            let action = data?["action"] as? String ?? ""
-                            let bookId = data?["book_id"] as? String ?? ""
-                            let dateCreated = (data?["date_created"] as? Timestamp)?.dateValue() ?? Date()
-                            let bookData = try await BookDataService.shared.fetchBookInfo(bookId: bookId)
-                            var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-                            let userData = try await UserManager.shared.getUser(userId: userId)
-
-                            guard let user = userData else {
-                                return nil
-                            }
-
-                            if let photoUrl = user.photoUrl {
-                                profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
-                            }
-
-                            var actionText = ""
-                            switch action {
-                            case "Reading":
-                                actionText = "Started reading"
-                            case "Want To Read":
-                                actionText = "Wants to read"
-                            case "Read":
-                                actionText = "Finished!"
-                            default:
-                                actionText = ""
-                            }
-
-                            guard let book = bookData else {  return nil }
-
-                            return PostFeedInstance(
-                                title: actionText,
-                                content: "",
-                                documentID: result.documentID,
-                                user: user,
-                                profilePicture: profileImage,
-                                book: book,
-                                dateEvent: dateCreated,
-                                currentUserLikedPost: false
-                            )
-                                                
-                        }
-                        
-                        if collection == "BookComments" {
-                            let snapshot = self.commentsCollecion
-                                        .document(bookId)
-                                        .collection("comments")
-                                        .document(documentId)
-                            
-                            let data = try await snapshot.getDocument().data()
-                            
-                            
-                            let comment = data?["comment"] as? String ?? ""
-                            let bookId = data?["book_id"] as? String ?? ""
-                            let dateCreated = (data?["date_created"] as? Timestamp)?.dateValue() ?? Date()
-                            let bookData = try await BookDataService.shared.fetchBookInfo(bookId: bookId)
-                            var profileImage: UIImage = UIImage(imageLiteralResourceName: "circle-user-regular")
-                            let userData = try await UserManager.shared.getUser(userId: userId)
-
-                            guard let user = userData else {
-                                return nil
-                            }
-
-                            if let photoUrl = user.photoUrl {
-                                profileImage = try await UserManager.shared.getURLImageAsUIImage(path: photoUrl)
-                            }
-
-                            guard let book = bookData else {  return nil }
-
-                            return PostFeedInstance(
-                                title: "Left a note",
-                                content: comment,
-                                documentID: result.documentID,
-                                user: user,
-                                profilePicture: profileImage,
-                                book: book,
-                                dateEvent: dateCreated,
-                                currentUserLikedPost: false
-                            )
-                        }
-                
-                        
-                        
-                        return nil
-                    }
+        if let lastDocument {
+            actionQ = postCollection
+                .order(by: "date_created", descending: true)
+                .whereField("user_id", isEqualTo: userId)
+                .limit(to: 8)
+                .start(afterDocument: lastDocument)
+        } else {
+            actionQ = postCollection
+                .order(by: "date_created", descending: true)
+                .whereField("user_id", isEqualTo: userId)
+                .limit(to: 8)
+        }
+        
+        var postList: [PostFeedInstance] = []
+        let actionResults = try await actionQ.getDocuments()
+        lastDocumentSnapshot = actionResults.documents.last
+        
+        try await withThrowingTaskGroup(of: PostFeedInstance?.self) { group in
+            for result in actionResults.documents {
+                group.addTask {
+                    let post = try await self.buildPostInstance(result: result)
+                    return post
                 }
-                
-                for try await post in group {
-                    if let post = post {
-                        postList.append(post)
-                    }
-                }
-                
-                postList.sort { $0.dateEvent > $1.dateEvent }
             }
-        return postList
+            
+            for try await post in group {
+                if let post = post {
+                    postList.append(post)
+                }
+            }
+            
+            postList.sort { $0.dateEvent > $1.dateEvent }
+        }
+        
+        return (postList, lastDocumentSnapshot)
     }
 }

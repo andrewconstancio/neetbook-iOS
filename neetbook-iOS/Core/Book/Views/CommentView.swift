@@ -17,6 +17,12 @@ struct CommentView: View {
     let currentUserId: String
     let comment: BookComment
     
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        return formatter
+    }()
+    
     var body: some View {
         HStack(alignment: .top) {
             Image(uiImage: comment.profilePicture)
@@ -25,32 +31,36 @@ struct CommentView: View {
                 .clipShape(Circle())
             
             VStack(alignment: .leading) {
-                Text(comment.displayName)
-                    .font(.headline)
-                    .foregroundColor(.primary.opacity(0.7))
+                HStack(spacing: 10) {
+                    Text(comment.displayName)
+                        .font(.headline)
+                        .foregroundColor(.primary.opacity(0.7))
+                    
+                    Text("\(dateFormatter.string(from: comment.dateCreated))")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                }
+
                 
                 Text(comment.comment ?? "")
                     .font(.subheadline)
                     .foregroundColor(.primary)
             }
+            
             Spacer()
-            if currentUserId == comment.userId {
-                Button {
+ 
+            Button {
+                if currentUserId == comment.userId {
                     showSheetDelete = true
-                } label: {
-                    Image(systemName: "ellipsis")
-                        .foregroundColor(.primary.opacity(0.7))
-                        .rotationEffect(.degrees(90))
-                }
-            } else {
-                Button {
+                } else {
                     showSheetReport = true
-                } label: {
-                    Image(systemName: "ellipsis")
-                        .foregroundColor(.primary.opacity(0.7))
-                        .rotationEffect(.degrees(90))
                 }
+            } label: {
+                Image(systemName: "ellipsis")
+                    .foregroundColor(.primary.opacity(0.7))
+                    .rotationEffect(.degrees(90))
             }
+            .padding(.top, 8)
         }
         .font(.system(size: 14))
         .popup(isPresented: $showSheetDelete) {

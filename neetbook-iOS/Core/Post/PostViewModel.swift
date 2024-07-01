@@ -13,6 +13,10 @@ class PostViewModel: ObservableObject {
     @Published var postComments: [PostComment] = []
     @Published var userNewComment: String = ""
     
+    var commentValid: Bool {
+        return !userNewComment.isEmpty
+    }
+    
     func getComments(documentId: String) async throws {
         postComments = try await UserPostManager.shared.getPostComments(documentId: documentId)
     }

@@ -51,9 +51,9 @@ final class UserManager {
     
     func createDefaultBookshelves() async throws {
         
-        try await saveUserBookshelf(name: "Reading", coverPhoto: nil)
-        try await saveUserBookshelf(name: "Want To Read", coverPhoto: nil)
-        try await saveUserBookshelf(name: "Finished", coverPhoto: nil)
+        try await saveUserBookshelf(name: "Reading", coverPhoto: nil, isPublic: true)
+        try await saveUserBookshelf(name: "Want To Read", coverPhoto: nil, isPublic: true)
+        try await saveUserBookshelf(name: "Finished", coverPhoto: nil, isPublic: true)
     }
     
     func getUser(userId: String) async throws -> DBUser? {
@@ -134,7 +134,6 @@ final class UserManager {
         guard let image = UIImage(data: data) else {
             throw URLError(.badServerResponse)
         }
-        
         
         return image
     }
@@ -256,6 +255,7 @@ final class UserManager {
             .getDocuments()
         
         var bookshelves: [Bookshelf] = []
+
         for doc in docs.documents {
             let bookshelf = try decoder.decode(Bookshelf.self, from: doc.data())
             bookshelves.append(bookshelf)
@@ -264,7 +264,7 @@ final class UserManager {
         return bookshelves
     }
     
-    func saveUserBookshelf(name: String, coverPhoto: UIImage?) async throws {
+    func saveUserBookshelf(name: String, coverPhoto: UIImage?, isPublic: Bool) async throws {
         guard let userId = Firebase.Auth.auth().currentUser?.uid else { return }
         
         var coverPhotoUrl = ""
@@ -288,7 +288,7 @@ final class UserManager {
             .setData(data, merge: true)
     }
     
-    func editUserBookshelf(bookshelf: Bookshelf, name: String, coverPhoto: UIImage?) async throws {
+    func editUserBookshelf(bookshelf: Bookshelf, name: String, coverPhoto: UIImage?, isPublic: Bool) async throws {
         guard let userId = Firebase.Auth.auth().currentUser?.uid else { return }
         
         var bookshelf = bookshelf
@@ -306,6 +306,7 @@ final class UserManager {
         
         bookshelf.setName(name: name)
         bookshelf.setImageUrl(url: coverPhotoUrl)
+        bookshelf.setIsPublic(isPublic: isPublic)
         
         let data = try encoder.encode(bookshelf)
         
