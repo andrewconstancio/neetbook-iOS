@@ -128,6 +128,7 @@ class HomeViewModel: ObservableObject {
     func getNYTBooks(for listName: String, limit: Int = 0) async throws -> [Book] {
         do {
             var isbns = try await BookDataService.shared.fetchPopularBooksISBNs(for: listName)
+        
             
             if limit > 0 && limit < isbns.count {
                 isbns = Array(isbns[0..<limit])

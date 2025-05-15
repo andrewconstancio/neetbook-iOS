@@ -22,7 +22,6 @@ final class BookDataService {
     private let isbnAuth: String =  "51178_5cfc6b159101f2948a1d51ae96d35242"
     private let isbnAuthDev: String =  "53048_0b15a9753633ec3f107cadfe8eef37ae"
     
-//    private let cache = InMemoryCache<Book>(experationInternal: 60 * 60 * 24)
     let cache = DiskCache<Book>(filename: "xca_book", experationInternal: 60 * 60 * 24)
     
     func fetchBookInfo(bookId: String) async throws -> Book? {
@@ -30,21 +29,17 @@ final class BookDataService {
         if let book = await cache.value(forKey: bookId) {
             return book
         }
-        
-//        print("CACHE MISSED/EXPIRED")
-        
+
         guard let url = URL(string: "\(isbnBaseURLDev)/book/\(bookId)") else {
             throw APIError.invalidData
         }
 
         var urlRequest = URLRequest(url: url)
         urlRequest.setValue("Content-Type", forHTTPHeaderField: "application/json")
-        urlRequest.setValue(isbnAuthDev, forHTTPHeaderField: "Authorization")
+        urlRequest.setValue(isbnAuth, forHTTPHeaderField: "Authorization")
 
         let (data, response) = try await URLSession.shared.data(for: urlRequest)
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        
-//        print(response)
         
         guard let bookJSON = json?["book"] as? [String : Any] else {
             return nil
@@ -104,7 +99,7 @@ final class BookDataService {
 
         var urlRequest = URLRequest(url: url)
         urlRequest.setValue("Content-Type", forHTTPHeaderField: "application/json")
-        urlRequest.setValue(isbnAuthDev, forHTTPHeaderField: "Authorization")
+        urlRequest.setValue(isbnAuth, forHTTPHeaderField: "Authorization")
 
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
