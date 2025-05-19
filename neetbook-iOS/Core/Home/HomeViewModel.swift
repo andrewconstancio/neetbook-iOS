@@ -32,15 +32,15 @@ class HomeViewModel: ObservableObject {
     private var recentlySearchedBookText: String = ""
     private var cancellables = Set<AnyCancellable>()
     
-    let sectionOneListName = "mass-market-paperback"
+    let sectionOneListName = "mass-market-monthly"
     let sectionTwoListName = "paperback-nonfiction"
-    let sectionThreeListName = "paperback-advice"
-    let sectionFourListName = "science"
+    let sectionThreeListName = "advice-how-to-and-miscellaneous"
+    let sectionFourListName = "graphic-books-and-manga"
     
     let sectionOneFriendlyName = "Best Sellers"
     let sectionTwoFriendlyName = "Nonfiction"
-    let sectionThreeFriendlyName = "Advice & Misc."
-    let sectionFourFriendlyName = "Science"
+    let sectionThreeFriendlyName = "Advice and Misc."
+    let sectionFourFriendlyName = "Graphic Books and Manga"
     
     init() {
         addSubscribers()
@@ -128,7 +128,6 @@ class HomeViewModel: ObservableObject {
     func getNYTBooks(for listName: String, limit: Int = 0) async throws -> [Book] {
         do {
             var isbns = try await BookDataService.shared.fetchPopularBooksISBNs(for: listName)
-        
             
             if limit > 0 && limit < isbns.count {
                 isbns = Array(isbns[0..<limit])
@@ -151,6 +150,7 @@ class HomeViewModel: ObservableObject {
             }
             return books
         } catch {
+            print(error.localizedDescription)
             throw error
         }
     }

@@ -165,42 +165,27 @@ final class BookDataService {
     }
     
     func fetchPopularBooksISBNs(for listName: String) async throws -> [String] {
-        let endpoint = "https://api.nytimes.com/svc/books/v3/lists.json"
-//        let endpoint = "https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json"
-        guard var urlComponents = URLComponents(string: endpoint) else {
-          throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
-        }
-        urlComponents.queryItems = [
-          URLQueryItem(name: "api-key", value: "YnfINN7ZG1aH7zkqEooljdQiBXOivgiY"),
-          URLQueryItem(name: "list", value: listName)
-        ]
-        guard let url = urlComponents.url else {
-          throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
-        }
-        let (data, _) = try await URLSession.shared.data(from: url)
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        guard let results = json?["results"] as? [[String: Any]] else {
-          throw NSError(domain: "Invalid Data", code: 0, userInfo: nil)
-        }
         
-        var isbnArray: [String] = []
+        let endpoint = "https://api.nytimes.com/svc/books/v3/lists/current/\(listName).json?api-key=YnfINN7ZG1aH7zkqEooljdQiBXOivgiY"
         
-        for result in results {
-            let isbns = result["isbns"] as? [[String: Any]]
-            let details = result["book_details"] as? [[String: Any]]
+        guard let url = URL(string: endpoint) else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        }
 
-            
-            if let details = details {
-                for detail in details {
-                    let title = detail["title"] as? String
-                    let primary_isbn13 = detail["primary_isbn13"] as? String
-                    if let isbn =  primary_isbn13 {
-                        isbnArray.append(isbn)
-                    }
-                }
-            }
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw NSError(domain: "Invalid Response", code: (response as? HTTPURLResponse)?.statusCode ?? -1, userInfo: nil)
         }
-        
+
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let results = json["results"] as? [String: Any],
+           let books = results["books"] as? [[String: Any]] else {
+            throw NSError(domain: "Invalid Data", code: 0, userInfo: nil)
+        }
+
+        let isbnArray: [String] = books.compactMap { $0["primary_isbn13"] as? String }
+
         return isbnArray
     }
 }

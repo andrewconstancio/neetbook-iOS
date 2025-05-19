@@ -18,13 +18,12 @@ struct AuthenticationView: View {
     
     var body: some View {
         ZStack {
-            Color.appBackgroundColor
+            Color.systemBackground
                 .ignoresSafeArea()
             VStack {
                 Text("neetbook.")
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal)
-                    .foregroundColor(.white)
                     .fontWeight(.bold)
                     .font(.largeTitle)
                 
@@ -40,14 +39,31 @@ struct AuthenticationView: View {
                 // Apple sign in button
                 appleSignInButton
                 
-                Text("By Signing in you agree to our [Terms Of Service](https://sites.google.com/view/neetbookios/terms-of-service?authuser=0)\n and the [Guidelines](https://sites.google.com/view/neetbookios/guidelines?authuser=0)")
-                    .foregroundColor(.white)
-                    .padding(.top, 10)
-                    .font(.system(size: 12))
+                Text(makeAttributedText())
+                   .padding(.top, 10)
+                   .font(.system(size: 12))
+                
+//                Text("By Signing in you agree to our [Terms Of Service](https://sites.google.com/view/neetbookios/terms-of-service?authuser=0)\n and the [Guidelines](https://sites.google.com/view/neetbookios/guidelines?authuser=0)")
+//                    .foregroundColor(Color.systemIndigo)
+//                    .padding(.top, 10)
+//                    .font(.system(size: 12))
                     
             }
             .padding()
         }
+    }
+    
+    func makeAttributedText() -> AttributedString {
+        var attributedString = try! AttributedString(markdown:
+            "By signing in you agree to our [Terms Of Service](https://sites.google.com/view/neetbookios/terms-of-service?authuser=0)\n and the [Guidelines](https://sites.google.com/view/neetbookios/guidelines?authuser=0)"
+        )
+
+        for run in attributedString.runs {
+            if let _ = run.link {
+                attributedString[run.range].foregroundColor = .init(uiColor: .systemIndigo)
+            }
+        }
+        return attributedString
     }
 }
 
@@ -78,8 +94,10 @@ extension AuthenticationView {
             }
             .padding()
             .frame(maxWidth: .infinity)
-            .background(Color.white)
-            .cornerRadius(20)
+            .overlay(
+               RoundedRectangle(cornerRadius: 20)
+                   .stroke(Color.appBackgroundColor, lineWidth: 1)
+            )
         })
     }
     
@@ -99,13 +117,15 @@ extension AuthenticationView {
                 .allowsHitTesting(false)
         }
         .frame(height: 55)
-        .cornerRadius(20)
         .onChange(of: viewModel.didSignInWithApple) { newValue in
             if newValue == true {
                 print("Signed in with apple")
             }
         }
+        .cornerRadius(20)
+        .overlay(
+           RoundedRectangle(cornerRadius: 20)
+               .stroke(Color.appBackgroundColor, lineWidth: 1)
+        )
     }
 }
-
-
