@@ -40,7 +40,7 @@ class BookshelfViewModel: ObservableObject {
         }
     }
     
-    func deleteBookshelf(bookshelf: Bookshelf) async throws {
-        try await UserManager.shared.deleteUserBookshelf(bookshelf: bookshelf)
+    func deleteBookshelf(id: String) async throws {
+        try await UserManager.shared.deleteUserBookshelf(bookshelfId:id)
     }
 }

@@ -50,12 +50,10 @@ struct HomeContentView: View {
                     ForEach(1..<4, id: \.self) { _ in
                         Rectangle()
                             .frame(width: 120, height: 170)
-//                            .cornerRadius(5)
                             .shadow(radius: 8)
-                            .redacted(reason: .placeholder)
-                            .shimmering()
                             .opacity(0.5)
                             .padding()
+                            .shimmering()
                     }
                 }
             } else {
@@ -69,7 +67,6 @@ struct HomeContentView: View {
                                     Image(uiImage: coverPhoto)
                                         .resizable()
                                         .frame(width: 120, height: 170)
-//                                        .cornerRadius(5)
                                         .shadow(radius: 8)
                                 }
                             }

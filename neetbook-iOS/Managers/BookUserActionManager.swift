@@ -117,12 +117,9 @@ final class BookUserActionManager {
     }
     
     func removeBookToBookshelves(bookId: String, userId: String, bookshelvesIds: [String]) async throws {
-        let query = bookshelvesUserscollection
+        bookshelvesUserscollection
             .whereField("user_id", isEqualTo: userId)
             .whereField("book_id", isEqualTo: bookId)
-//            .whereField("bookshelf_id", in: bookshelvesIds)
-        
-        let querySnapshot = try await query.getDocuments()
         
         for bookshelfId in bookshelvesIds {
             let documents = try await bookshelvesUserscollection
@@ -144,13 +141,6 @@ final class BookUserActionManager {
                         .setData(["count": FieldValue.increment(Int64(-1))], merge: true)
             }
         }
-        
-//        for document in querySnapshot.documents {
-//            let docId = document.reference.documentID
-//            try await document.reference.delete()
-//            
-//            try await UserPostManager.shared.deleteUserPost(documentID: docId)
-//        }
     }
     
     func getBooksForBookshelf(bookshelfId: String) async throws -> [BookOnShelf] {
@@ -279,5 +269,13 @@ final class BookUserActionManager {
             .count
         
         return querySnapshotCount
+    }
+    
+    func deleteBookshelf(userId: String, bookshelfId: String) async throws {
+        try await userBookshelvesCollection
+            .document(userId)
+            .collection("bookshelves")
+            .document(bookshelfId)
+            .delete()
     }
 }

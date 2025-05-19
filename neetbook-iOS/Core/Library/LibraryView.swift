@@ -122,81 +122,106 @@ struct LibraryView: View {
             }
             .padding()
             
-            List {
-                ForEach(viewModel.shelves)  { shelf in
-                    HStack {
-                        if shelf.imageUrl == "" {
-                            NoPhotoBookshelfView(width: 20, height: 20)
-                                .shadow(radius: 10)
-                        } else {
-                            AsyncImage(url: URL(string: shelf.imageUrl)) { image in
-                                image
-                                    .resizable()
-                                    .frame(width: 50, height: 50)
-                                    .scaledToFit()
-                                    .clipShape(Circle())
-                                
-                            } placeholder: {
-                                Circle()
-                                    .frame(width: 50, height: 50)
-                                    .redacted(reason: .placeholder)
-                                    .shimmering()
-                                    .opacity(0.5)
-                            }
-                        }
-
-                        NavigationLink {
-                            BookshelfView(bookshelf: shelf)
-                        } label: {
-                            HStack {
-                                Text(shelf.name)
-                                    .bold()
-                                    .foregroundStyle(.primary)
-                                    .offset(x: 10, y: 0)
-                                
-                                if let count = shelf.count {
-                                    Text("(\(count))")
-                                        .foregroundStyle(.secondary)
-                                        .font(.system(size: 14))
-                                        .offset(x: 10)
-                                } else {
-                                    Text("(0)")
-                                        .foregroundStyle(.secondary)
-                                        .font(.system(size: 14))
-                                        .offset(x: 10)
-                                }
-                                
-                                if let privateBookshelf = shelf.isPublic {
-                                    if privateBookshelf == false {
-                                        Image(systemName: "lock")
-                                            .foregroundStyle(Color.appColorOrange.opacity(0.7))
-                                            .font(.system(size: 16))
-                                            .bold()
-                                            .offset(x: 10)
+            if viewModel.shelves.count == 0 {
+                VStack {
+                    Text("Create your first bookshelf!")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .bold()
+                    Spacer()
+                }
+            } else {
+                List {
+                    ForEach(viewModel.shelves)  { shelf in
+                        HStack {
+                            if shelf.imageUrl == "" {
+                                NoPhotoBookshelfView(width: 20, height: 20)
+                                    .shadow(radius: 10)
+                            } else {
+                                AsyncImage(url: URL(string: shelf.imageUrl)) { phase in
+                                    switch phase {
+                                    case .empty:
+                                        Circle()
+                                            .frame(width: 50, height: 50)
+                                            .redacted(reason: .placeholder)
+                                            .shimmering()
+                                            .opacity(0.5)
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(Circle())
+                                            .clipped()
+                                    case .failure(let error):
+                                            VStack {
+                                                Image(systemName: "xmark.octagon")
+                                                Text("Failed to load")
+                                                if let error = error as? URLError {
+                                                    Text(error.localizedDescription)
+                                                }
+                                            }
+                                            .frame(width: 50, height: 50)
+                                            .foregroundColor(.red)
+                                    @unknown default:
+                                        EmptyView()
                                     }
                                 }
                             }
+
+                            NavigationLink {
+                                BookshelfView(bookshelf: shelf)
+                            } label: {
+                                HStack {
+                                    Text(shelf.name)
+                                        .bold()
+                                        .foregroundStyle(.primary)
+                                        .offset(x: 10, y: 0)
+                                    
+                                    if let count = shelf.count {
+                                        Text("(\(count))")
+                                            .foregroundStyle(.secondary)
+                                            .font(.system(size: 14))
+                                            .offset(x: 10)
+                                    } else {
+                                        Text("(0)")
+                                            .foregroundStyle(.secondary)
+                                            .font(.system(size: 14))
+                                            .offset(x: 10)
+                                    }
+                                    
+                                    if let privateBookshelf = shelf.isPublic {
+                                        if privateBookshelf == false {
+                                            Image(systemName: "lock")
+                                                .foregroundStyle(Color.appColorOrange.opacity(0.7))
+                                                .font(.system(size: 16))
+                                                .bold()
+                                                .offset(x: 10)
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            Spacer()
                         }
-                        
-                        Spacer()
+                        .listRowInsets(EdgeInsets())
+                        .padding()
+                        .frame(height: 85)
+                        .background(Color("Background"))
                     }
-                    .listRowInsets(EdgeInsets())
-                    .padding()
-                    .frame(height: 85)
-                    .background(Color("Background"))
+                    .onDelete { indexSet in
+                        delete(indexSet: indexSet)
+                    }
+                    .onMove { indexSet, newOffset in
+                        move(indexSet: indexSet, newOffset: newOffset)
+                    }
                 }
-                .onDelete { indexSet in
-                    delete(indexSet: indexSet)
-                }
-                .onMove { indexSet, newOffset in
-                    move(indexSet: indexSet, newOffset: newOffset)
-                }
+                .frame(maxWidth: .infinity)
+                .edgesIgnoringSafeArea(.all)
+                .listStyle(PlainListStyle())
+                .scrollContentBackground(.hidden)
+                .padding(.bottom, 30)
             }
-            .frame(maxWidth: .infinity)
-            .edgesIgnoringSafeArea(.all)
-            .listStyle(PlainListStyle())
-            .scrollContentBackground(.hidden)
-            .padding(.bottom, 30)
         }
         .overlay(Color.black.opacity(showNewBookshelfPopup ? 0.3 : 0.0))
         .blur(radius: showNewBookshelfPopup ? 2 : 0)
@@ -222,7 +247,13 @@ struct LibraryView: View {
     }
 
     func delete(indexSet: IndexSet) {
-
+        if let index = indexSet.first {
+            let removedShelf = viewModel.shelves[index]
+            Task {
+                try? await viewModel.deleteBookshelf(id: removedShelf.id)
+            }
+            viewModel.shelves.remove(atOffsets: indexSet)
+        }
     }
 }
 

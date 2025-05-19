@@ -20,7 +20,7 @@ enum UserError: Error {
 final class UserManager {
     
     static let shared = UserManager()
-    private init() {}
+//    private init() {}
     
     private let userCollection = Firestore.firestore().collection("users")
     private let userFollowingListCollection = Firestore.firestore().collection("UserFollowList")
@@ -272,9 +272,13 @@ final class UserManager {
         if let coverPhoto = coverPhoto {
             guard let imageData = coverPhoto.jpegData(compressionQuality: 0.5) else { return }
             
-            let storageRef = storage.reference(withPath: "bookshelf_images/\(userId)/\(name)")
-            let _ = try await storageRef.putDataAsync(imageData)
-            
+            let storageRef = storage.reference(withPath: "bookshelf_images/\(userId)/\(name).jpg")
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpeg"
+            metadata.contentDisposition = "inline"
+
+            let _ = try await storageRef.putDataAsync(imageData, metadata: metadata)
+
             coverPhotoUrl = try await storageRef.downloadURL().absoluteString
         }
         
@@ -317,23 +321,18 @@ final class UserManager {
             .setData(data, merge: true)
     }
     
-    func deleteUserBookshelf(bookshelf: Bookshelf) async throws {
+    func deleteUserBookshelf(bookshelfId: String) async throws {
         guard let userId = Firebase.Auth.auth().currentUser?.uid else { return }
         
-        let bookshelfDocs = try await userBookshelvesCollection
+        try await userBookshelvesCollection
             .document(userId)
             .collection("bookshelves")
-            .whereField("id", isEqualTo: bookshelf.id)
-            .getDocuments()
+            .document(bookshelfId)
+            .delete()
         
         let bookshelfAddedToDocs = try await bookshelvesAddedToCollection
-            .whereField("bookshelf_id", isEqualTo: bookshelf.id)
+            .whereField("bookshelf_id", isEqualTo: bookshelfId)
             .getDocuments()
-        
-        
-        for doc in bookshelfDocs.documents {
-            try await doc.reference.delete()
-        }
         
         for doc in bookshelfAddedToDocs.documents {
             try await doc.reference.delete()

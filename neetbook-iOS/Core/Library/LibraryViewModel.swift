@@ -9,18 +9,19 @@ import Foundation
 
 @MainActor
 final class LibraryViewModel: ObservableObject {
-    @Published private(set) var shelves: [Bookshelf] = []
+    @Published var shelves: [Bookshelf] = []
     @Published var isLoading: Bool = false
     @Published var readingCount: Int = 0
     @Published var wantToReadCount: Int = 0
     @Published var finishedCount: Int = 0
     
     private var bookUserActionManager = BookUserActionManager()
-    
+    private var userManager = UserManager()
     
     func getBookshelves() async throws {
         let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-        shelves = try await UserManager.shared.getUserBookShelves(userId: userId)
+        shelves = try await userManager.getUserBookShelves(userId: userId)
+        shelves = shelves.filter { $0.name != "Reading" && $0.name != "Want To Read" && $0.name != "Finished" }
     }
     
     func getMarkedBooksCount() async throws {
@@ -32,15 +33,11 @@ final class LibraryViewModel: ObservableObject {
         finishedCount = try await bookUserActionManager.getMarkBooksCounts(userId: userId, markedType: BookListType.finished)
     }
     
-    
-//    func getUserBooks() async throws {
-//        do {
-//            let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-//            booksReading = try await BookUserManager.shared.getReadingUserAddedBooks(userId: userId)
-//            booksWantToRead = try await BookUserManager.shared.getWantToReadUserAddedBooks(userId: userId)
-//            booksRead = try await BookUserManager.shared.getReadUserAddedBooks(userId: userId)
-//        } catch {
-//            throw error
-//        }
-//    }
+    func deleteBookshelf(id: String) async throws {
+        do {
+            try await userManager.deleteUserBookshelf(bookshelfId: id)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 }

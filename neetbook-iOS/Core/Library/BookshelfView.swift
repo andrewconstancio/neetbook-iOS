@@ -13,9 +13,11 @@ import Shimmer
 struct BookshelfView: View {
     let bookshelf: Bookshelf
     @StateObject private var viewModel: BookshelfViewModel
+    
     @State private var showEditBookshelf: Bool = false
     @State private var showDeleteBookshelfConfirm: Bool = false
     @State var showEditBookshelfPopup: Bool = false
+    
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) private var dismiss
@@ -127,7 +129,7 @@ struct BookshelfView: View {
                         VStack(alignment: .leading) {
                             Button {
                                 Task {
-                                    try? await viewModel.deleteBookshelf(bookshelf: bookshelf)
+                                    try? await viewModel.deleteBookshelf(id: bookshelf.id)
                                     showDeleteBookshelfConfirm = false
                                     self.presentationMode.wrappedValue.dismiss()
                                 }
