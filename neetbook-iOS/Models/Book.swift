@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Book: Identifiable, Codable {
+struct Book: Identifiable, Codable, Hashable {
     var id = UUID()
     let bookId: String
     let title: String
@@ -18,6 +18,4 @@ struct Book: Identifiable, Codable {
     let publishedYear: String
     let language: String
     let publisher: String
-    
-    @CodableImage var coverPhoto: UIImage?
 }

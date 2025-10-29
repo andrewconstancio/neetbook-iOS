@@ -1,19 +1,10 @@
-//
-//  HomeNew.swift
-//  neetbook-iOS
-//
-//  Created by Andrew Constancio on 3/31/24.
-//
-
 import SwiftUI
 import SwiftfulLoadingIndicators
 
 struct HomeView: View {
-    
-    // enviroment color scheme
     @Environment(\.colorScheme) var colorScheme
     
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @StateObject private var viewModel = HomeViewModel()
     
@@ -112,33 +103,6 @@ struct HomeView: View {
                 }
                 
                 if !viewModel.isSearching {
-//                    ScrollView(.horizontal) {
-//                        HStack(spacing: 30) {
-//                            ForEach(0..<genresList.count, id: \.self) { index in
-//                                Button {
-//                                    withAnimation(.easeInOut(duration: 0.2)) {
-//                                        genresListSelectedIndex = index
-//                                    }
-//                                } label: {
-//                                    if genresListSelectedIndex == index {
-//                                        Text(genresList[index])
-//                                            .foregroundColor(.white)
-//                                            .bold()
-//                                            .padding(8)
-//                                            .background(Capsule().fill(.black))
-//
-//                                    } else {
-//                                        Text(genresList[index])
-//                                            .foregroundStyle(.primary)
-//                                            .bold()
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                    .padding(.bottom, 20)
-//                    .scrollIndicators(.hidden)
-                    
                     if genresListSelectedIndex == 0 {
                         
                         Text("Whats popular ✨")
@@ -192,12 +156,12 @@ struct HomeView: View {
                                             BookView(book: viewModel.searchBookResults[value])
                                         } label: {
                                             HStack {
-                                                if let coverPhoto = viewModel.searchBookResults[value].coverPhoto{
-                                                    Image(uiImage: coverPhoto)
-                                                        .resizable()
-                                                        .frame(width: 80, height: 120)
-                                                        .cornerRadius(5)
-                                                }
+//                                                if let coverPhoto = viewModel.searchBookResults[value].coverPhoto{
+//                                                    Image(uiImage: coverPhoto)
+//                                                        .resizable()
+//                                                        .frame(width: 80, height: 120)
+//                                                        .cornerRadius(5)
+//                                                }
                                                 
                                                 VStack(alignment: .leading) {
                                                     Text(viewModel.searchBookResults[value].title)

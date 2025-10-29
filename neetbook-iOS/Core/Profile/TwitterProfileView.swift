@@ -13,7 +13,7 @@ struct TwitterProfileView: View {
     let userId: String
 
 //    @Binding var showSignInView: Bool
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     // for Dark Mode Adoption..
     @Environment(\.colorScheme) var colorScheme
@@ -254,54 +254,54 @@ extension View{
 }
 
 // Tab Button...
-struct TabButton: View {
-    
-    var title: String
-    @Binding var currentTab: String
-    var animation: Namespace.ID
-    
-    @Environment(\.colorScheme) var colorScheme
-    
-    var body: some View{
-        
-        Button(action: {
-            withAnimation{
-                currentTab = title
-            }
-        }, label: {
-            
-            // if i use LazyStack then the text is visible fully in scrollview...
-            // may be its a bug...
-            LazyVStack(spacing: 12){
-                
-                
-                if colorScheme == .dark {
-                    Text(title)
-                        .font(.system(size: 14))
-                        .fontWeight(.semibold)
-                        .foregroundColor(currentTab == title ? Color.white : Color.white.opacity(0.5))
-                        .padding(.horizontal)
-                } else {
-                    Text(title)
-                        .font(.system(size: 14))
-                        .fontWeight(.semibold)
-                        .foregroundColor(currentTab == title ? Color.appColorPurple : .gray)
-                        .padding(.horizontal)
-                }
-                
-                if currentTab == title{
-                    
-                    Capsule()
-                        .fill(Color.appColorPurple)
-                        .frame(height: 1.2)
-                        .matchedGeometryEffect(id: "TAB", in: animation)
-                }
-                else{
-                    Capsule()
-                        .fill(Color.clear)
-                        .frame(height: 1.2)
-                }
-            }
-        })
-    }
-}
+//struct TabButton: View {
+//    
+//    var title: String
+//    @Binding var currentTab: String
+//    var animation: Namespace.ID
+//    
+//    @Environment(\.colorScheme) var colorScheme
+//    
+//    var body: some View{
+//        
+//        Button(action: {
+//            withAnimation{
+//                currentTab = title
+//            }
+//        }, label: {
+//            
+//            // if i use LazyStack then the text is visible fully in scrollview...
+//            // may be its a bug...
+//            LazyVStack(spacing: 12){
+//                
+//                
+//                if colorScheme == .dark {
+//                    Text(title)
+//                        .font(.system(size: 14))
+//                        .fontWeight(.semibold)
+//                        .foregroundColor(currentTab == title ? Color.white : Color.white.opacity(0.5))
+//                        .padding(.horizontal)
+//                } else {
+//                    Text(title)
+//                        .font(.system(size: 14))
+//                        .fontWeight(.semibold)
+//                        .foregroundColor(currentTab == title ? Color.appColorPurple : .gray)
+//                        .padding(.horizontal)
+//                }
+//                
+//                if currentTab == title{
+//                    
+//                    Capsule()
+//                        .fill(Color.appColorPurple)
+//                        .frame(height: 1.2)
+//                        .matchedGeometryEffect(id: "TAB", in: animation)
+//                }
+//                else{
+//                    Capsule()
+//                        .fill(Color.clear)
+//                        .frame(height: 1.2)
+//                }
+//            }
+//        })
+//    }
+//}

@@ -11,6 +11,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseStorage
 import SwiftUI
+import FirebaseAuth
 
 enum UserError: Error {
     case failedDeleteUserData
@@ -89,6 +90,32 @@ final class UserManager {
         userExist = userRef.exists ? true : false
         
         return userExist
+    }
+    
+    
+    /// Checks to see if a profile account has been made for the current user.
+    /// - Returns: `True` or `False` if the profile account has been made.
+    func userAccountCreated() async throws -> Bool {
+        guard let uid = Auth.auth().currentUser?.uid else { return false }
+        
+        let userRef = try await Firestore.firestore().collection("users").document(uid).getDocument()
+        return userRef.exists ? true : false
+    }
+    
+    /// Fetches the current users profile.
+    /// - Returns: The `DBUser` profile of the current user. 
+    func fetchCurrentUser() async throws -> (DBUser?, FirebaseAuth.User) {
+        guard let currentUser = Auth.auth().currentUser else {
+            throw NSError(domain: "Current user id not found.", code: 0)
+        }
+        
+        let databaseUser = try await userCollection.document(currentUser.uid).getDocument(as: DBUser.self, decoder: decoder)
+        return (databaseUser, currentUser)
+    }
+    
+    func fetchUser(withUid: String) async throws -> DBUser {
+        let user = try await userCollection.document(withUid).getDocument(as: DBUser.self, decoder: decoder)
+        return user
     }
     
     func checkUserUsernameHashSet(username: String, hash: String) async throws -> Bool {

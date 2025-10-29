@@ -13,7 +13,7 @@ struct FeedView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @StateObject private var viewModel = FeedViewModel()
     

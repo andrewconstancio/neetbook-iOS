@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DataOfBirthView: View {
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @ObservedObject var viewModel: ProfileSetupViewRootViewModel
     

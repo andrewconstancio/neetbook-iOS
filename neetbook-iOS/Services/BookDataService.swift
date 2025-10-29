@@ -1,18 +1,10 @@
-//
-//  BookDataService.swift
-//  neetbook-iOS
-//
-//  Created by Andrew Constancio on 9/4/23.
-//
-
 import SwiftUI
+
 enum APIError: Error {
     case networkError(Error)
     case invalidData
     case invalidURL
 }
-
-
 
 final class BookDataService {
     static let shared = BookDataService()
@@ -61,14 +53,6 @@ final class BookDataService {
             publishedYear = String(publishedDate.prefix(4))
         }
         
-        let image: UIImage?
-        if let coverURL = URL(string: smallThumbnail) {
-            let (coverData, response) = try await URLSession.shared.data(from: coverURL, delegate: nil)
-            image = Helpers.shared.convertDataToUIImage(data: coverData, response: response)
-        } else {
-            image = UIImage(systemName: "book.closed.circle.fill")
-        }
-        
         let book = Book(
             bookId: bookId,
             title: title,
@@ -78,8 +62,7 @@ final class BookDataService {
             pages: pages,
             publishedYear: publishedYear,
             language: language,
-            publisher: publisher,
-            coverPhoto: image
+            publisher: publisher
         )
         
         //save to cache
@@ -146,8 +129,7 @@ final class BookDataService {
                             pages: pages,
                             publishedYear: publishedYear,
                             language: language,
-                            publisher: publisher,
-                            coverPhoto: image
+                            publisher: publisher
                         )
                     }
                 }
@@ -187,5 +169,26 @@ final class BookDataService {
         let isbnArray: [String] = books.compactMap { $0["primary_isbn13"] as? String }
 
         return isbnArray
+    }
+}
+
+// MARK: - API Errors
+enum BookAPIError: LocalizedError {
+    case invalidURL
+    case invalidResponse(statusCode: Int)
+    case invalidData
+    case noBookFound
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "The URL provided is invalid"
+        case .invalidResponse(let statusCode):
+            return "Server returned invalid response with status code: \(statusCode)"
+        case .invalidData:
+            return "Unable to parse response data"
+        case .noBookFound:
+            return "No book found with the provided ID"
+        }
     }
 }

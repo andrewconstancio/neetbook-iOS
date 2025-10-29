@@ -9,11 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @StateObject var userStateViewModel = UserStateViewModel()
+    @StateObject var userStateViewModel = AuthViewModel()
     
     @State private var selection: String = "Home"
-    
-    @State private var tabSelection: TabBarItem = .home
     
     @State private var selectedTab = 0
     
@@ -23,9 +21,8 @@ struct ContentView: View {
                 ProfileSetupRootView()
                     .environmentObject(userStateViewModel)
             } else if userStateViewModel.userState == .isLoading {
-//                Spacer()
-//                Spinner()
-//                Spacer()
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }  else {
                 NavigationStack {
                     TabView(selection: $selectedTab) {
@@ -35,7 +32,6 @@ struct ContentView: View {
                                 Label("", systemImage: "house")
                             }
                             .tag(0)
-//                            .badge(userStateViewModel.pendingFriendCount)
                         
                         FeedView()
                             .environmentObject(userStateViewModel)

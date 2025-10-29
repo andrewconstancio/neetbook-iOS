@@ -41,13 +41,13 @@ struct PopularBookFullView: View {
                                 BookView(book: book)
                             } label: {
                                 VStack(spacing: 5) {
-                                    if let coverPhoto = book.coverPhoto {
-                                        Image(uiImage: coverPhoto)
-                                            .resizable()
-                                            .frame(width: 100, height: 150)
-                                            .cornerRadius(5)
-                                            .shadow(radius: 3)
-                                    }
+//                                    if let coverPhoto = book.coverPhoto {
+//                                        Image(uiImage: coverPhoto)
+//                                            .resizable()
+//                                            .frame(width: 100, height: 150)
+//                                            .cornerRadius(5)
+//                                            .shadow(radius: 3)
+//                                    }
                                 }
                             }
                         }

@@ -50,7 +50,7 @@ final class BookViewModel: ObservableObject {
         try await getBookShelves()
         try await getBookshelvesAddedTo(bookId: bookId)
         try await checkIfUserAddedBookToFavoritesList(bookId: bookId)
-        currentUser = try await UserManager.shared.getUser(userId: currentUserId)
+//        currentUser = try await UserManager.shared.getUser(userId: currentUserId)
         bookInfoIsLoading = false
     }
     

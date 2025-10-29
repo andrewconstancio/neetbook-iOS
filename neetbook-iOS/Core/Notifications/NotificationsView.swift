@@ -11,7 +11,7 @@ import Shimmer
 
 struct NotificationView: View {
     
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @StateObject private var viewModel = NotificationsViewModel()
     

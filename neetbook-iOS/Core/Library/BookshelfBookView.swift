@@ -21,12 +21,22 @@ struct BookshelfBookView: View {
             BookView(book: book.book)
         } label: {
             HStack {
-                if let coverPhoto = book.book.coverPhoto{
-                    Image(uiImage: coverPhoto)
-                        .resizable()
-                        .frame(width: 80, height: 120)
-                        .cornerRadius(5)
+                if let url = URL(string: book.book.coverURL) {
+                    AsyncCachedImage(url: url) { image in
+                        image
+                            .resizable()
+                            .frame(width: 80, height: 120)
+                            .cornerRadius(5)
+                    } placeholder: {
+                        ProgressView()
+                    }
                 }
+//                if let coverPhoto = book.book.coverPhoto{
+//                    Image(uiImage: coverPhoto)
+//                        .resizable()
+//                        .frame(width: 80, height: 120)
+//                        .cornerRadius(5)
+//                }
                 VStack(alignment: .leading) {
                     Text(book.book.title)
                         .font(.headline)

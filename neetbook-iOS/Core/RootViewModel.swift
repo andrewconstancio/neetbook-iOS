@@ -16,8 +16,9 @@ final class RootViewModel: ObservableObject {
     }
     
     func checkIfUserAccountMade() async throws -> Bool {
-        let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-        let dbUser = try? await UserManager.shared.getUser(userId: userId)
-        return dbUser == nil
+//        let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+//        let dbUser = try? await UserManager.shared.getUser(userId: userId)
+//        return dbUser == nil
+        return false
     }
 }

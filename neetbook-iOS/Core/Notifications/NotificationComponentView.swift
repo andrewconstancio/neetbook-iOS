@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NotificationComponentView: View {
     
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @Environment(\.colorScheme) var colorScheme
     

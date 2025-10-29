@@ -55,70 +55,95 @@ struct BookView: View {
     
     var body: some View {
         VStack {
-            FittedScrollView {
-                VStack(spacing: 10) {
-                    VStack {
-                        // cover photo
-                        if let coverPhoto = book.coverPhoto {
-                            Image(uiImage: coverPhoto)
-                                .resizable()
-                                .frame(width: 90, height: 140)
-                                .cornerRadius(10)
-                                .shadow(radius: 10)
-                                .padding(.top, 100)
-                                .padding(.bottom, 20)
-                        }
-                        
-                        // horizontal tabs
-                        VStack(alignment: .leading) {
-                            VStack(spacing: 0){
-                                ScrollView(.horizontal, showsIndicators: false, content: {
-                                    HStack(spacing: 0){
-                                        TabButton(title: "Info", currentTab: $currentTab, animation: animation)
-                                            .frame(width: UIScreen.main.bounds.width / 2)
-                                        
-                                        TabButton(title: "Comments", currentTab: $currentTab, animation: animation)
-                                            .frame(width: UIScreen.main.bounds.width / 2)
-                                    }
-                                })
-                                .padding(.top, 30)
-                                Divider()
-                            }
-                            
-                            // content
-                            if currentTab == "Info" {
-                                BookSingleInfoView(name: "Title ", info: book.title)
-                                BookSingleInfoView(name: "Author ", info: "\(book.author)")
-                                if book.description != "" {
-                                    description
-                                }
-                                BookSingleInfoView(name: "Publisher ", info: "\(book.publisher)")
-                                BookSingleInfoView(name: "Year ", info: "\(book.publishedYear)")
-                            } else {
-                                BookCommentSectionView(viewModel: viewModel, book: book)
-                            }
-                            Spacer()
-                        }
-                        .padding(.bottom, 200)
-                        .padding(.horizontal, 2)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .edgesIgnoringSafeArea(.all)
-                        .background(Color("Background"))
-                        .cornerRadius(10, corners: [.topLeft, .topRight])
-                    }
-                }
-                .background(
-                    VStack {
-                        Image(uiImage: book.coverPhoto!)
-                            .resizable()
-                            .blur(radius: 25)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: UIScreen.main.bounds.height / 2)
-                        Spacer()
-                    }
-                )
-            }
-            Spacer()
+            Text("hi")
+//            FittedScrollView {
+//                VStack(spacing: 10) {
+//                    VStack {
+//                        // cover photo
+//                        if let url = URL(string: book.coverURL) {
+//                            AsyncCachedImage(url: url) { image in
+//                                image
+//                                    .resizable()
+//                                    .frame(width: 90, height: 140)
+//                                    .cornerRadius(10)
+//                                    .shadow(radius: 10)
+//                                    .padding(.top, 100)
+//                                    .padding(.bottom, 20)
+//                            } placeholder: {
+//                                ProgressView()
+//                            }
+//                        }
+////                        if let coverPhoto = book.coverPhoto {
+////                            Image(uiImage: coverPhoto)
+////                                .resizable()
+////                                .frame(width: 90, height: 140)
+////                                .cornerRadius(10)
+////                                .shadow(radius: 10)
+////                                .padding(.top, 100)
+////                                .padding(.bottom, 20)
+////                        }
+//                        
+//                        // horizontal tabs
+//                        VStack(alignment: .leading) {
+//                            VStack(spacing: 0){
+//                                ScrollView(.horizontal, showsIndicators: false, content: {
+//                                    HStack(spacing: 0){
+//                                        TabButton(title: "Info", currentTab: $currentTab, animation: animation)
+//                                            .frame(width: UIScreen.main.bounds.width / 2)
+//                                        
+//                                        TabButton(title: "Comments", currentTab: $currentTab, animation: animation)
+//                                            .frame(width: UIScreen.main.bounds.width / 2)
+//                                    }
+//                                })
+//                                .padding(.top, 30)
+//                                Divider()
+//                            }
+//                            
+//                            // content
+//                            if currentTab == "Info" {
+//                                BookSingleInfoView(name: "Title ", info: book.title)
+//                                BookSingleInfoView(name: "Author ", info: "\(book.author)")
+//                                if book.description != "" {
+//                                    description
+//                                }
+//                                BookSingleInfoView(name: "Publisher ", info: "\(book.publisher)")
+//                                BookSingleInfoView(name: "Year ", info: "\(book.publishedYear)")
+//                            } else {
+//                                BookCommentSectionView(viewModel: viewModel, book: book)
+//                            }
+//                            Spacer()
+//                        }
+//                        .padding(.bottom, 200)
+//                        .padding(.horizontal, 2)
+//                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                        .edgesIgnoringSafeArea(.all)
+//                        .background(Color("Background"))
+//                        .cornerRadius(10, corners: [.topLeft, .topRight])
+//                    }
+//                }
+//                .background(
+//                    VStack {
+//                        if let url = URL(string: book.coverURL) {
+//                            AsyncCachedImage(url: url) { image in
+//                                image
+//                                    .resizable()
+//                                    .blur(radius: 25)
+//                                    .frame(maxWidth: .infinity)
+//                                    .frame(height: UIScreen.main.bounds.height / 2)
+//                            } placeholder: {
+//                                ProgressView()
+//                            }
+//                        }
+////                        Image(uiImage: book.coverPhoto!)
+////                            .resizable()
+////                            .blur(radius: 25)
+////                            .frame(maxWidth: .infinity)
+////                            .frame(height: UIScreen.main.bounds.height / 2)
+//                        Spacer()
+//                    }
+//                )
+//            }
+//            Spacer()
         }
         .onTapGesture {
             hideKeyboard()
@@ -246,7 +271,6 @@ extension BookView {
                     .fontWeight(.bold)
             }
             .frame(height: 35)
-//            .frame(width: UIScreen.main.bounds.width / 2 - 40)
             .font(.system(size: 14))
             .foregroundColor(.white)
             .padding(10)

@@ -63,12 +63,12 @@ struct HomeContentView: View {
                             BookView(book: book)
                         } label: {
                             VStack(spacing: 5) {
-                                if let coverPhoto = book.coverPhoto {
-                                    Image(uiImage: coverPhoto)
-                                        .resizable()
-                                        .frame(width: 120, height: 170)
-                                        .shadow(radius: 8)
-                                }
+//                                if let coverPhoto = book.coverPhoto {
+//                                    Image(uiImage: coverPhoto)
+//                                        .resizable()
+//                                        .frame(width: 120, height: 170)
+//                                        .shadow(radius: 8)
+//                                }
                             }
                         }
                     }

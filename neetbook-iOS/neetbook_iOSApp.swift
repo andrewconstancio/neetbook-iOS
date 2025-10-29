@@ -10,6 +10,17 @@ import Firebase
 import GoogleSignIn
 import FirebaseAuth
 
+//private struct FirebaseServiceKey: EnvironmentKey {
+//    static let defaultValue: FirebaseServiceProtocol = FirebaseService()
+//}
+//
+//extension EnvironmentValues {
+//    var firebaseService: FirebaseServiceProtocol {
+//        get { self[FirebaseServiceKey.self] }
+//        set { self[FirebaseServiceKey.self] = newValue }
+//    }
+//}
+
 @main
 struct neetbook_iOSApp: App {
     
@@ -17,7 +28,8 @@ struct neetbook_iOSApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ApplicationSwitcherView()
+            RootView()
+//            ApplicationSwitcherView()
         }
     }
 }

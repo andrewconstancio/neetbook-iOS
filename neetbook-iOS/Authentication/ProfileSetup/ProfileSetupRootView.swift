@@ -13,7 +13,7 @@ typealias MainContent<V> = Group<V> where V:View
 
 struct ProfileSetupRootView: View {
     
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @StateObject private var viewModel = ProfileSetupViewRootViewModel()
     
@@ -53,7 +53,7 @@ struct ProfileSetupRootView: View {
 
 struct ContentSetupView: View {
     
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @ObservedObject var viewModel: ProfileSetupViewRootViewModel
 

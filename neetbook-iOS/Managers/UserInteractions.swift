@@ -538,4 +538,84 @@ final class UserInteractions {
         
         return try await query.getDocuments().count
     }
+    
+    // MARK: NEW
+    
+    
+    /// Search for users by the username or the display name.
+    /// - Parameter searchText: The text to be search
+    /// - Returns: `UserSearchResult` array of search results.
+    func searchUsers(searchText: String) async throws -> [UserSearchResult] {
+        guard let currentUID = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "There is no user signed in.", code: 0)
+        }
+        
+        let usernameQuery = userCollection
+            .whereField("username", isEqualTo: searchText.lowercased())
+            .whereField("user_id", isNotEqualTo: currentUID)
+        
+        let displayNameQuery = userCollection
+            .whereField("displayname", isEqualTo: searchText)
+            .whereField("user_id", isNotEqualTo: currentUID)
+        
+        let usernameResultData = try await usernameQuery.getDocuments()
+        let displaynameResultData = try await displayNameQuery.getDocuments()
+        
+        var resultUserIds: [String] = []
+        for doc in usernameResultData.documents {
+            let userId = doc["user_id"] as? String ?? ""
+            resultUserIds.append(userId)
+        }
+        for doc in displaynameResultData.documents {
+            let userId = doc["user_id"] as? String ?? ""
+            resultUserIds.append(userId)
+        }
+        
+        if resultUserIds.isEmpty {
+            return []
+        }
+        
+        let combinedUserQuery = userCollection
+            .whereField("user_id", in: resultUserIds)
+        
+        let combinedUserData = try await combinedUserQuery.getDocuments()
+        
+        var searchUsers: [UserSearchResult] = []
+        for document in combinedUserData.documents {
+            let user_id = document["user_id"] as? String ?? ""
+            let name = document["displayname"] as? String ?? ""
+            let username = document["username"] as? String ?? ""
+            let hashcode = document["hashcode"] as? String ?? ""
+            let photoURL = document["photo_url"] as? String ?? ""
+             
+            if let url = URL(string: photoURL) {
+                let (data, response) = try await URLSession.shared.data(from: url, delegate: nil)
+                let image = helper.convertDataToUIImage(data: data, response: response)
+                
+                if let profileImage = image {
+                    let user = UserSearchResult(
+                        id: user_id,
+                        displayName: name,
+                        username: username,
+                        hashcode: hashcode,
+                        profileURL: photoURL,
+                        profilePicture: profileImage
+                    )
+                    searchUsers.append(user)
+                } else {
+                    let user = UserSearchResult(
+                        id: user_id,
+                        displayName: name,
+                        username: username,
+                        hashcode: hashcode,
+                        profileURL: photoURL,
+                        profilePicture: UIImage(imageLiteralResourceName: "circle-user-regular")
+                    )
+                    searchUsers.append(user)
+                }
+            }
+        }
+        
+        return searchUsers
+    }
 }

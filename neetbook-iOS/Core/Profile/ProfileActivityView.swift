@@ -44,7 +44,7 @@ struct ProfileActivityView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    @EnvironmentObject private var userStateViewModel: UserStateViewModel
+    @EnvironmentObject private var userStateViewModel: AuthViewModel
     
     @EnvironmentObject private var viewModel: ProfileViewModel
     

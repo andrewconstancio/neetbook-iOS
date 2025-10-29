@@ -238,13 +238,24 @@ struct OtherUserProfileView: View {
                                                         NavigationLink {
                                                             BookView(book: viewModel.activity[index].book)
                                                         } label: {
-                                                            if let image = viewModel.activity[index].book.coverPhoto {
-                                                                Image(uiImage: image)
-                                                                    .resizable()
-                                                                    .frame(width: 65, height: 100)
-                                                                    .cornerRadius(10)
-                                                                    .shadow(radius: 10)
+                                                            if let url = URL(string: viewModel.activity[index].book.coverURL) {
+                                                                AsyncCachedImage(url: url) { image in
+                                                                    image
+                                                                        .resizable()
+                                                                        .frame(width: 65, height: 100)
+                                                                        .cornerRadius(10)
+                                                                        .shadow(radius: 10)
+                                                                } placeholder: {
+                                                                    ProgressView()
+                                                                }
                                                             }
+//                                                            if let image = viewModel.activity[index].book.coverPhoto {
+//                                                                Image(uiImage: image)
+//                                                                    .resizable()
+//                                                                    .frame(width: 65, height: 100)
+//                                                                    .cornerRadius(10)
+//                                                                    .shadow(radius: 10)
+//                                                            }
                                                         }
                                                     }
                                                 }

@@ -13,7 +13,7 @@ class CurrentUserViewModel: ObservableObject {
     
     func fetchUser() async throws {
         let userId = try? AuthenticationManager.shared.getAuthenticatedUserUserId()
-        let user = try? await UserManager.shared.getUser(userId: userId ?? "")
+//        let user = try? await UserManager.shared.getUser(userId: userId ?? "")
         
         guard var user = user, let photoURL = user.photoUrl else {
             throw APIError.invalidData
@@ -21,9 +21,9 @@ class CurrentUserViewModel: ObservableObject {
         
         // set profile photo
         let image = try await UserManager.shared.getURLImageAsUIImage(path: photoURL)
-        user.setUserProfilePic(image: image)
+//        user.setUserProfilePic(image: image)
     
-        self.user = user
+//        self.user = user
     }
 }
 

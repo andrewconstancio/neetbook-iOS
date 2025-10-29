@@ -4,8 +4,43 @@
 //
 //  Created by Andrew Constancio on 2/13/24.
 //
-
 import SwiftUI
+import FirebaseAuth
+
+class AuthViewModelNew: ObservableObject {
+    /// Current authentication state (loading, unauthenticated, requiresSetup, authenticated).
+    @Published var authState: AuthState = .loading
+    
+    /// Navigation path for authentication flow (login, profile setup).
+    @Published var authPath = NavigationPath()
+    
+    /// Navigation path for main app flow (goals, settings).
+    @Published var appPath = NavigationPath()
+    
+    @Published var mainTabSelected = 0
+    
+    init() {
+        Task {
+            await setupAuthState()
+        }
+    }
+    
+    @MainActor
+    func setupAuthState() async {
+        do {
+            let (databaseUser, firebaseUser) = try await UserManager.shared.fetchCurrentUser()
+            
+            if let databaseUser = databaseUser {
+                authState = .authenticated(databaseUser)
+            } else {
+                authState = .requiresSetup(firebaseUser)
+            }
+        } catch {
+            authState = .unauthenticated
+            print(error.localizedDescription)
+        }
+    }
+}
 
 enum UserState {
     case isLoading
@@ -18,8 +53,9 @@ enum UserLoginError: Error {
     case userError
 }
 
+
 @MainActor
-class UserStateViewModel: ObservableObject {
+class AuthViewModel: ObservableObject {
     @Published private(set) var user: DBUser? = nil
     @Published var userState: UserState = .isLoading
     @Published private(set) var pendingFriendCount: Int = 0

@@ -24,24 +24,6 @@ struct ApplicationSwitcherView: View {
                  isLoggedIn = user != nil
              }
          }
-//        ZStack {
-//            switch userStateViewModel.userState {
-//            case .isLoading:
-//                LogoView()
-//            case .loggedOut:
-//                AuthenticationView()
-//                    .environmentObject(userStateViewModel)
-//            case .accountNotMade:
-//                ProfileSetupRootView()
-//                    .environmentObject(userStateViewModel)
-//            case .loggedIn:
-//                ContentView()
-//                    .environmentObject(userStateViewModel)
-//            }
-//        }
-//        .task {
-//            await userStateViewModel.initFlow()
-//        }
     }
 }
 

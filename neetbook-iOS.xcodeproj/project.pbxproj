@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,6 +28,9 @@
 		1C0320792BD44F5600B19038 /* CacheImplemation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0320782BD44F5600B19038 /* CacheImplemation.swift */; };
 		1C03207B2BD4583C00B19038 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C03207A2BD4583C00B19038 /* Cache.swift */; };
 		1C03207D2BD45B6500B19038 /* KeysTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C03207C2BD45B6500B19038 /* KeysTracker.swift */; };
+		1C0CFAE42EAACDA900E3CF9C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1C0CFAE32EAACDA900E3CF9C /* GoogleService-Info.plist */; };
+		1C0CFB812EABB54300E3CF9C /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0CFB802EABB53F00E3CF9C /* AuthState.swift */; };
+		1C0CFC1E2EAEC05400E3CF9C /* AsyncCachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0CFC1D2EAEC04C00E3CF9C /* AsyncCachedImage.swift */; };
 		1C2D4C7E2B19702100828D16 /* FittedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C7D2B19702100828D16 /* FittedScrollView.swift */; };
 		1C2D4C812B1AC9ED00828D16 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 1C2D4C802B1AC9ED00828D16 /* PopupView */; };
 		1C2D4C832B1AD3E000828D16 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2D4C822B1AD3E000828D16 /* CommentView.swift */; };
@@ -39,7 +42,7 @@
 		1C4ACFFC2B4777B4009C10E8 /* PageTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4ACFFB2B4777B4009C10E8 /* PageTitleView.swift */; };
 		1C4ACFFE2B47B2CF009C10E8 /* DeleteAccountPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4ACFFD2B47B2CF009C10E8 /* DeleteAccountPopupView.swift */; };
 		1C4AD0002B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4ACFFF2B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift */; };
-		1C4B22262B7C4FF1006A55D4 /* UserStateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B22252B7C4FF1006A55D4 /* UserStateViewModel.swift */; };
+		1C4B22262B7C4FF1006A55D4 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B22252B7C4FF1006A55D4 /* AuthViewModel.swift */; };
 		1C4B22282B7C520B006A55D4 /* ApplicationSwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B22272B7C520B006A55D4 /* ApplicationSwitcherView.swift */; };
 		1C4B222A2B809268006A55D4 /* UserPostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B22292B809268006A55D4 /* UserPostManager.swift */; };
 		1C4B222D2B8276F4006A55D4 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B222C2B8276F4006A55D4 /* PostView.swift */; };
@@ -80,14 +83,7 @@
 		1CA4C4FF2AAC021C007C1AD3 /* BookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA4C4FE2AAC021C007C1AD3 /* BookViewModel.swift */; };
 		1CB1B3BF2A5B50DE009F6914 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 1CB1B3BE2A5B50DE009F6914 /* FirebaseFirestore */; };
 		1CB1B3C12A5B52E3009F6914 /* ProfileSetupRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C02A5B52E3009F6914 /* ProfileSetupRootView.swift */; };
-		1CB1B3C92A5B9DDB009F6914 /* CustomNavLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C32A5B9DDB009F6914 /* CustomNavLink.swift */; };
-		1CB1B3CA2A5B9DDB009F6914 /* CustomNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C42A5B9DDB009F6914 /* CustomNavView.swift */; };
-		1CB1B3CB2A5B9DDB009F6914 /* CustomNavBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C52A5B9DDB009F6914 /* CustomNavBarContainerView.swift */; };
-		1CB1B3CC2A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C62A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift */; };
-		1CB1B3CD2A5B9DDB009F6914 /* AppNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C72A5B9DDB009F6914 /* AppNavBarView.swift */; };
-		1CB1B3CE2A5B9DDB009F6914 /* CustomNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB1B3C82A5B9DDB009F6914 /* CustomNavBarView.swift */; };
 		1CB41D2E2B5DF78F0013FAFA /* AdaptsToKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D2D2B5DF78F0013FAFA /* AdaptsToKeyboard.swift */; };
-		1CB41D302B6F0A6B0013FAFA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1CB41D2F2B6F0A6B0013FAFA /* GoogleService-Info.plist */; };
 		1CB41D5E2B7068100013FAFA /* IsScrolling in Frameworks */ = {isa = PBXBuildFile; productRef = 1CB41D5D2B7068100013FAFA /* IsScrolling */; };
 		1CB41D602B71D2640013FAFA /* NotificationCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D5F2B71D2640013FAFA /* NotificationCountView.swift */; };
 		1CB41D622B71D5700013FAFA /* PendingFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB41D612B71D5700013FAFA /* PendingFriendsView.swift */; };
@@ -113,15 +109,10 @@
 		1CC81F5F2A5A2127001D56E1 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 1CC81F5E2A5A2127001D56E1 /* FirebaseAuthCombine-Community */; };
 		1CC81F632A5A2127001D56E1 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 1CC81F622A5A2127001D56E1 /* FirebaseFirestoreCombine-Community */; };
 		1CC81F652A5A2127001D56E1 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1CC81F642A5A2127001D56E1 /* FirebaseFirestoreSwift */; };
-		1CC81F712A5A2244001D56E1 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F6C2A5A2244001D56E1 /* RootView.swift */; };
 		1CC81F722A5A2244001D56E1 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F6D2A5A2244001D56E1 /* AuthenticationView.swift */; };
 		1CC81F732A5A2244001D56E1 /* AuthenicationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F6E2A5A2244001D56E1 /* AuthenicationManager.swift */; };
 		1CC81F742A5A2244001D56E1 /* SignInEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F6F2A5A2244001D56E1 /* SignInEmailView.swift */; };
 		1CC81F752A5A2244001D56E1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F702A5A2244001D56E1 /* SettingsView.swift */; };
-		1CC81F7C2A5A2275001D56E1 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F782A5A2275001D56E1 /* CustomTabBarView.swift */; };
-		1CC81F7D2A5A2275001D56E1 /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F792A5A2275001D56E1 /* TabBarItem.swift */; };
-		1CC81F7E2A5A2275001D56E1 /* CustomTabBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F7A2A5A2275001D56E1 /* CustomTabBarContainerView.swift */; };
-		1CC81F7F2A5A2275001D56E1 /* TabBarItemsPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F7B2A5A2275001D56E1 /* TabBarItemsPreferenceKey.swift */; };
 		1CC81F832A5A22A1001D56E1 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F822A5A22A1001D56E1 /* LibraryView.swift */; };
 		1CC81F852A5A22A8001D56E1 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F842A5A22A8001D56E1 /* FeedView.swift */; };
 		1CC81F882A5A24B5001D56E1 /* Color-Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC81F872A5A24B5001D56E1 /* Color-Ext.swift */; };
@@ -211,6 +202,9 @@
 		1C0320782BD44F5600B19038 /* CacheImplemation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheImplemation.swift; sourceTree = "<group>"; };
 		1C03207A2BD4583C00B19038 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		1C03207C2BD45B6500B19038 /* KeysTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysTracker.swift; sourceTree = "<group>"; };
+		1C0CFAE32EAACDA900E3CF9C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1C0CFB802EABB53F00E3CF9C /* AuthState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthState.swift; sourceTree = "<group>"; };
+		1C0CFC1D2EAEC04C00E3CF9C /* AsyncCachedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncCachedImage.swift; sourceTree = "<group>"; };
 		1C2D4C7D2B19702100828D16 /* FittedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittedScrollView.swift; sourceTree = "<group>"; };
 		1C2D4C822B1AD3E000828D16 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		1C2D4C842B1C000300828D16 /* NavBackButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBackButtonView.swift; sourceTree = "<group>"; };
@@ -221,7 +215,7 @@
 		1C4ACFFB2B4777B4009C10E8 /* PageTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTitleView.swift; sourceTree = "<group>"; };
 		1C4ACFFD2B47B2CF009C10E8 /* DeleteAccountPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountPopupView.swift; sourceTree = "<group>"; };
 		1C4ACFFF2B4B6753009C10E8 /* CouldNoDeleteAccountPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouldNoDeleteAccountPopupView.swift; sourceTree = "<group>"; };
-		1C4B22252B7C4FF1006A55D4 /* UserStateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStateViewModel.swift; sourceTree = "<group>"; };
+		1C4B22252B7C4FF1006A55D4 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		1C4B22272B7C520B006A55D4 /* ApplicationSwitcherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationSwitcherView.swift; sourceTree = "<group>"; };
 		1C4B22292B809268006A55D4 /* UserPostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostManager.swift; sourceTree = "<group>"; };
 		1C4B222C2B8276F4006A55D4 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
@@ -259,14 +253,7 @@
 		1CA4C4FC2AA95C91007C1AD3 /* BookUserActionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookUserActionManager.swift; sourceTree = "<group>"; };
 		1CA4C4FE2AAC021C007C1AD3 /* BookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewModel.swift; sourceTree = "<group>"; };
 		1CB1B3C02A5B52E3009F6914 /* ProfileSetupRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupRootView.swift; sourceTree = "<group>"; };
-		1CB1B3C32A5B9DDB009F6914 /* CustomNavLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavLink.swift; sourceTree = "<group>"; };
-		1CB1B3C42A5B9DDB009F6914 /* CustomNavView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavView.swift; sourceTree = "<group>"; };
-		1CB1B3C52A5B9DDB009F6914 /* CustomNavBarContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBarContainerView.swift; sourceTree = "<group>"; };
-		1CB1B3C62A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomBarPreferenceKeys.swift; sourceTree = "<group>"; };
-		1CB1B3C72A5B9DDB009F6914 /* AppNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNavBarView.swift; sourceTree = "<group>"; };
-		1CB1B3C82A5B9DDB009F6914 /* CustomNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavBarView.swift; sourceTree = "<group>"; };
 		1CB41D2D2B5DF78F0013FAFA /* AdaptsToKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptsToKeyboard.swift; sourceTree = "<group>"; };
-		1CB41D2F2B6F0A6B0013FAFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1CB41D5F2B71D2640013FAFA /* NotificationCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCountView.swift; sourceTree = "<group>"; };
 		1CB41D612B71D5700013FAFA /* PendingFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingFriendsView.swift; sourceTree = "<group>"; };
 		1CB41D632B71DA4C0013FAFA /* PendingFriendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingFriendsViewModel.swift; sourceTree = "<group>"; };
@@ -289,15 +276,10 @@
 		1CC81F422A5A20C2001D56E1 /* neetbook-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "neetbook-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CC81F462A5A20C2001D56E1 /* neetbook_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = neetbook_iOSUITests.swift; sourceTree = "<group>"; };
 		1CC81F482A5A20C2001D56E1 /* neetbook_iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = neetbook_iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		1CC81F6C2A5A2244001D56E1 /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		1CC81F6D2A5A2244001D56E1 /* AuthenticationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		1CC81F6E2A5A2244001D56E1 /* AuthenicationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenicationManager.swift; sourceTree = "<group>"; };
 		1CC81F6F2A5A2244001D56E1 /* SignInEmailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInEmailView.swift; sourceTree = "<group>"; };
 		1CC81F702A5A2244001D56E1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		1CC81F782A5A2275001D56E1 /* CustomTabBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
-		1CC81F792A5A2275001D56E1 /* TabBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarItem.swift; sourceTree = "<group>"; };
-		1CC81F7A2A5A2275001D56E1 /* CustomTabBarContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarContainerView.swift; sourceTree = "<group>"; };
-		1CC81F7B2A5A2275001D56E1 /* TabBarItemsPreferenceKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarItemsPreferenceKey.swift; sourceTree = "<group>"; };
 		1CC81F822A5A22A1001D56E1 /* LibraryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		1CC81F842A5A22A8001D56E1 /* FeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		1CC81F872A5A24B5001D56E1 /* Color-Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color-Ext.swift"; sourceTree = "<group>"; };
@@ -343,6 +325,10 @@
 		1CF9100E2BBA52A1005ABE78 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		1CF910102BBA5F8D005ABE78 /* HomeContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		1C9E9ECE2EAFC9C200B66D07 /* NEW */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = NEW; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		1CC81F242A5A20C1001D56E1 /* Frameworks */ = {
@@ -503,19 +489,6 @@
 			path = Book;
 			sourceTree = "<group>";
 		};
-		1CB1B3C22A5B9DBE009F6914 /* CustomNavBar */ = {
-			isa = PBXGroup;
-			children = (
-				1CB1B3C72A5B9DDB009F6914 /* AppNavBarView.swift */,
-				1CB1B3C62A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift */,
-				1CB1B3C52A5B9DDB009F6914 /* CustomNavBarContainerView.swift */,
-				1CB1B3C82A5B9DDB009F6914 /* CustomNavBarView.swift */,
-				1CB1B3C32A5B9DDB009F6914 /* CustomNavLink.swift */,
-				1CB1B3C42A5B9DDB009F6914 /* CustomNavView.swift */,
-			);
-			path = CustomNavBar;
-			sourceTree = "<group>";
-		};
 		1CC81F1E2A5A20C1001D56E1 = {
 			isa = PBXGroup;
 			children = (
@@ -540,28 +513,28 @@
 		1CC81F292A5A20C1001D56E1 /* neetbook-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				1C9E9ECE2EAFC9C200B66D07 /* NEW */,
 				1C0320752BD44EA100B19038 /* Cache */,
-				1CB41D2F2B6F0A6B0013FAFA /* GoogleService-Info.plist */,
-				1CC81F2C2A5A20C1001D56E1 /* ContentView.swift */,
-				1CB41D672B7333C00013FAFA /* ContentViewModel.swift */,
-				1C4B22272B7C520B006A55D4 /* ApplicationSwitcherView.swift */,
-				1CC81F2A2A5A20C1001D56E1 /* neetbook_iOSApp.swift */,
-				1C4B22252B7C4FF1006A55D4 /* UserStateViewModel.swift */,
 				1CEDE23B2AA50959005DEDBA /* Animiations */,
 				1CEDE2132A8B2A01005DEDBA /* Models */,
-				1CB1B3C22A5B9DBE009F6914 /* CustomNavBar */,
 				1CC81F9F2A5B48CC001D56E1 /* Managers */,
 				1CC81F942A5B4018001D56E1 /* Core */,
 				1CA4C4EA2AA67C98007C1AD3 /* Services */,
 				1CC81F8F2A5A2F16001D56E1 /* Utilites */,
 				1CC81F862A5A2487001D56E1 /* Custom */,
 				1CC81F6B2A5A2223001D56E1 /* Authentication */,
-				1CC81F772A5A2266001D56E1 /* CustomTabBar */,
 				1CC81F8E2A5A2AD2001D56E1 /* Info.plist */,
+				1CC81F2C2A5A20C1001D56E1 /* ContentView.swift */,
+				1CB41D672B7333C00013FAFA /* ContentViewModel.swift */,
+				1C4B22272B7C520B006A55D4 /* ApplicationSwitcherView.swift */,
+				1CC81F2A2A5A20C1001D56E1 /* neetbook_iOSApp.swift */,
+				1C0CFB802EABB53F00E3CF9C /* AuthState.swift */,
+				1C4B22252B7C4FF1006A55D4 /* AuthViewModel.swift */,
 				1CC81F2E2A5A20C2001D56E1 /* Assets.xcassets */,
 				1CC81F302A5A20C2001D56E1 /* neetbook_iOS.entitlements */,
 				1CC81F312A5A20C2001D56E1 /* Preview Content */,
 				1C0320612BCA1B5E00B19038 /* ApplicationSwitchViewModel.swift */,
+				1C0CFAE32EAACDA900E3CF9C /* GoogleService-Info.plist */,
 			);
 			path = "neetbook-iOS";
 			sourceTree = "<group>";
@@ -603,17 +576,6 @@
 				1CA4C4E02AA65CB5007C1AD3 /* LogoView.swift */,
 			);
 			path = Authentication;
-			sourceTree = "<group>";
-		};
-		1CC81F772A5A2266001D56E1 /* CustomTabBar */ = {
-			isa = PBXGroup;
-			children = (
-				1CC81F7A2A5A2275001D56E1 /* CustomTabBarContainerView.swift */,
-				1CC81F782A5A2275001D56E1 /* CustomTabBarView.swift */,
-				1CC81F792A5A2275001D56E1 /* TabBarItem.swift */,
-				1CC81F7B2A5A2275001D56E1 /* TabBarItemsPreferenceKey.swift */,
-			);
-			path = CustomTabBar;
 			sourceTree = "<group>";
 		};
 		1CC81F802A5A2288001D56E1 /* Library */ = {
@@ -675,6 +637,7 @@
 		1CC81F8F2A5A2F16001D56E1 /* Utilites */ = {
 			isa = PBXGroup;
 			children = (
+				1C0CFC1D2EAEC04C00E3CF9C /* AsyncCachedImage.swift */,
 				1CC81F902A5A2F32001D56E1 /* Utilities.swift */,
 				1CEDE21B2A8F369E005DEDBA /* Helpers.swift */,
 				1CEDE22B2A95A78F005DEDBA /* ImagePicker.swift */,
@@ -688,7 +651,6 @@
 		1CC81F942A5B4018001D56E1 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				1CC81F6C2A5A2244001D56E1 /* RootView.swift */,
 				1CEDE23C2AA658F0005DEDBA /* RootViewModel.swift */,
 				1C6A84FE2AFFFE6D00266135 /* CurrentUserViewModel.swift */,
 				1CA4C4E52AA674FC007C1AD3 /* Components */,
@@ -814,6 +776,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				1C9E9ECE2EAFC9C200B66D07 /* NEW */,
+			);
 			name = "neetbook-iOS";
 			packageProductDependencies = (
 				1CC81F582A5A2127001D56E1 /* FirebaseAnalytics */,
@@ -934,7 +899,7 @@
 			files = (
 				1CC81F332A5A20C2001D56E1 /* Preview Assets.xcassets in Resources */,
 				1CC81F2F2A5A20C2001D56E1 /* Assets.xcassets in Resources */,
-				1CB41D302B6F0A6B0013FAFA /* GoogleService-Info.plist in Resources */,
+				1C0CFAE42EAACDA900E3CF9C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -964,9 +929,8 @@
 				1CEDE2222A945E6F005DEDBA /* UserNameSetupView.swift in Sources */,
 				1CA4C4F52AA74D29007C1AD3 /* TagCloudView.swift in Sources */,
 				1CEDE2262A945F0D005DEDBA /* DataOfBirthView.swift in Sources */,
-				1CC81F7F2A5A2275001D56E1 /* TabBarItemsPreferenceKey.swift in Sources */,
 				1C0320512BBD992E00B19038 /* GenreContentViewModel.swift in Sources */,
-				1C4B22262B7C4FF1006A55D4 /* UserStateViewModel.swift in Sources */,
+				1C4B22262B7C4FF1006A55D4 /* AuthViewModel.swift in Sources */,
 				1CC81F752A5A2244001D56E1 /* SettingsView.swift in Sources */,
 				1C4207E62C0819ED00FCF7A7 /* MarkBookView.swift in Sources */,
 				1C6A85122B0C4BD800266135 /* OtherFollowListView.swift in Sources */,
@@ -997,10 +961,10 @@
 				1CB41D2E2B5DF78F0013FAFA /* AdaptsToKeyboard.swift in Sources */,
 				1C0320562BC3339400B19038 /* FeedViewModel.swift in Sources */,
 				1C03204F2BBD984200B19038 /* GenreContentView.swift in Sources */,
+				1C0CFB812EABB54300E3CF9C /* AuthState.swift in Sources */,
 				1CB41D642B71DA4C0013FAFA /* PendingFriendsViewModel.swift in Sources */,
 				1C6A850E2B0AF64100266135 /* FollowListViewModel.swift in Sources */,
 				1CEDE2282A9461B0005DEDBA /* NextButtonViewModifers.swift in Sources */,
-				1CB1B3CB2A5B9DDB009F6914 /* CustomNavBarContainerView.swift in Sources */,
 				1CC81F742A5A2244001D56E1 /* SignInEmailView.swift in Sources */,
 				1CB41D6C2B73409D0013FAFA /* TestProfileView.swift in Sources */,
 				1CA4C4F12AA6C0F3007C1AD3 /* BookView.swift in Sources */,
@@ -1019,7 +983,6 @@
 				1C03205A2BC3442400B19038 /* PostInstanceView.swift in Sources */,
 				1CEDE2302A9A5615005DEDBA /* SetupSelectedGenresView.swift in Sources */,
 				1CA4C4F92AA8050A007C1AD3 /* AdaptiveSheet.swift in Sources */,
-				1CB1B3CA2A5B9DDB009F6914 /* CustomNavView.swift in Sources */,
 				1CEDE23A2AA50712005DEDBA /* SpinnerCircle.swift in Sources */,
 				1C6A85062B0471DA00266135 /* OtherUserProfileViewModel.swift in Sources */,
 				1C4208C72C320E3700FCF7A7 /* LastReadsView.swift in Sources */,
@@ -1030,14 +993,11 @@
 				1C03206A2BCC9C0E00B19038 /* EditBookSelectionPopupView.swift in Sources */,
 				1C2D4C832B1AD3E000828D16 /* CommentView.swift in Sources */,
 				1CC81F9A2A5B40E0001D56E1 /* AuthenticationViewModel.swift in Sources */,
-				1CB1B3CC2A5B9DDB009F6914 /* CustomBarPreferenceKeys.swift in Sources */,
 				1CE3A2BD2ADCA9A0003BAD2A /* ProfileViewModel.swift in Sources */,
 				1C4ACFFE2B47B2CF009C10E8 /* DeleteAccountPopupView.swift in Sources */,
 				1CC81F972A5B408B001D56E1 /* SettingViewModel.swift in Sources */,
 				1CA4C4FD2AA95C91007C1AD3 /* BookUserActionManager.swift in Sources */,
-				1CB1B3C92A5B9DDB009F6914 /* CustomNavLink.swift in Sources */,
 				1CEDE2342A9D95F6005DEDBA /* ImageMoveAndScaleSheet.swift in Sources */,
-				1CB1B3CE2A5B9DDB009F6914 /* CustomNavBarView.swift in Sources */,
 				1C6A850C2B0AF07300266135 /* FollowListView.swift in Sources */,
 				1C0320722BD0C38900B19038 /* BookInfoView.swift in Sources */,
 				1C4B222A2B809268006A55D4 /* UserPostManager.swift in Sources */,
@@ -1051,8 +1011,6 @@
 				1CA4C4EC2AA67CAC007C1AD3 /* BookDataService.swift in Sources */,
 				1C4208C52C319C4500FCF7A7 /* MarkedBookView.swift in Sources */,
 				1CF9100B2BBA2A9C005ABE78 /* ResizableTF.swift in Sources */,
-				1CC81F7D2A5A2275001D56E1 /* TabBarItem.swift in Sources */,
-				1CB1B3CD2A5B9DDB009F6914 /* AppNavBarView.swift in Sources */,
 				1C0320682BCC69F500B19038 /* BookshelfBookView.swift in Sources */,
 				1C4B22312B828387006A55D4 /* PostViewModel.swift in Sources */,
 				1CEDE23D2AA658F0005DEDBA /* RootViewModel.swift in Sources */,
@@ -1067,9 +1025,9 @@
 				1C6A850A2B0A651100266135 /* NotificationsViewModel.swift in Sources */,
 				1CC81F882A5A24B5001D56E1 /* Color-Ext.swift in Sources */,
 				1CB1B3C12A5B52E3009F6914 /* ProfileSetupRootView.swift in Sources */,
-				1CC81F7C2A5A2275001D56E1 /* CustomTabBarView.swift in Sources */,
 				1CB41D622B71D5700013FAFA /* PendingFriendsView.swift in Sources */,
 				1C6A85162B0D9A5E00266135 /* UserFeedManager.swift in Sources */,
+				1C0CFC1E2EAEC05400E3CF9C /* AsyncCachedImage.swift in Sources */,
 				1CB41D602B71D2640013FAFA /* NotificationCountView.swift in Sources */,
 				1CB41D762B75C6840013FAFA /* ProfileFavoritesView.swift in Sources */,
 				1CE3A2AD2ABBB11E003BAD2A /* SwipeTestingView.swift in Sources */,
@@ -1091,14 +1049,12 @@
 				1CC81F9E2A5B4147001D56E1 /* ProfileView.swift in Sources */,
 				1C4B22282B7C520B006A55D4 /* ApplicationSwitcherView.swift in Sources */,
 				1CA4C4FF2AAC021C007C1AD3 /* BookViewModel.swift in Sources */,
-				1CC81F712A5A2244001D56E1 /* RootView.swift in Sources */,
 				1C0320542BC325C200B19038 /* NotificationComponentView.swift in Sources */,
 				1C4207E22C04891800FCF7A7 /* DeleteBookshelfConfirmView.swift in Sources */,
 				1CA4C4F72AA75CA1007C1AD3 /* BookActionView.swift in Sources */,
 				1CA2D2B22BD5C11C006D1A75 /*  ReactionsSpringsWithParameters.swift in Sources */,
 				1CC81FA12A5B48FB001D56E1 /* UserManager.swift in Sources */,
 				1CE3A2B72ACD0231003BAD2A /* AddToFavoritesView.swift in Sources */,
-				1CC81F7E2A5A2275001D56E1 /* CustomTabBarContainerView.swift in Sources */,
 				1CE3A2B32ACCE773003BAD2A /* RefreshableScrollView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

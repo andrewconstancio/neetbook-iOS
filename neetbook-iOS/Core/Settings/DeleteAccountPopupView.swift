@@ -10,7 +10,7 @@ import PopupView
 
 struct DeleteAccountPopupView: View {
     
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @ObservedObject var viewModel: SettingsViewModel
     

@@ -24,12 +24,12 @@ struct LastReadsView: View {
                     BookView(book: book.book)
                 } label: {
                     HStack {
-                        if let coverPhoto = book.book.coverPhoto{
-                            Image(uiImage: coverPhoto)
-                                .resizable()
-                                .frame(width: 80, height: 120)
-                                .cornerRadius(5)
-                        }
+//                        if let coverPhoto = book.book.coverPhoto{
+//                            Image(uiImage: coverPhoto)
+//                                .resizable()
+//                                .frame(width: 80, height: 120)
+//                                .cornerRadius(5)
+//                        }
                         VStack(alignment: .leading) {
                             Text(book.book.title)
                                 .font(.headline)

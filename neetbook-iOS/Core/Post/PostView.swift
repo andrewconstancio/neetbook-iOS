@@ -10,7 +10,7 @@ import SwiftUI
 struct PostView: View {
     let post: PostFeedInstance
     
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @Environment(\.colorScheme) var colorScheme
     

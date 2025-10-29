@@ -41,8 +41,7 @@ class DeveloperPreview {
                     pages: 416,
                     publishedYear: "2008-02-05",
                     language: "en",
-                    publisher: "YOOO",
-                    coverPhoto: UIImage(named: "dunemi"))
+                    publisher: "YOOO")
     
     let postComment = PostComment(documentId: "zZrI19bILlAbfkvH4pI8",
                                   userId: "9iNv2tf5tqQMFvdwhLPLzDo2OZf1",

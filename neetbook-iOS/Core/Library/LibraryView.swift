@@ -17,7 +17,7 @@ enum BookListType: String {
 
 struct LibraryView: View {
     
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @StateObject private var viewModel = LibraryViewModel()
     
@@ -260,6 +260,6 @@ struct LibraryView: View {
 struct LibraryView_Previews: PreviewProvider {
     static var previews: some View {
         LibraryView()
-            .environmentObject(UserStateViewModel())
+            .environmentObject(AuthViewModel())
     }
 }

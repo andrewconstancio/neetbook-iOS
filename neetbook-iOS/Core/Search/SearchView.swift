@@ -65,12 +65,16 @@ struct SearchView: View {
                                         BookView(book: viewModel.searchBookResults[value])
                                     } label: {
                                         HStack {
-                                            if let coverPhoto = viewModel.searchBookResults[value].coverPhoto{
-                                                Image(uiImage: coverPhoto)
-                                                    .resizable()
-                                                    .frame(width: 60, height: 100)
-                                                    .cornerRadius(10)
-                                                    .shadow(radius: 5)
+                                            if let url = URL(string: viewModel.searchBookResults[value].coverURL) {
+                                                AsyncCachedImage(url: url) { image in
+                                                    image
+                                                        .resizable()
+                                                        .frame(width: 60, height: 100)
+                                                        .cornerRadius(10)
+                                                        .shadow(radius: 5)
+                                                } placeholder: {
+                                                    ProgressView()
+                                                }
                                             }
                                             VStack(alignment: .leading) {
                                                 Text(viewModel.searchBookResults[value].title)

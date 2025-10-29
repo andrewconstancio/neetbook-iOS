@@ -100,7 +100,6 @@ struct CommentView: View {
                 .dragToDismiss(true)
         }
         .padding(.top, 20)
-//        .frame(maxWidth: .infinity, alignment: .top)
     }
 }
 

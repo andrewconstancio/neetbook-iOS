@@ -18,7 +18,6 @@ struct PostCommentView: View {
     
     @State private var showSheetReport: Bool = false
     
-    
     var body: some View {
         HStack(alignment: .top) {
             Image(uiImage: comment.profilePicture)

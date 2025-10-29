@@ -12,7 +12,7 @@ struct PostInstanceView: View {
     
     let linkToPost: Bool
     
-    @EnvironmentObject var userStateViewModel: UserStateViewModel
+    @EnvironmentObject var userStateViewModel: AuthViewModel
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -65,12 +65,21 @@ struct PostInstanceView: View {
                 NavigationLink {
                     BookView(book: post.book)
                 } label: {
-                    if let image = post.book.coverPhoto {
-                        Image(uiImage: image)
-                            .resizable()
-                            .frame(width: 90, height: 140)
-//                            .cornerRadius(5)
+                    if let url = URL(string: post.book.coverURL) {
+                        AsyncCachedImage(url: url) { image in
+                            image
+                                .resizable()
+                                .frame(width: 90, height: 140)
+                        } placeholder: {
+                            ProgressView()
+                        }
                     }
+//                    if let image = post.book.coverPhoto {
+//                        Image(uiImage: image)
+//                            .resizable()
+//                            .frame(width: 90, height: 140)
+////                            .cornerRadius(5)
+//                    }
                 }
                 NavigationLink {
                     PostView(post: post)
