@@ -10,6 +10,7 @@ import SwiftUI
 struct ResizableTF: UIViewRepresentable {
     @Binding var text: String
     @Binding var height: CGFloat
+    var placeholderText: String
     
     func makeCoordinator() -> Coordinator {
         return ResizableTF.Coordinator(parent1: self)
@@ -54,7 +55,7 @@ struct ResizableTF: UIViewRepresentable {
         
         func textViewDidEndEditing(_ textView: UITextView) {
             if self.parent.text == "" {
-                textView.text = "Enter Comment"
+                textView.text = self.parent.placeholderText
                 textView.textColor = .gray
             }
         }

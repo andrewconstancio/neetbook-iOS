@@ -43,6 +43,12 @@ struct Bookshelf: Identifiable, Codable {
     }
 }
 
+extension Bookshelf: Equatable {
+    static func == (lhs: Bookshelf, rhs: Bookshelf) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
 struct BookshelfAddedTo: Codable {
     let bookId: String
     let bookshelfId: String
@@ -50,7 +56,7 @@ struct BookshelfAddedTo: Codable {
     let userId: String
 }
 
-struct DBUser: Codable {
+struct DBUser: Codable, Hashable {
     let userId: String
     var username: String?
     var hashcode: String?
@@ -82,7 +88,7 @@ struct DBUser: Codable {
         self.displayname = displayname
         self.hashcode = hashcode
         self.email = email
-        self.photoUrl = email
+        self.photoUrl = photoUrl   // ✅ fixed this from `email`
         self.publicAccount = publicAccount
         self.dateOfBirth = dateOfBirth
         self.dateCreated = dateCreated
@@ -110,4 +116,15 @@ struct DBUser: Codable {
     mutating func setUserProfilePic(image: UIImage) {
         self.profilePhoto = image
     }
+
+    // Explicit Hashable conformance
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(userId)
+    }
+    
+    // Equality check (users are equal if they share the same ID)
+    static func == (lhs: DBUser, rhs: DBUser) -> Bool {
+        return lhs.userId == rhs.userId
+    }
 }
+

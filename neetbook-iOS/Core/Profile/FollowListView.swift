@@ -116,7 +116,8 @@ extension FollowListView {
                     HStack {
                         if let image = viewModel.following[index].profileImage {
                             NavigationLink {
-                                TwitterProfileView(userId: viewModel.following[index].userId)
+                                ProfileView(userID: viewModel.following[index].userId)
+//                                TwitterProfileView(userId: viewModel.following[index].userId)
                             } label: {
                                 Image(uiImage: image)
                                     .resizable()
@@ -212,7 +213,8 @@ extension FollowListView {
                     HStack {
                         if let image = viewModel.followers[index].profileImage {
                             NavigationLink {
-                                TwitterProfileView(userId: viewModel.following[index].userId)
+                                ProfileView(userID: viewModel.following[index].userId)
+//                                TwitterProfileView(userId: viewModel.following[index].userId)
                             } label: {
                                 Image(uiImage: image)
                                     .resizable()

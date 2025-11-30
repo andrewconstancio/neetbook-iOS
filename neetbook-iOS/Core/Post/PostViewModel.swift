@@ -7,37 +7,70 @@
 
 import SwiftUI
 
-
 @MainActor
 class PostViewModel: ObservableObject {
+    
+    /// An array of user comments for the post.
     @Published var postComments: [PostComment] = []
-    @Published var userNewComment: String = ""
     
+    /// A string for a new comment.
+    @Published var newComment: String = ""
+    
+    /// A flag to check if the comment is valid.
     var commentValid: Bool {
-        return !userNewComment.isEmpty
+        return !newComment.isEmpty
     }
     
-    func getComments(documentId: String) async throws {
-        postComments = try await UserPostManager.shared.getPostComments(documentId: documentId)
+    
+    /// Fetches the comments for the post.
+    /// - Parameter documentId: The post document id from firebase.
+    func fetchPostComments(documentID: String) async {
+        do {
+            postComments = try await UserPostManager.shared.getPostComments(documentId: documentID)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
-    func addComment(posterUserId: String, documentId: String) async throws {
-        if userNewComment != "" {
-            let comment = try await UserPostManager.shared.addCommentToPost(posterUserId: posterUserId, documentId: documentId, comment: userNewComment)
+    /// Inserts a new comment on the post.
+    /// - Parameters:
+    ///   - postUserID: The post users id.
+    ///   - documentId: The post document id from firebase.
+    func insertComment(postUserID: String, documentId: String) async {
+        do {
+            let comment = try await UserPostManager.shared.addCommentToPost(posterUserId: postUserID, documentId: documentId, comment: newComment)
             
             postComments.insert(comment, at: 0)
-            userNewComment = ""
+            newComment = ""
+        } catch {
+            print(error.localizedDescription)
         }
     }
     
-    func deleteComment(documentId: String) async throws {
-        try await UserPostManager.shared.deletePostComment(documentId: documentId)
-        DispatchQueue.main.async {
-            self.postComments =  self.postComments.filter { $0.documentId != documentId}
+    
+    /// Deletes a comment from the post.
+    /// - Parameter documentId: The post document id from firebase.
+    func deleteComment(documentId: String) async {
+        do {
+            try await UserPostManager.shared.deletePostComment(documentId: documentId)
+            DispatchQueue.main.async {
+                self.postComments =  self.postComments.filter { $0.documentId != documentId}
+            }
+        } catch {
+            print(error.localizedDescription)
         }
     }
     
-    func reportComment(commentDocID: String, comment: String) async throws {
-        try await UserPostManager.shared.reportComment(commentDocID: commentDocID, comment: comment)
+    
+    /// Reports a comment that is on the post.
+    /// - Parameters:
+    ///   - commentDocumentID: The comments document ID that is reported from firebase.
+    ///   - comment: The comments text that is reported.
+    func reportComment(commentDocumentID: String, comment: String) async {
+        do {
+            try await UserPostManager.shared.reportComment(commentDocID: commentDocumentID, comment: comment)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }

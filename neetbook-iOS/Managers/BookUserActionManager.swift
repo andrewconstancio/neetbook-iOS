@@ -278,4 +278,127 @@ final class BookUserActionManager {
             .document(bookshelfId)
             .delete()
     }
+    
+    
+    // MARK: New
+    
+    func getMarkedBookTypes(userId: String, markedType: BookListType) async throws -> [MarkedBook] {
+        let querySnapshot = try await userMarkedBooks
+            .whereField("user_id", isEqualTo: userId)
+            .whereField("mark_type", isEqualTo: markedType.rawValue)
+            .order(by: "date_created", descending: true)
+            .getDocuments()
+        
+        var books: [MarkedBook] = []
+        
+        try await withThrowingTaskGroup(of: MarkedBook?.self) { group in
+            for document in querySnapshot.documents {
+                group.addTask {
+                    let data = document.data()
+                    let dateAdded = (data["date_created"] as? Timestamp)?.dateValue() ?? Date()
+                    
+                    if let bookId = data["book_id"] as? String {
+                        let book = try await BookDataService.shared.fetchBookInfo(bookId: bookId)
+                        if let book = book {
+                            let bookInShelf = MarkedBook(id: document.documentID,
+                                                         book: book,
+                                                         dateAdded: dateAdded)
+                            return bookInShelf
+                        }
+                    }
+                    return nil
+                }
+                
+                for try await book in group {
+                    if let book = book {
+                        books.append(book)
+                    }
+                }
+            }
+        }
+        return books
+    }
+    
+    func insertIntoBookshelves(bookId: String, bookshelvesIds: [String]) async throws {
+        guard let currentUID = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "Current user id not found.", code: 0)
+        }
+        
+        var addToFeed: Bool = false
+        var postDocID: String = ""
+        
+        for bookshelvesId in bookshelvesIds {
+            
+            let querySnapshot = try await bookshelvesUserscollection
+                .whereField("user_id", isEqualTo: currentUID)
+                .whereField("book_id", isEqualTo: bookId)
+                .whereField("bookshelf_id", isEqualTo: bookshelvesId)
+                .getDocuments()
+            
+            if querySnapshot.isEmpty {
+                let docData: [String : Any] = [
+                    "book_id" : bookId,
+                    "user_id" : currentUID,
+                    "bookshelf_id" : bookshelvesId,
+                    "date_created" : Timestamp(date: Date())
+                ]
+                
+                let ref = bookshelvesUserscollection.document()
+                try await ref.setData(docData, merge: true)
+                
+                let documentSnapshot = userBookshelvesCollection
+                        .document(currentUID)
+                        .collection("bookshelves")
+                        .document(bookshelvesId)
+                
+                let docId = ref.documentID
+                try await documentSnapshot.setData(["count": FieldValue.increment(Int64(1))], merge: true)
+                let data = try await documentSnapshot.getDocument().data()
+                let bookshelf = try decoder.decode(Bookshelf.self, from: data as Any)
+                
+                
+                // add to post feed
+                let addToPostFeed = bookshelf.isPublic ?? true
+                if addToPostFeed {
+                    addToFeed = true
+                    postDocID = docId
+                }
+            }
+        }
+        
+        if addToFeed {
+            UserPostManager.shared.addUserPost(userId: currentUID, collection: "userBookshelvesAddedTo", bookId: bookId, documentID: postDocID)
+        }
+    }
+    
+    func removeFromBookshelves(bookId: String, bookshelvesIds: [String]) async throws {
+        guard let currentUID = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "Current user id not found.", code: 0)
+        }
+        
+        bookshelvesUserscollection
+            .whereField("user_id", isEqualTo: currentUID)
+            .whereField("book_id", isEqualTo: bookId)
+        
+        for bookshelfId in bookshelvesIds {
+            let documents = try await bookshelvesUserscollection
+                .whereField("user_id", isEqualTo: currentUID)
+                .whereField("book_id", isEqualTo: bookId)
+                .whereField("bookshelf_id", isEqualTo: bookshelfId)
+                .getDocuments()
+            
+            for document in documents.documents {
+                let docId = document.reference.documentID
+                try await document.reference.delete()
+    
+                try await UserPostManager.shared.deleteUserPost(documentID: docId)
+                
+                try await userBookshelvesCollection
+                        .document(currentUID)
+                        .collection("bookshelves")
+                        .document(bookshelfId)
+                        .setData(["count": FieldValue.increment(Int64(-1))], merge: true)
+            }
+        }
+    }
 }

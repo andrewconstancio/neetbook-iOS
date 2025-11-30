@@ -55,12 +55,12 @@ final class BookViewModel: ObservableObject {
     }
     
     func addUserBookComment(bookId: String) async throws {
-        let newComment = try? await BookUserCommentManager.shared.addUserBookComment(bookId: bookId, userId: currentUserId, comment: userNewComment)
-        
-        if let comment = newComment {
-            self.bookComments.insert(comment, at: 0)
-        }
-        
+//        let newComment = try? await BookUserCommentManager.shared.addUserBookComment(bookId: bookId, userId: currentUserId, comment: userNewComment)
+//        
+//        if let comment = newComment {
+//            self.bookComments.insert(comment, at: 0)
+//        }
+//        
         userNewComment = ""
     }
     

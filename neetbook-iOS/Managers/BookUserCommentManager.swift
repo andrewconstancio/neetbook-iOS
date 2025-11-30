@@ -38,10 +38,14 @@ final class BookUserCommentManager {
         return decoder
     }
     
-    func addUserBookComment(bookId: String, userId: String, comment: String) async throws -> BookComment {
+    func insertBookComment(bookId: String, comment: String) async throws -> BookComment {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "User is not signed in.", code: 0)
+        }
+        
         let docData: [String : Any] = [
             "book_id" : bookId,
-            "user_id" : userId,
+            "user_id" : uid,
             "comment" : comment,
             "date_created" : Timestamp(date: Date())
         ]
@@ -53,10 +57,10 @@ final class BookUserCommentManager {
         
         let ref = try await doc.getDocument()
         
-        UserPostManager.shared.addUserPost(userId: userId, collection: "BookComments", bookId: bookId, documentID: ref.documentID)
+        UserPostManager.shared.addUserPost(userId: uid, collection: "BookComments", bookId: bookId, documentID: ref.documentID)
         
         var displayName = ""
-        let userData = try await UserManager.shared.getUser(userId: userId)
+        let userData = try await UserManager.shared.getUser(userId: uid)
         
         guard let user = userData else {
             throw APIError.invalidData
@@ -73,7 +77,7 @@ final class BookUserCommentManager {
         
         let bookComment = BookComment(
             documentId: ref.documentID,
-            userId: userId,
+            userId: uid,
             displayName: displayName,
             profilePicture: profileImage,
             comment: ref["comment"] as? String,

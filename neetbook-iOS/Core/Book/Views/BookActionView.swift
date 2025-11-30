@@ -10,9 +10,12 @@ import Combine
 import PopupView
 
 struct BookshelfButton: ViewModifier {
+    
     @Environment(\.colorScheme) var colorScheme
     let bookshelfAddedId: String
-    @ObservedObject var viewModel: BookViewModel
+    
+    @ObservedObject var viewModel: BookViewModelNew
+    
     func body(content: Content) -> some View {
         if colorScheme == .dark {
             content
@@ -37,75 +40,17 @@ struct BookshelfButton: ViewModifier {
 }
 
 struct BookActionView: View {
-    @ObservedObject var viewModel: BookViewModel
-    @Binding var showBookActionSheet: Bool
-    @State var actionSelected: ReadingActions?
-    @State private var currentPage: String = "0"
-    @State private var showFavoritesView: Bool = false
-    @State var showNewBookshelfPopup: Bool = false
     let book: Book
     
-    let formatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter
-    }()
+    @ObservedObject var bookVM: BookViewModelNew
+    
+    @Binding var showBookActionSheet: Bool
     
     var body: some View {
         VStack(alignment: .leading) {
             titleText
-            Spacer()
             ScrollView {
-                VStack(spacing: 20) {
-                    ForEach(0..<viewModel.userBookshelves.count, id: \.self) { index in
-                        HStack {
-                            Spacer()
-                            Button {
-                                let impactMed = UIImpactFeedbackGenerator(style: .medium)
-                                impactMed.impactOccurred()
-                                
-                                if viewModel.bookshelvesAdded.contains(viewModel.userBookshelves[index].id) {
-                                    print("before: ", viewModel.bookshelvesAdded)
-                                    if let foundIndex = viewModel.bookshelvesAdded.firstIndex(of: viewModel.userBookshelves[index].id) {
-                                        viewModel.bookshelvesAdded.remove(at: foundIndex)
-                                        print("after: ", viewModel.bookshelvesAdded)
-                                    }
-                                } else {
-                                    viewModel.bookshelvesAdded.append(viewModel.userBookshelves[index].id)
-                                }
-                            } label: {
-                                HStack {
-                                    if viewModel.userBookshelves[index].imageUrl == "" {
-                                        NoPhotoBookshelfView(width: 20, height: 20)
-                                            .shadow(radius: 10)
-                                    } else {
-                                        AsyncImage(url: URL(string: viewModel.userBookshelves[index].imageUrl)) { image in
-                                            image
-                                                .resizable()
-                                                .frame(width: 50, height: 50)
-                                                .scaledToFit()
-                                                .clipShape(Circle())
-                                            
-                                        } placeholder: {
-                                        }
-                                    }
-                                    Text("\(viewModel.userBookshelves[index].name)")
-                                        .offset(x: 10)
-                                        .bold()
-                                    
-                                    Spacer()
-                                    if viewModel.bookshelvesAdded.contains(viewModel.userBookshelves[index].id) {
-                                        Image(systemName: "checkmark")
-                                            .bold()
-                                            .offset(x: -20)
-                                    }
-                                }
-                                .modifier(BookshelfButton(bookshelfAddedId: viewModel.userBookshelves[index].id, viewModel: viewModel))
-                            }
-                            Spacer()
-                        }
-                    }
-                }
+                bookshelves
             }
             HStack {
                 Spacer()
@@ -114,10 +59,11 @@ struct BookActionView: View {
             }
         }
         .padding(5)
+        .task {
+            await bookVM.fetchBookShelves()
+        }
     }
-}
-
-extension BookActionView {
+    
     private var titleText: some View {
         Text("Add to bookshelf")
             .font(.title2)
@@ -131,11 +77,7 @@ extension BookActionView {
             let impactMed = UIImpactFeedbackGenerator(style: .medium)
             impactMed.impactOccurred()
             Task {
-                do {
-                    try await viewModel.saveToBookshelves(bookId: book.bookId)
-                } catch {
-                    print(error.localizedDescription)
-                }
+                await viewModel.saveToBookshelves(bookId: book.bookId)
             }
             showBookActionSheet = false
         } label: {
@@ -147,12 +89,60 @@ extension BookActionView {
                 .cornerRadius(10)
         }
     }
+    
+    private var bookshelves: some View {
+        ForEach(0..<bookVM.userBookshelves.count, id: \.self) { index in
+            HStack {
+                Spacer()
+                Button {
+                    let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                    impactMed.impactOccurred()
+                    
+                    if bookVM.bookshelvesAdded.contains(bookVM.userBookshelves[index].id) {
+                        if let foundIndex = bookVM.bookshelvesAdded.firstIndex(of: bookVM.userBookshelves[index].id) {
+                            bookVM.bookshelvesAdded.remove(at: foundIndex)
+                        }
+                    } else {
+                        bookVM.bookshelvesAdded.append(bookVM.userBookshelves[index].id)
+                    }
+                } label: {
+                    HStack {
+                        if bookVM.userBookshelves[index].imageUrl == "" {
+                            NoPhotoBookshelfView(width: 20, height: 20)
+                                .shadow(radius: 10)
+                        } else {
+                            if let url = URL(string: bookVM.userBookshelves[index].imageUrl) {
+                                AsyncCachedImage(url: url) { image in
+                                    image
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                        .scaledToFit()
+                                        .clipShape(Circle())
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                            }
+                        }
+                        Text("\(bookVM.userBookshelves[index].name)")
+                            .offset(x: 10)
+                            .bold()
+                        
+                        Spacer()
+                        if bookVM.bookshelvesAdded.contains(bookVM.userBookshelves[index].id) {
+                            Image(systemName: "checkmark")
+                                .bold()
+                                .offset(x: -20)
+                        }
+                    }
+                    .modifier(
+                        BookshelfButton(
+                            bookshelfAddedId: bookVM.userBookshelves[index].id,
+                            viewModel: bookVM
+                        )
+                    )
+                }
+                Spacer()
+            }
+        }
+    }
 }
-
-//struct BookActionView_Previews: PreviewProvider {
-//    
-//    static var previews: some View {
-//        @StateObject  var vm = BookViewModel(bookId: "123")
-//        BookActionView(viewModel: vm, showBookActionSheet: .constant(true), book: Book(bookId: "123", title: "123", author: "123", coverURL: "123", description: "123", publishedYear: "123"))
-//    }
-//}

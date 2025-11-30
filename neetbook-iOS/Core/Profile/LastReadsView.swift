@@ -77,7 +77,7 @@ struct LastReadsView: View {
         }
         .onAppear {
             Task {
-                try? await viewModel.getFinishedBooks()
+                await viewModel.fetchFinishedBooks()
             }
         }
     }

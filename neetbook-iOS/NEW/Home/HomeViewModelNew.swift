@@ -1,6 +1,7 @@
 import SwiftUI
 import Combine
 
+@MainActor
 class HomeViewModelNew: ObservableObject {
     @Published var searchText = ""
     @Published var searchType: SearchType = .booksAndAuthors

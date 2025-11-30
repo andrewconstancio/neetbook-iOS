@@ -132,7 +132,7 @@ extension PostCommentView {
     private var reportCommentButton: some View {
         Button {
             Task {
-                try? await viewModel.reportComment(commentDocID: comment.documentId,
+                try? await viewModel.reportComment(commentDocumentID: comment.documentId,
                                                        comment: comment.comment ?? "")
                 showSheetReport = false
             }

@@ -541,6 +541,124 @@ final class UserInteractions {
     
     // MARK: NEW
     
+    func insertFollowRequest(userID: String) async throws {
+        guard let currentUID = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "There is no user signed in.", code: 0)
+        }
+        
+        let docData: [String : Any] = [
+            "user_id" : userID,
+            "requested_to_follow_user_id" : currentUID,
+            "accepted" : false,
+            "date_created" : Timestamp(date: Date())
+        ]
+        
+        // TODO: Refactor
+        
+        try await userFollowRequestCollection
+            .document(userID)
+            .collection("request")
+            .addDocument(data: docData)
+    
+        try await addToNotificationFollow(
+            type: "Requested To Follow",
+            currentUserId: userID, userId:
+                currentUID
+        )
+    }
+    
+    func unfollow(userId: String) async throws {
+        guard let currentUID = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "There is no user signed in.", code: 0)
+        }
+        
+        let currentUserFollowingSnapshot = userFollowingListCollection
+            .document(currentUID)
+            .collection("UserFollowing")
+            .whereField("user_id", isEqualTo: userId)
+        
+        let docs = try await currentUserFollowingSnapshot.getDocuments()
+        
+        for result in docs.documents {
+            try await result.reference.delete()
+        }
+        
+        let otherUserFollowingSnapshot = userFollowingListCollection
+            .document(userId)
+            .collection("UserFollowers")
+            .whereField("user_id", isEqualTo: currentUID)
+        
+        let docsTwo = try await otherUserFollowingSnapshot.getDocuments()
+        
+        for result in docsTwo.documents {
+            try await result.reference.delete()
+        }
+        
+        
+        try await self.removeNotificationFollow(
+            type: "Follow Accepted",
+            removeOnUserId: userId,
+            actionUserID: currentUID
+        )
+    }
+    
+    /// Checks if a user is following another user.
+    /// - Parameter userID: The user ID to check if following.
+    /// - Returns: `True` or `False` depending if the users are following each other.
+    func checkFollowingStateFor(userID: String) async throws -> Bool {
+        guard let currentUID = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "There is no user signed in.", code: 0)
+        }
+        
+        let query = userFollowingListCollection
+            .document(currentUID)
+            .collection("UserFollowing")
+            .whereField("user_id", isEqualTo: userID)
+        
+        let results = try await query.getDocuments()
+        return results.isEmpty ? false : true
+    }
+    
+    /// Checks if a follow request exist between two user IDs.
+    /// - Parameter userID: The user ID to check if there is a follow request to.
+    /// - Returns: `True` or `False` depending if a follow request exist.
+    func checkForFollowRequest(userID: String) async throws -> Bool {
+        guard let currentUID = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "There is no user signed in.", code: 0)
+        }
+        
+        let query = userFollowRequestCollection
+            .document(userID)
+            .collection("request")
+            .whereField("user_id", isEqualTo: userID)
+            .whereField("requested_to_follow_user_id", isEqualTo: currentUID)
+        
+        let results = try await query.getDocuments()
+        return results.isEmpty ? false : true
+    }
+    
+    func deleteFollowRequest(userID: String) async throws {
+        guard let currentUID = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "There is no user signed in.", code: 0)
+        }
+    
+        let query = userFollowRequestCollection
+            .document(userID)
+            .collection("request")
+            .whereField("user_id", isEqualTo: userID)
+            .whereField("requested_to_follow_user_id", isEqualTo: currentUID)
+        
+        let results = try await query.getDocuments()
+        for result in results.documents {
+            try await result.reference.delete()
+        }
+        
+        try await removeNotificationFollow(
+            type: "Requested To Follow",
+            removeOnUserId: userID,
+            actionUserID: currentUID
+        )
+    }
     
     /// Search for users by the username or the display name.
     /// - Parameter searchText: The text to be search

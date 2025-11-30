@@ -11,7 +11,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-struct PostFeedInstance: Identifiable {
+struct PostFeedInstance: Identifiable, Hashable {
     let id = UUID()
     let title: String
     let content: String

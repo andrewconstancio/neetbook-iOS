@@ -61,7 +61,8 @@ extension PendingFriendsView {
             HStack {
                 if let image = value.profileImage {
                     NavigationLink {
-                        TwitterProfileView(userId: value.userId)
+                        ProfileView(userID: value.userId)
+//                        TwitterProfileView(userId: value.userId)
                     } label: {
                         Image(uiImage: image)
                             .resizable()

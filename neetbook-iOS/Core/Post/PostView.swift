@@ -8,79 +8,37 @@
 import SwiftUI
 
 struct PostView: View {
+    /// The post from the users feed.
     let post: PostFeedInstance
     
-    @EnvironmentObject var userStateViewModel: AuthViewModel
+    /// The auth view model.
+    @EnvironmentObject var authVM: AuthViewModelNew
     
+    /// The color scheme environment.
     @Environment(\.colorScheme) var colorScheme
     
+    /// The dismiss view environment.
     @Environment(\.dismiss) private var dismiss
     
-    @StateObject private var viewModel = PostViewModel()
+    /// The post view model.
+    @ObservedObject var viewModel: PostViewModel
     
-    @State private var height: CGFloat = 30
-    
-    @State private var keyboardHeight: CGFloat = 0
+    /// The height of the keyboard for a new comment.
+    @State private var commentKeyboardHeight: CGFloat = 0
 
     var body: some View {
         VStack {
             ScrollView {
-                PostInstanceView(post: post, linkToPost: false)
-                    .environmentObject(userStateViewModel)
-                if viewModel.postComments.count > 0 {
-                    HStack {
-                        Text("Comments")
-                            .bold()
-                        Spacer()
-                    }
-                    .padding()
-                    ForEach(viewModel.postComments) { comment in
-                        if let user = userStateViewModel.user {
-                            PostCommentView(comment: comment, currentUserId: user.userId)
-                                .environmentObject(viewModel)
-                        }
-                    }
-                }
+                FeedInstance(post: post)
+                postComments
             }
             .scrollIndicators(.hidden)
             Spacer()
-            HStack {
-                if let _ = userStateViewModel.user, let profilePhoto = userStateViewModel.user?.profilePhoto {
-                    Image(uiImage: profilePhoto)
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .shadow(radius: 10)
-                        .cornerRadius(10)
-                        .clipShape(Circle())
-                }
-            
-                ResizableTF(text: $viewModel.userNewComment, height: $height)
-                    .frame(height: height)
-                    .padding(.horizontal)
-                    .background(.white)
-                    .cornerRadius(15)
-            
-                Button {
-                    if viewModel.commentValid {
-                        Task {
-                            try? await viewModel.addComment(posterUserId: post.user.userId, documentId: post.documentID)
-                            hideKeyboard()
-                        }
-                    }
-                } label: {
-                    Text("Send")
-                        .font(.system(size: 14))
-                        .bold()
-                        .foregroundStyle(viewModel.commentValid ? colorScheme == .dark ? .white : .black : .secondary)
-                        .padding(.horizontal, 3)
-                }
-            }
-            .padding()
-
+            addComment
         }
         .background(Color("Background"))
         .task {
-            try? await viewModel.getComments(documentId: post.documentID)
+            await viewModel.fetchPostComments(documentID: post.documentID)
         }
         .onTapGesture {
             hideKeyboard()
@@ -88,6 +46,67 @@ struct PostView: View {
         .navigationTitle(post.title)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: NavBackButtonView(color: .primary, dismiss: self.dismiss))
+    }
+    
+    
+    /// A view that shows users comments on a post.
+    @ViewBuilder
+    private var postComments: some View {
+        if viewModel.postComments.count > 0 {
+            HStack {
+                Text("Comments")
+                    .bold()
+                Spacer()
+            }
+            .padding()
+            
+            ForEach(viewModel.postComments) { comment in
+                if let user = authVM.authState.currentUser {
+                    PostCommentView(comment: comment, currentUserId: user.userId)
+                        .environmentObject(viewModel)
+                }
+            }
+        }
+    }
+    
+    /// The area which includes a textfield to add a comment to a post.
+    private var addComment: some View {
+        HStack {
+            if let _ = authVM.authState.currentUser, let profilePhoto = authVM.authState.currentUser?.profilePhoto {
+                Image(uiImage: profilePhoto)
+                    .resizable()
+                    .frame(width: 40, height: 40)
+                    .shadow(radius: 10)
+                    .cornerRadius(10)
+                    .clipShape(Circle())
+            }
+        
+            ResizableTF(
+                text: $viewModel.newComment,
+                height: $commentKeyboardHeight,
+                placeholderText: "Add comment..."
+            )
+            .frame(height: commentKeyboardHeight)
+            .padding(.horizontal)
+            .background(.white)
+            .cornerRadius(15)
+        
+            Button {
+                if viewModel.commentValid {
+                    Task {
+                        await viewModel.insertComment(postUserID: post.user.userId, documentId: post.documentID)
+                        hideKeyboard()
+                    }
+                }
+            } label: {
+                Text("Send")
+                    .font(.system(size: 14))
+                    .bold()
+                    .foregroundStyle(viewModel.commentValid ? colorScheme == .dark ? .white : .black : .secondary)
+                    .padding(.horizontal, 3)
+            }
+        }
+        .padding()
     }
 }
 

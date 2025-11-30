@@ -11,149 +11,179 @@ import FirebaseFirestore
 @MainActor
 final class ProfileViewModel: ObservableObject {
     
+    /// The user id to fetch data for.
+    var userID: String
+    
+    /// The `DBUser` object fetched for the userID passed in.
     @Published private(set) var user: DBUser? = nil
-    @Published private(set) var currUserID: String = ""
-    @Published var isLoadingMainData: Bool = false
-    @Published var isLoadingActivity: Bool = false
+    
+    /// Flag if the data is loading.
+    @Published var isLoading = false
+    
+    /// An array of `FavoriteBook` for the user.
     @Published var favoriteBooks: [FavoriteBook] = []
+    
+    /// An array of `PostFeedInstance` for this user.
     @Published var activity: [PostFeedInstance] = []
-    @Published var photoURL: String = ""
+    
+    /// The following count for this user.
     @Published var followingCount = 0
+    
+    /// The follower count for this user.
     @Published var followerCount = 0
-    @Published var userUpdated: Bool = false
+    
+    /// The following status of the user if the user in not on there own profile.
     @Published var followingStatus: FollowingStatus = .notFollowing
-    @Published var activityCount: Int = 0
+    
+    /// An array of `MarkedBook` that is user has marked as finished.
     @Published var finishedBooks: [MarkedBook] = []
     
+    /// The last activity document `DocumentSnapshot` used for pagination.
     var activitiesLastDocument: DocumentSnapshot? = nil
     
+    /// The `BookUserActionManager` for this view model.
     private var bookUserActionManager = BookUserActionManager()
     
-    init(userId: String) {
+    
+    /// Inititalizer for this view model.
+    /// - Parameter userId: The user id to fetch the data for.
+    init(userID: String) {
+        self.userID = userID
+        fetchData()
+    }
+    
+    
+    /// Calls all the data functions needed.
+    func fetchData() {
         Task {
-            isLoadingMainData = true
-            try? await fetchUser(userId: userId)
-            try? await getUserActivity(userId: userId)
-            try? await getFavoriteBooks(userId: userId)
-            try? await getUserFollowingCount(userId: userId)
-            try? await getUserFollowerCount(userId: userId)
-            
+            isLoading = true
+            await fetchUser()
+            await fetchUserActivity()
+            await fetchFavoriteBooks()
+            await fetchUserFollowingCount()
+            await fetchUserFollowerCount()
+
             if let user = user {
                 if !user.isCurrentUser {
-                    try await checkUserFollowing(userId: userId)
+                    await checkUserFollowing()
                 }
             }
-            isLoadingMainData = false
+            isLoading = false
         }
     }
     
-    func fetchUser(userId: String) async throws {
-        let user = try? await UserManager.shared.getUser(userId: userId)
-        
-        guard var user = user, let photoURL = user.photoUrl else {
-            throw APIError.invalidData
-        }
-        
-        // set profile photo
-        let image = try await UserManager.shared.getURLImageAsUIImage(path: photoURL)
-        user.setUserProfilePic(image: image)
-        self.user = user
-    }
-        
-    func getUserFollowingCount(userId: String) async throws {
+    /// Fetches the user data.
+    func fetchUser() async {
         do {
-            followingCount = try await UserManager.shared.getFollowingCount(userId: userId)
+            self.user = try await UserManager.shared.getUser(userId: userID)
         } catch {
-            throw error
+            print(error.localizedDescription)
         }
     }
     
-    func getUserFollowerCount(userId: String) async throws {
+    /// Fetches the following count.
+    func fetchUserFollowingCount() async {
         do {
-            followerCount = try await UserManager.shared.getFollowerCount(userId: userId)
+            followingCount = try await UserManager.shared.getFollowingCount(userId: userID)
         } catch {
-            throw error
+            print(error.localizedDescription)
         }
     }
     
-    func getUserActivity(userId: String) async throws {
+    /// Fetches the follower count.
+    func fetchUserFollowerCount() async {
         do {
-            let (activities, lastDocument) = try await UserFeedManager.shared.getUserActivities(userId: userId, lastDocument: activitiesLastDocument)
-            
+            followerCount = try await UserManager.shared.getFollowerCount(userId: userID)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    /// Fetches the users activities.
+    func fetchUserActivity() async {
+        do {
+            let (activities, lastDocument) = try await UserFeedManager
+                .shared
+                .getUserActivities(userId: userID, lastDocument: activitiesLastDocument)
             activity.append(contentsOf: activities)
-//            self.activityCount = self.activity.count
             activitiesLastDocument = lastDocument
         } catch {
-            throw error
+            print(error.localizedDescription)
         }
     }
     
-    func getFavoriteBooks(userId: String) async throws {
+    /// Fetches the users favorited books.
+    func fetchFavoriteBooks() async {
         do {
-            self.favoriteBooks = try await BookUserManager.shared.getFavoriteBooks(userId: userId)
+            favoriteBooks = try await BookUserManager.shared.getFavoriteBooks(userId: userID)
         } catch {
-            throw error
+            print(error.localizedDescription)
         }
     }
     
-    func checkUserFollowing(userId: String) async throws {
+    /// Check if a user is following another user.
+    func checkUserFollowing() async {
         do {
-            let currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            let result =  try await UserInteractions.shared.checkUserFollowing(currentUserId: currentUserId, userId: userId)
+            let result = try await UserInteractions.shared.checkFollowingStateFor(userID: userID)
             if result {
                 followingStatus = .following
             } else {
-                try await checkUserFollowRequest(userId: userId)
+                await checkUserFollowRequest()
             }
         } catch {
-            throw error
+            print(error.localizedDescription)
         }
     }
     
-    func checkUserFollowRequest(userId: String) async throws {
+    /// Checks if there is a follow request.
+    func checkUserFollowRequest() async {
         do {
-            let currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            let reseult =  try await UserInteractions.shared.checkUserFollowRequest(currentUserId: currentUserId, userId: userId)
-            followingStatus = reseult ? .requestedToFollow : followingStatus
+            let result = try await UserInteractions.shared.checkForFollowRequest(userID: userID)
+            followingStatus = result ? .requestedToFollow : followingStatus
         } catch {
-            throw error
+            print(error.localizedDescription)
         }
     }
     
-    func requestToFollow(userId: String) async throws {
+    /// Sends a follow request.
+    func requestToFollow() async {
         do {
-            let currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            try await UserInteractions.shared.requestToFollow(currentUserId: currentUserId, userId: userId)
+            try await UserInteractions.shared.insertFollowRequest(userID: userID)
             followingStatus = .requestedToFollow
         } catch {
-            throw error
+            print(error.localizedDescription)
         }
     }
     
-    func unfollowUser(userId: String) async throws {
+    /// Unfollowers a user.
+    func unfollowUser() async {
         do {
-            let currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            try await UserInteractions.shared.unfollowUser(currentUserId: currentUserId, userId: userId)
+            try await UserInteractions.shared.unfollow(userId: userID)
             followingStatus = .notFollowing
             followerCount -= 1
         } catch {
-            throw error
+            print(error.localizedDescription)
         }
     }
     
-    func deleteFollowRequest(userId: String) async throws {
+    /// Deletes a follow request.
+    func deleteFollowRequest() async {
         do {
-            let currentUserId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            try await UserInteractions.shared.deleteUserFollowRequest(currentUserId: currentUserId, userId: userId)
+            try await UserInteractions.shared.deleteFollowRequest(userID: userID)
             followingStatus = .notFollowing
         } catch {
-            throw error
+            print(error.localizedDescription)
         }
     }
     
-    func getFinishedBooks() async throws {
-        if let userId = user?.userId {
-            finishedBooks = try await bookUserActionManager.getMarkedBookTypesForUser(userId: userId, markedType: .finished)
+    /// Fetches an array of finished books by the user.
+    func fetchFinishedBooks() async {
+        do {
+            finishedBooks = try await bookUserActionManager.getMarkedBookTypes(userId: userID, markedType: .finished)
+            
+            print(finishedBooks)
+        } catch{
+            print(error.localizedDescription)
         }
     }
 }

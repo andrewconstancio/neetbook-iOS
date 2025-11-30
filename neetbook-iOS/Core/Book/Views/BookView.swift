@@ -156,17 +156,17 @@ struct BookView: View {
         .navigationBarItems(leading: NavBackButtonView(color: .white, dismiss: self.dismiss))
         .toolbarBackground(.hidden, for: .navigationBar)
         .sheet(isPresented: $showBookActionSheet) {
-            BookActionView(
-                viewModel: viewModel,
-                showBookActionSheet: $showBookActionSheet,
-                actionSelected: viewModel.userActions,
-                book: book
-            )
-            .onDisappear {
-                Task {
-                    try await viewModel.getBookshelvesAddedTo(bookId: book.bookId)
-                }
-            }
+//            BookActionView(
+//                viewModel: viewModel,
+//                showBookActionSheet: $showBookActionSheet,
+//                actionSelected: viewModel.userActions,
+//                book: book
+//            )
+//            .onDisappear {
+//                Task {
+//                    try await viewModel.getBookshelvesAddedTo(bookId: book.bookId)
+//                }
+//            }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if currentTab == "Info" {
@@ -191,7 +191,7 @@ struct BookView: View {
         .overlay(Color.black.opacity(showBookMarkSheet ? 0.3 : 0.0))
         .blur(radius: showBookMarkSheet ? 2 : 0)
         .popup(isPresented: $showBookMarkSheet) {
-            MarkBookView(viewModel: viewModel, showBookMarkSheet: $showBookMarkSheet)
+//            MarkBookView(viewModel: viewModel, showBookMarkSheet: $showBookMarkSheet)
         } customize: {
             $0
                 .dragToDismiss(true)
@@ -298,11 +298,11 @@ extension BookView {
                     ProgressView()
                 }
             }
-            ResizableTF(text: $viewModel.userNewComment, height: $height)
-                .frame(height: height)
-                .padding(.horizontal)
-                .background(.white)
-                .cornerRadius(15)
+//            ResizableTF(text: $viewModel.userNewComment, height: $height)
+//                .frame(height: height)
+//                .padding(.horizontal)
+//                .background(.white)
+//                .cornerRadius(15)
             
             Button {
                 if viewModel.commentValid {
@@ -329,7 +329,7 @@ extension BookView {
             showBookMarkSheet = true
         } label: {
             HStack {
-                Image(systemName: "check")
+                Image(systemName: "checkmark")
                     .fontWeight(.bold)
                 
                 Text(viewModel.markSelected == "" ? "Mark Book" : viewModel.markSelected.capitalizeFirstLetter())

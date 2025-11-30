@@ -106,7 +106,7 @@ struct SearchView: View {
                             if viewModel.searchUsersResults.count > 0 {
                                     ForEach(viewModel.searchUsersResults, id: \.self) { user in
                                         NavigationLink {
-                                            TwitterProfileView(userId: user.id)
+//                                            TwitterProfileView(userId: user.id)
                                         } label: {
                                             HStack {
                                                 Image(uiImage: user.profilePicture)

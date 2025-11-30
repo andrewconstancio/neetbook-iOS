@@ -11,44 +11,59 @@ import FirebaseFirestore
 
 @MainActor
 class FeedViewModel: ObservableObject {
-    @Published var photoURL: String = ""
-    @Published var post: [PostFeedInstance] = []
+    
+    /// An array of post on for the users feed.
+    @Published var feedPost: [PostFeedInstance] = []
+    
+    /// Flag if the feed is loading.
     @Published var isLoadingFeed: Bool = false
+    
+    /// A document snapshot of the last post document fetched.
     var lastDocument: DocumentSnapshot? = nil
     
-    init() {
-        Task {
-            isLoadingFeed = true
-            try? await getFeed()
-            isLoadingFeed = false
-        }
-    }
-    
-    
-    func getFeed() async throws {
+    /// Fetches the users feed.
+    func fetchFeed(showLoading: Bool = true) async {
         do {
-            let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            let (postReturn, lastDocumentReturn) = try await UserFeedManager.shared.getUserHomeFeed(userId: userId, lastDocument: lastDocument)
-            for post in postReturn {
-                print(post.documentID)
-                print(post.dateEvent)
+            if showLoading {
+                await MainActor.run { self.isLoadingFeed = true }
             }
-            DispatchQueue.main.async {
-                self.post.append(contentsOf: postReturn)
+            
+            let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+            let (postReturn, lastDocumentReturn) = try await UserFeedManager.shared.getUserHomeFeed(
+                userId: userId,
+                lastDocument: lastDocument
+            )
+            
+            await MainActor.run {
+                self.feedPost.append(contentsOf: postReturn)
                 self.lastDocument = lastDocumentReturn
+                if showLoading {
+                    self.isLoadingFeed = false
+                }
             }
         } catch {
-            throw error
+            await MainActor.run {
+                if showLoading {
+                    self.isLoadingFeed = false
+                }
+            }
+            print(error.localizedDescription)
         }
     }
+
     
-    func refreshFeed() async throws {
-        if let firstDocumentId = post.first?.documentID {
-            let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
-            let newPost = try await UserFeedManager.shared.refreshUserFeed(userId: userId, firstDocumentId: firstDocumentId)
-            post.insert(contentsOf: newPost, at: 0)
-        } else {
-            try await getFeed()
+    /// Refreshes the users feed.
+    func refreshFeed() async  {
+        do {
+            if let firstDocumentId = feedPost.first?.documentID {
+                let userId = try AuthenticationManager.shared.getAuthenticatedUserUserId()
+                let newPost = try await UserFeedManager.shared.refreshUserFeed(userId: userId, firstDocumentId: firstDocumentId)
+                feedPost.insert(contentsOf: newPost, at: 0)
+            } else {
+                await fetchFeed(showLoading: false)
+            }
+        } catch {
+            print(error.localizedDescription)
         }
     }
     

@@ -1,14 +1,13 @@
 //
-//  PostInstanceViewModel.swift
+//  PostInstanceViewModelNew.swift
 //  neetbook-iOS
 //
-//  Created by Andrew Constancio on 4/15/24.
+//  Created by Andrew Constancio on 11/10/25.
 //
-
 import Foundation
 
 @MainActor
-class PostInstanceViewModel: ObservableObject {
+class PostInstanceViewModelNew: ObservableObject {
     @Published var likes: Int = 0
     @Published var isLikedByUser: Bool = false
     @Published var showError: Bool = false
@@ -26,6 +25,7 @@ class PostInstanceViewModel: ObservableObject {
     
     func updateLikes(for post: PostFeedInstance) async {
         do {
+            print(isLikedByUser )
             if isLikedByUser {
                 isLikedByUser = false
                 likes -= 1
@@ -36,9 +36,11 @@ class PostInstanceViewModel: ObservableObject {
                 likes += 1
                 try await UserPostManager.shared.likePost(documentId: post.documentID)
             }
+            print(likes)
         } catch {
             showError = true
             errorMessage = error.localizedDescription
         }
     }
 }
+

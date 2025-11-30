@@ -118,6 +118,27 @@ final class UserManager {
         return user
     }
     
+    func fetchUserBookShelves() async throws -> [Bookshelf] {
+        guard let currentUID = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "Current user id not found.", code: 0)
+        }
+        
+        let docs = try await userBookshelvesCollection
+            .document(currentUID)
+            .collection("bookshelves")
+            .order(by: "date_created", descending: false)
+            .getDocuments()
+        
+        var bookshelves: [Bookshelf] = []
+
+        for doc in docs.documents {
+            let bookshelf = try decoder.decode(Bookshelf.self, from: doc.data())
+            bookshelves.append(bookshelf)
+        }
+        
+        return bookshelves
+    }
+    
     func checkUserUsernameHashSet(username: String, hash: String) async throws -> Bool {
         let usernameUsabable: Bool
 

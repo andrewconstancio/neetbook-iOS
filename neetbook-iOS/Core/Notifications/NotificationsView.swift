@@ -63,8 +63,9 @@ struct NotificationView: View {
                         ForEach(0..<viewModel.notifications.count, id: \.self) { index in
                             HStack {
                                 NavigationLink {
-                                    TwitterProfileView(userId: viewModel.notifications[index].userId)
-                                        .environmentObject(userStateViewModel)
+                                    ProfileView(userID: viewModel.notifications[index].userId)
+//                                    TwitterProfileView(userId: viewModel.notifications[index].userId)
+//                                        .environmentObject(userStateViewModel)
                                 } label: {
                                     Image(uiImage: viewModel.notifications[index].profilePicture)
                                         .resizable()
@@ -206,8 +207,8 @@ struct NotificationView: View {
                                         viewModel.notifications[index].type == .newPostComment {
                                     NavigationLink {
                                         if let post = viewModel.notifications[index].post {
-                                            PostView(post: post)
-                                                .environmentObject(userStateViewModel)
+//                                            PostView(post: post)
+//                                                .environmentObject(userStateViewModel)
                                         }
                                     } label: {
                                         Image(systemName: "arrow.up.forward.app")

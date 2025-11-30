@@ -33,12 +33,12 @@ struct ContentView: View {
                             }
                             .tag(0)
                         
-                        FeedView()
-                            .environmentObject(userStateViewModel)
-                            .tabItem {
-                                Label("", systemImage: "person.2")
-                            }
-                            .tag(1)
+//                        FeedView()
+//                            .environmentObject(userStateViewModel)
+//                            .tabItem {
+//                                Label("", systemImage: "person.2")
+//                            }
+//                            .tag(1)
                         
                         LibraryView()
                             .environmentObject(userStateViewModel)

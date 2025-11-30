@@ -1,4 +1,4 @@
-enum HomeCategories: CaseIterable {
+enum BookGenresNewYorkTimes: CaseIterable {
     case bestSellers, nonFiction, selfImprovment
     
     var title: String {
@@ -17,10 +17,9 @@ enum HomeCategories: CaseIterable {
         case .bestSellers:
             return "mass-market-monthly"
         case .nonFiction:
-            return "mass-market-monthly"
+            return "paperback-nonfiction"
         case .selfImprovment:
-            return "mass-market-monthly"
+            return "advice-how-to-and-miscellaneous"
         }
     }
 }
-

@@ -51,8 +51,8 @@ struct HomeView: View {
                     }
                     if let user = userStateViewModel.user {
                         NavigationLink {
-                            TwitterProfileView(userId: user.userId)
-                                .environmentObject(userStateViewModel)
+//                            TwitterProfileView(userId: user.userId)
+//                                .environmentObject(userStateViewModel)
                         } label: {
                             if let image = user.profilePhoto {
                                 Image(uiImage: image)
@@ -217,7 +217,7 @@ struct HomeView: View {
                                 if viewModel.searchUsersResults.count > 0 {
                                         ForEach(viewModel.searchUsersResults, id: \.self) { user in
                                             NavigationLink {
-                                                TwitterProfileView(userId: user.id)
+//                                                TwitterProfileView(userId: user.id)
                                             } label: {
                                                 HStack {
                                                     Image(uiImage: user.profilePicture)
